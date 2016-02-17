@@ -1,7 +1,7 @@
 class UserController < ApplicationController
   def login
     if request.post?
-      server_address = '127.0.0.1:3001'
+      server_address = '192.168.6.205:3001'
       uri = "http://#{server_address}/remote_login.json/"
       user = RestClient.post(uri,params)
       unless user.blank?
