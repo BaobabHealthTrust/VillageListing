@@ -95,6 +95,11 @@ Rails.application.routes.draw do
   post'/dde_search_by_name' => 'dde#search_by_name'
 
   get '/dde/search'
+  get '/dde/district'
+  get '/dde/traditional_authority'
+  get '/dde/district_villages'
+  get '/dde/village'
+  post '/dde/send_to_dde'
   #map.dde_search_by_id  '/dde_search_by_id', :controller => 'dde', :action => 'search_by_id'
   get'/dde_search_by_id' => 'dde#search_by_id'
   post'/dde_search_by_id' => 'dde#search_by_id'

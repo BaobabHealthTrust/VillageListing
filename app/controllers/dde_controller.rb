@@ -851,6 +851,8 @@ skip_before_action :verify_authenticity_token
     @id = params[:id]
     settings = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env] rescue {}
 
+    @user_mgmt_address = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"]
+    
     @settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] rescue {}
 
     @show_middle_name = (settings["show_middle_name"] == true ? true : false) rescue false
@@ -1402,6 +1404,7 @@ skip_before_action :verify_authenticity_token
 
   # Districts containing the string given in params[:value]
   def district
+=begin
     region_id = DDERegion.find_by_name("#{params[:filter_value]}").id
     region_conditions = ["name LIKE (?) AND region_id = ? ", "#{params[:search_string]}%", region_id]
 
@@ -1409,11 +1412,23 @@ skip_before_action :verify_authenticity_token
     districts = districts.map do |d|
       "<li value=\"#{d.name}\">#{d.name}</li>"
     end
-    render :text => districts.join('') + "<li value='Other'>Other</li>" and return
+=end
+    user_mgmt_address = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"]
+    paramz = {user: session[:user], region: params[:filter_value], district_name: params[:search_string]}
+    uri = "http://#{user_mgmt_address}/demographics/districts.json/"
+        data = RestClient.post(uri,paramz)
+        unless data.blank?
+          data = JSON.parse(data)
+          render :text => "<li>" + data.map{|n| n } .join("</li><li>") + "</li>" and return
+        else
+          render :text => [].to_json and return
+        end
+    #render :text => districts.join('') + "<li value='Other'>Other</li>" and return
   end
 
   # List traditional authority containing the string given in params[:value]
   def traditional_authority
+=begin
     district_id = DDEDistrict.find_by_name("#{params[:filter_value]}").id
     traditional_authority_conditions = ["name LIKE (?) AND district_id = ?", "%#{params[:search_string]}%", district_id]
 
@@ -1422,10 +1437,22 @@ skip_before_action :verify_authenticity_token
       "<li value=\"#{t_a.name}\">#{t_a.name}</li>"
     end
     render :text => traditional_authorities.join('') + "<li value='Other'>Other</li>" and return
+=end
+    user_mgmt_address = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"]
+    paramz = {user: session[:user], ta_name: params[:search_string], district_name: params[:filter_value]}
+    uri = "http://#{user_mgmt_address}/demographics/traditional_authorities.json/"
+        data = RestClient.post(uri,paramz)
+        unless data.blank?
+          data = JSON.parse(data)
+          render :text => "<li>" + data.map{|n| n } .join("</li><li>") + "</li>" and return
+        else
+          render :text => [].to_json and return
+        end
   end
 
   # Villages containing the string given in params[:value]
   def village
+=begin
     traditional_authority_id = DDETraditionalAuthority.find_by_name("#{params[:filter_value]}").id
     village_conditions = ["name LIKE (?) AND traditional_authority_id = ?", "%#{params[:search_string]}%", traditional_authority_id]
 
@@ -1434,9 +1461,21 @@ skip_before_action :verify_authenticity_token
       "<li value=\"#{v.name}\">#{v.name}</li>"
     end
     render :text => villages.join('') + "<li value='Other'>Other</li>" and return
+=end
+    user_mgmt_address = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"]
+    paramz = {user: session[:user], village_name: params[:search_string], ta_name: params[:filter_value]}
+    uri = "http://#{user_mgmt_address}/demographics/villages.json/"
+        data = RestClient.post(uri,paramz)
+        unless data.blank?
+          data = JSON.parse(data)
+          render :text => "<li>" + data.map{|n| n } .join("</li><li>") + "</li>" and return
+        else
+          render :text => [].to_json and return
+        end
   end
 
   def district_villages
+=begin
     dde_district_id = DDEDistrict.find_by_name(params[:filter_value]).district_id
     villages =  DDEVillage.find_by_sql("SELECT v.name FROM dde_village v INNER JOIN dde_traditional_authority ta
       ON v.traditional_authority_id = ta.traditional_authority_id WHERE ta.district_id = '#{dde_district_id}'
@@ -1447,6 +1486,17 @@ skip_before_action :verify_authenticity_token
     end
 
     render :text => villages.join('') + "<li value='Other'>Other</li>" and return
+=end
+    user_mgmt_address = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"]
+    paramz = {user: session[:user], village_name: params[:search_string], district_name: params[:filter_value]}
+    uri = "http://#{user_mgmt_address}/demographics/villages.json/"
+        data = RestClient.post(uri,paramz)
+        unless data.blank?
+          data = JSON.parse(data)
+          render :text => "<li>" + data.map{|n| n } .join("</li><li>") + "</li>" and return
+        else
+          render :text => [].to_json and return
+        end
   end
 
   # Landmark containing the string given in params[:value]
