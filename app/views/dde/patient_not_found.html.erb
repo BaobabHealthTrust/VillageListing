@@ -1,4 +1,8 @@
 
+<script>
+  var tt_cancel_destination = "/";
+</script>
+
 <% if params[:create].blank? %>
 
   <%= form_tag("/patient_not_found/#{@id}") do %>
@@ -166,21 +170,17 @@
   </style>
 
   <script type="text/javascript">
-  <% if params[:relation] %>
-    var tt_cancel_destination = "/patients/relationships?patient_id=<%=h params[:relation] -%>"
-  <% else %>
-    var tt_cancel_destination = "/clinic"
-  <% end %>
+    
 
-  var showDurrentDistrict = '<%= @show_current_district %>';
-  var freeTextHomeVillage = '';
+    var showDurrentDistrict = '<%= @show_current_district %>';
+    var freeTextHomeVillage = '';
 
-  var dob_year = null;
-  var dob_month = null;
-  dob_day = null;
-  var set_dob = null;
+    var dob_year = null;
+    var dob_month = null;
+    dob_day = null;
+    var set_dob = null;
 
-  var skipped = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    var skipped = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
   <%  address = "http://#{request.host_with_port}/process_result"%>
 
   var json = "{national_id: '<%= @id %>', application: '<%= @settings["application_name"] %>', site_code: '<%= @settings["site_code"] %>', return_path: '<%= address %>', names: {family_name: '', given_name: '', middle_name: '', maiden_name: '' }, gender: '<%= params["gender"] %>', person_attributes: {country_of_residence: '', citizenship: '', occupation: '', home_phone_number: '', cell_phone_number: '', office_phone_number: '', race: ''}, birthdate: '', patient: {identifiers: []}, birthdate_estimated: '', addresses: {current_residence: '', current_village: '', current_ta: '', current_district: '', home_village: '', home_ta: '', home_district: '', landmark: ''}}"

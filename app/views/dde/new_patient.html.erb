@@ -154,11 +154,7 @@
   var showDurrentDistrict = '<%= @show_current_district %>';
   var freeTextHomeVillage = '';
 
-<% if params[:relation] %>
-    var tt_cancel_destination = "/patients/relationships?patient_id=<%=h params[:relation] -%>"
-<% else %>
-    var tt_cancel_destination = "/clinic"
-<% end %>
+  var tt_cancel_destination = "/"
 
   var dob_year = null;
   var dob_month = null;
@@ -167,7 +163,10 @@
 
   var skipped = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-  var json = <%= {
+<% address = "http://#{request.host_with_port}/process_result"%>
+  var json = "{national_id: '<%= @id %>', application: '<%= @settings["application_name"] %>', site_code: '<%= @settings["site_code"] %>', return_path: '<%= address %>', names: {family_name: '', given_name: '', middle_name: '', maiden_name: '' }, gender: '<%= params["gender"] %>', person_attributes: {country_of_residence: '', citizenship: '', occupation: '', home_phone_number: '', cell_phone_number: '', office_phone_number: '', race: ''}, birthdate: '', patient: {identifiers: []}, birthdate_estimated: '', addresses: {current_residence: '', current_village: '', current_ta: '', current_district: '', home_village: '', home_ta: '', home_district: '', landmark: ''}}"
+
+  /*var json = <%= {
   "national_id" => nil,
   "application" => "#{@settings["application_name"]}",
   "site_code" => "#{@settings["site_code"]}",
@@ -204,7 +203,9 @@
     "home_district" => nil,
     "landmark" => nil
   }
-}.to_json %>;
+}.to_json %>;*/
+
+  json = JSON.parse(JSON.stringify(eval("(" + json + ")")))
 
   function sendToDDE() {
     console.log("hello")
@@ -241,7 +242,7 @@
     if (dob_day.match(/^$/)) {
       dob_day = null;
     }
-/*
+    /*
     if (dob_year == null || String(dob_year).toLowerCase() == "unknown") {
       var yr = (new Date()).getFullYear() - parseInt(__$("age_estimate").value);
 
@@ -263,31 +264,31 @@
     
      //json.birthdate = dob;
     
-  */  
+     */
     dob_est = false;
 
     if (dob_month != null && String(dob_month).toLowerCase() == "unknown"){
  
-       dob_month = '7';
-       dob_day = '1';
-       dob_est = true;
+      dob_month = '7';
+      dob_day = '1';
+      dob_est = true;
     }
     
     if (dob_day != null && String(dob_day).toLowerCase() == "unknown"){
-       dob_day = '15';
-       dob_est = true;
+      dob_day = '15';
+      dob_est = true;
     }
     
     if (__$("age_estimate") != null && dob_year != null && String(dob_year).toLowerCase() == "unknown"){
      
-       var patient_estimated_birth_year = (new Date()).getFullYear() - parseInt(__$("age_estimate").value);
+      var patient_estimated_birth_year = (new Date()).getFullYear() - parseInt(__$("age_estimate").value);
     }
     
     if (patient_estimated_birth_year != null && dob_year != null && String(dob_year).toLowerCase() == "unknown" ){ 
-        dob_year = patient_estimated_birth_year;
-        dob_month = '7';
-        dob_day = '1';
-        dob_est = true;
+      dob_year = patient_estimated_birth_year;
+      dob_month = '7';
+      dob_day = '1';
+      dob_est = true;
     }
     
     json.birthdate = dob_year + "/" + dob_month + "/" + padZeros(dob_day, 2);
@@ -514,7 +515,7 @@
   
 </script>
 
-<% form_tag "/people/create" do %>
+<%= form_tag "/people/create" do %>
 
   <%= text_field_tag "person[names][given_name]", params[:given_name],
     {:id => "first_name",
@@ -744,7 +745,7 @@
 
 <% end %>
 
-<% form_tag("/dde/send_to_dde", "method" => 'post', "enctype" => 'multipart/form-data',
+<%= form_tag("/dde/send_to_dde", "method" => 'post', "enctype" => 'multipart/form-data',
   "id" => 'creation', "class" => "form-horizontal", "autocomplete" => "off", "role" => "form", "novalidate" => "novalidate") do %>
 
   <textarea id="person" name="person" style="display: none;" condition="false"></textarea>

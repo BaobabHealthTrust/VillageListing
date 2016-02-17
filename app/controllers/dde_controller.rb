@@ -1056,10 +1056,11 @@ skip_before_action :verify_authenticity_token
       url = "http://#{(@settings["dde_username"])}:#{(@settings["dde_password"])}@#{(@settings["dde_server"])}/ajax_process_data" 
     end
     @results = RestClient.post(url, {"person" => params["person"]})
-
     if params["notfound"]
       json = JSON.parse(JSON.parse(@results)[0])
-      
+      session[:dde_object] = json
+      redirect_to "/" and return
+=begin     
       patient_id = DDE.search_and_or_create(json.to_json)  rescue nil 
       
     	patient = Patient.find(patient_id) rescue nil
@@ -1070,6 +1071,7 @@ skip_before_action :verify_authenticity_token
     		flash["error"] = "Sorry! Something went wrong. Failed to process properly!"
         redirect_to "/clinic" and return
     	end
+=end
     else
       render :layout => "ts"
     end
