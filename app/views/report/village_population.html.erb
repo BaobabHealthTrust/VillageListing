@@ -1,0 +1,154 @@
+<style>
+
+body {
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  -moz-user-select: none;     /* Firefox all */
+  -ms-user-select: none;      /* IE 10+ */
+  user-select: none;          /* Likely future */ 
+}
+
+img {
+  user-drag: none; 
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  pointer-events: none;
+}
+
+.main-page-container  {
+  display: table;
+  width: 100%;
+  padding: 0px 1px 0px 1px;
+}
+
+.main-page-container-rows  {
+  display: table-row;
+}
+
+.cells {
+  display: table-cell;
+}
+
+
+/* ...................................... */
+.divbtn {
+  height: 265px;
+  display: table;
+  margin-top: 10px;
+  cursor:pointer;
+}
+
+.icons {
+  width: 160px;
+  height: 160px;
+  margin-top: 10%;
+  text-align: middle;
+}
+
+.divbtn p {
+  font-weight: bold;
+}
+
+.btncells {
+  width: 25%;
+  text-align: center;
+}
+
+.small-icons {
+  width: 100px;
+  height: 100px;
+}
+
+.header .cells {
+  vertical-align: middle; 
+  padding-right: 5px;
+}
+
+#scan {
+  background-color: lightgrey;
+  border-style: solid;
+  border-width: 1px;
+  font-size: 80px;
+  margin-bottom: 6px;
+  width: 44%;
+}
+
+.header .icons {
+  width: 100px;
+  height: 100px;
+}
+
+/* ...................................... */
+
+.people {
+  padding-top: 10px;
+}
+
+.people th {
+  border-style: solid;
+  border-width: 1px;
+  text-align: left;
+}
+
+.people td {
+  border-style: solid;
+  border-width: 1px;
+  text-align: left;
+}
+
+
+</style>
+
+<%= render :partial => 'user/header' %>
+
+
+<!-- div class="report-attributes">
+  <table style="width: 100%;"> 
+    <tr>
+      <th>District:</th>
+      <td>
+        <select>
+          <%(@districts || []).each do |name|%>
+            <option value="<%=name%>"><%=name%></option>
+          <%end%>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <th>Total</th><td><%=@people.length%></td>
+    </tr>
+  </table>
+</div -->
+
+
+<table class="people" style="width: 99%">
+  <thead>
+    <tr>
+      <th>Identifier</th>
+      <th>First name</th>
+      <th>Last name</th>
+      <th>Birthdate</th>
+      <th>Current district</th>
+      <th>Current TA</th>
+      <th>Current Village</th>
+    </tr>
+  </thead>
+  <tbody>
+  <%(@people || []).each do |person|%>
+  <tr>
+    <td><%=person['_id'] rescue 'Not assigned'%></td>
+    <td><%=person['names']['given_name']%></td>
+    <td><%=person['names']['family_name']%></td>
+    <td><%=person['birthdate']%></td>
+    <td><%=person['addresses']['current_district']%></td>
+    <td><%=person['addresses']['current_ta']%></td>
+    <td><%=person['addresses']['current_village']%></td>
+  </tr>
+  <%end%>
+  </tbody>
+</table>
+
+<%= render :partial => 'footer' %>
+
