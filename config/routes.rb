@@ -1,4 +1,26 @@
 Rails.application.routes.draw do
+  
+  
+  ##################### people ######################
+  get 'people/new'
+  get 'people/search_results'
+  get 'people/search'
+  ##################### people end ######################
+
+  
+  ##################### home ######################
+  get '/' => 'home#index'
+  ##################### home end ######################
+
+
+
+  ##################### user ######################
+  get 'user/index'
+  get '/login' => 'user#login'
+  post '/login' => 'user#login'
+  get '/logout' => 'user#logout'
+  ##################### user end ######################
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -53,4 +75,5 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
+  root 'home#index'
 end
