@@ -105,14 +105,6 @@
         "Select Person": "<%= @settings["help_base_url"] rescue "" %>select_patient"
     };
 
-tstLocaleWords = {<%=
-        ["Cancel", "Logout", "Finish", "Clear", "Back", "OK", "Save", "Loading. Please Wait",
-          "Delete", "Space", "cap", "Yes", "No", "Unknown", "Next", "Processing. Please Wait",
-          "Please enter a valid value", "You must enter a value to continue", "Authorise",
-          "Value bigger than maximum", "Value smaller than minimum", "Value out of Range",
-          "Are you sure you want to Cancel"].collect{|e| "\"#{e.downcase}\":\"#{Vocabulary.search(e)}\""}.join(",")
-       %>};
-           
     function hidekeyboard() {
         if (__$("keyboard")) {
             __$("keyboard").style.display = "none";
@@ -240,7 +232,7 @@ tstLocaleWords = {<%=
         __$("buttons").appendChild(footer);
 
         var newPatient = document.createElement("button");
-        newPatient.innerHTML = "<span><%= Vocabulary.search("New Patient") %></span>";
+        newPatient.innerHTML = "<span>New Patient</span>";
         newPatient.id = "newPatient";
         newPatient.style.cssFloat = "right";
 
@@ -383,7 +375,7 @@ tstLocaleWords = {<%=
                     __$("patient").value = this.id;
 
                     if (__$('nextButton')) {
-                        __$("nextButton").innerHTML = "<span><%= Vocabulary.search("Select") %></span>"
+                        __$("nextButton").innerHTML = "<span>Select</span>"
                         __$("nextButton").className = "green navButton";
 
                         __$('nextButton').onmousedown = function () {
@@ -565,7 +557,7 @@ tstLocaleWords = {<%=
 </head>
 <body>
 <div id='content'>
-  <% form_tag("/process_result", "method" => 'post', "enctype" => 'multipart/form-data', "id" => 'form', "style" => "display: none") do %>
+  <%= form_tag("/process_result", "method" => 'post', "enctype" => 'multipart/form-data', "id" => 'form', "style" => "display: none") do %>
       <%= hidden_field_tag "patient", nil %>
       <table width='100%' cellpadding=10 cellspacing=0>
         <tr>
@@ -575,28 +567,28 @@ tstLocaleWords = {<%=
         </tr>
         <tr>
           <td>
-            <%= Vocabulary.search("First Name") %>
+            First Name
           </td>
           <td>
-            <input type="text" id="given_name" name="given_name" value="" helpText="<%= Vocabulary.search("First Name") %>"
+            <input type="text" id="given_name" name="given_name" value="" helpText="First Name"
                    ajaxURL='/dde/given_names?search_string=' allowFreeText=true />
           </td>
         </tr>
         <tr>
           <td>
-            <%= Vocabulary.search("Family Name") %>
+            Family Name
           </td>
           <td>
-            <input type="text" id="family_name" name="family_name" value="" helpText="<%= Vocabulary.search("Family Name") %>"
+            <input type="text" id="family_name" name="family_name" value="" helpText="Family Name"
                    ajaxURL='/dde/family_names?search_string=' allowFreeText=true />
           </td>
         </tr>
         <tr>
           <td>
-            <%= Vocabulary.search("Gender") %>
+            Gender
           </td>
           <td>
-            <select id="gender" name="gender" value="" helpText="<%= Vocabulary.search("Gender") %>" condition="<%= (!@globals["default_gender_female"].nil? and @globals["default_gender_female"] == true ? false : true) %>">
+            <select id="gender" name="gender" value="" helpText="Gender" condition="<%= (!@globals["default_gender_female"].nil? and @globals["default_gender_female"] == true ? false : true) %>">
               <option></option>
               <option value="F" <%= (!@globals["default_gender_female"].nil? and @globals["default_gender_female"] == true ? "selected" : "") %> >Female</option>
               <option value="M">Male</option>
@@ -605,11 +597,11 @@ tstLocaleWords = {<%=
         </tr>
         <tr>
           <td>
-            <%= Vocabulary.search("Select Patient or Create New Patient") %>
+            Select Patient or Create New Patient
           </td>
           <td>
             <input type="text" id="selected_patient" name="selected_patient" value=""
-                   helpText="<%= Vocabulary.search("Select Patient or Create New Patient") %>" tt_onLoad="loadNames(); hidekeyboard(); __$('nextButton').onmousedown = function(){};" optional="true"
+                   helpText="Select Patient or Create New Patient" tt_onLoad="loadNames(); hidekeyboard(); __$('nextButton').onmousedown = function(){};" optional="true"
                    tt_pageStyleClass="NoControls NoKeyboard hidekeyboard" tt_onUnLoad="__$('nextButton').className = 'green navButton'; __$('nextButton').onmousedown = function(){gotoNextPage()}; if(__$('extras')) __$('buttons').removeChild(__$('extras'));"/>
           </td>
         </tr>
