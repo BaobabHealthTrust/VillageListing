@@ -1,0 +1,128 @@
+<%= javascript_include_tag "jquery" %>
+<%= javascript_include_tag 'utils' %>
+
+<script type="text/javascript">
+  var tt_cancel_destination = "/";
+  var checkForBarcodeTimeout = 1500;
+  
+  function formatBarcodeSpace(){
+
+    __$('inputFrame' + tstCurrentPage).style.background = "white";
+    __$('inputFrame' + tstCurrentPage).style.marginTop = "6%";
+    __$('page' + tstCurrentPage).style.marginTop = "2.5%";
+    __$('inputFrame' + tstCurrentPage).style.border = "hidden";
+
+    var barcode = document.getElementById("touchscreenInput0");
+    var helptext = __$("helpText" + tstCurrentPage);
+
+    barcode.style.width = "400px"
+    barcode.style.fontSize = "50px"
+    barcode.style.marginLeft = "33%";
+    barcode.style.height = "80px";
+
+    helptext.style.marginLeft = "32.5%";
+    helptext.style.paddingTop = "50px";
+  }
+
+  function focusForBarcodeInput() {
+    var barcode = document.getElementById("touchscreenInput0");
+    if (barcode) {
+      barcode.focus();
+    }
+  }
+
+  window.setTimeout("focusForBarcodeInput()", 350);
+
+  function changeDefultSettings() {
+    usertext = document.getElementById("touchscreenInput0");
+    if (usertext && usertext.value.match(/.+\$$/i) != null) {
+      usertext.value = usertext.value.substring(0, usertext.value.length - 1);
+      npid = usertext.value.toUpperCase();
+      ajaxRequesti(npid);
+    }
+
+    __$('nextButton').innerHTML = "<span>Finish</span>";
+    __$('nextButton').onmousedown = function(){
+      npid = document.getElementById("touchscreenInput0").value.toUpperCase();
+      ajaxRequesti(npid);
+    }
+
+  }
+
+  //window.setTimeout("changeDefultSettings();", 350);
+
+  function ajaxRequesti(id){
+
+    var url = "/process_data/" + id;
+
+    var httpRequest = new XMLHttpRequest();
+    httpRequest.onreadystatechange = function() {
+      handleAjaxRequesti(httpRequest);
+    };
+
+    try {
+      httpRequest.open("GET", url, true);
+      httpRequest.send(null);
+    } catch(e){
+    }
+  }
+
+  function handleAjaxRequesti(aXMLHttpRequest){
+    if (!aXMLHttpRequest) return;
+
+    if (aXMLHttpRequest.readyState == 4 && (aXMLHttpRequest.status == 200 ||
+      aXMLHttpRequest.status == 304)) {
+
+      var result = aXMLHttpRequest.responseText;
+
+      __$("person").innerHTML = result;
+
+      document.getElementById("barcodeInput").submit();
+
+    }
+  }
+
+  function upcaseValue(){
+    alert("ddd")
+   value = document.getElementById("touchscreenInput0").value
+   document.getElementById("touchscreenInput0").value = value.toUpperCase()
+   alert(document.getElementById("touchscreenInput0").value)
+  }
+  
+</script>
+
+<style type="text/css">
+  .national_id{
+    position: absolute;
+    left: 26%;
+    width: 5%;
+    top: 24%;
+    width: 100px;
+  }
+
+  #tt_page_scan_or_type_national_id .touchscreenTextInput {
+    position: absolute;
+    top: 80px;
+  }
+
+  #page0 .helpTextClass{
+    margin-left: 35.5% !Important;
+  }
+
+</style>
+
+
+<form action="/dde/process_scan_data" method = 'post' enctype = 'multipart/form-data' id = "barcodeInput" >
+
+  <%= text_field_tag :national_id, '', {
+    :tt_onLoad => "formatBarcodeSpace(); changeDefultSettings();",
+    :tt_onUnLoad => "upcaseValue()",
+    :id => 'national_id',
+    :class => 'touchscreenTextInput',
+    :tt_pageStyleClass => "azButton",
+    :helpText => "Scan OR type National ID",
+    :style => 'position:absolute'
+  } %>
+
+  <textarea id="person" name="person" style="display: none;" condition="false"></textarea>
+</form

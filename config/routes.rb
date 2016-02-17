@@ -81,5 +81,68 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
+
+ # ------------------------------- INSTALLATION GENERATED ----------------------------------------------------
+  #map.duplicates  '/duplicates', :controller => 'dde', :action => 'duplicates'
+  get'/duplicates' => 'dde#duplicates'
+  post'/duplicates' => 'dde#duplicates'
+
+  #map.dde_search_by_name  '/dde_search_by_name', :controller => 'dde', :action => 'search_by_name'
+  get'/dde_search_by_name' => 'dde#search_by_name'
+  post'/dde_search_by_name' => 'dde#search_by_name'
+
+  #map.dde_search_by_id  '/dde_search_by_id', :controller => 'dde', :action => 'search_by_id'
+  get'/dde_search_by_id' => 'dde#search_by_id'
+  post'/dde_search_by_id' => 'dde#search_by_id'
+
+  #map.push_merge  '/push_merge', :controller => 'dde', :action => 'push_merge'
+  get'/push_merge' => 'dde#push_merge'
+  post'/push_merge' => 'dde#push_merge'
+
+  #map.process_result '/process_result', :controller => 'dde', :action => 'process_result'
+  get'/process_result' => 'dde#process_result'
+  post'/process_result' => 'dde#process_result'
+
+  #map.process_data '/process_data/:id', :controller => 'dde', :action => 'process_data'
+  get'/process_data/:id' => 'dde#process_data'
+  post'/process_data/:id' => 'dde#process_data'
+
+  #map.search '/search', :controller => 'dde', :action => 'search_name'
+  get'/search' => 'dde#search_name'
+  post'/search' => 'dde#search_name'
+
+  #map.new_patient '/new_patient', :controller => 'dde', :action => 'new_patient'
+  get'/new_patient' => 'dde#new_patient'
+  post'/new_patient' => 'dde#new_patient'
+
+  #map.ajax_process_data '/ajax_process_data', :controller => 'dde', :action => {'ajax_process_data' => [:post]}
+  get'/ajax_process_data' => 'dde#ajax_process_data'
+  post'/ajax_process_data' => 'dde#ajax_process_data'
+
+  #map.process_confirmation '/process_confirmation', :controller => 'dde', :action => {'process_confirmation' => [:post]}
+  get'/process_confirmation' => 'dde#process_confirmation'
+  post'/process_confirmation' => 'dde#process_confirmation'
+
+  #map.patient_not_found '/patient_not_found/:id', :controller => 'dde', :action => 'patient_not_found'
+  get'/patient_not_found/:id' => 'dde#patient_not_found'
+  post'/patient_not_found/:id' => 'dde#patient_not_found'
+
+  #map.ajax_search '/ajax_search', :controller => 'dde', :action => 'ajax_search'
+  get'/ajax_search' => 'dde#ajax_search'
+  post'/ajax_search' => 'dde#ajax_search'
+
+  #map.edit_demographics '/patients/edit_demographics', :controller => 'dde', :action => 'edit_patient'
+  get'/patients/edit_demographics' => 'dde#edit_patient'
+  post'/patients/edit_demographics' => 'dde#edit_patient'
+
+  #map.demographics '/people/demographics/:id', :controller => 'dde', :action => 'edit_patient'
+  get'/people/demographics/:id' => 'dde#edit_patient'
+  post'/people/demographics/:id' => 'dde#edit_patient'
+ 
+  #map.demographics '/patients/demographics/:id', :controller => 'dde', :action => 'edit_patient'
+  get'/patients/demographics/:id' => 'dde#edit_patient'
+  post'/patients/demographics/:id' => 'dde#edit_patient'
+
+  # ------------------------------- END OF INSTALLATION GENERATED ----------------------------------------------
   root 'home#index'
 end

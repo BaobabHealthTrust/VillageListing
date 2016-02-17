@@ -7,6 +7,8 @@ config/database.yml
 config/email.yml
 config/couchdb.yml
 config/secrets.yml
+config/dde_connection.yml
+config/globals.yml
 .DS_Store
 *.swp
 *.swo
