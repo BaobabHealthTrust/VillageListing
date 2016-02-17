@@ -22,6 +22,7 @@ default: &default
   show_country_of_residence: false
   default_gender_female: false
   locale: en
+  user_mgmt_url: localhost:5000
 
 development:
   <<: *default
