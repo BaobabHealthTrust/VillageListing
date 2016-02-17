@@ -15,10 +15,16 @@ Rails.application.routes.draw do
 
 
   ##################### user ######################
-  get 'user/index'
+  get '/admin' => 'user#index'
   get '/login' => 'user#login'
   post '/login' => 'user#login'
   get '/logout' => 'user#logout'
+  get 'user/new' 
+  post 'user/create' 
+  get 'user/list' 
+  get 'user/username' 
+  get 'user/first_name' 
+  get 'user/last_name' 
   ##################### user end ######################
 
   # The priority is based upon order of creation: first created -> highest priority.
