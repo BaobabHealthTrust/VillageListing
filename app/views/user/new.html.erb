@@ -1,0 +1,98 @@
+<script>
+  var tt_cancel_destination = "/admin"
+
+
+</script>
+
+
+
+<%= form_tag("/user/create", id: "create-form", method: 'post', enctype: 'multipart/form-data') do %>
+ 
+ <%= text_field_tag "user[username]", params[:username],
+                     {:id => 'username', :field_type => 'alpha',
+                      :helpText => 'Username',
+                      :textCase => "lower",
+                      :ajaxURL => '/user/username?search_string=',
+                      :allowFreeText => true }%>
+
+
+  <%= text_field_tag "user[first_name]", params[:firstname],
+                     {:id => 'given_name', :field_type => 'alpha',
+                      :helpText => 'First name',
+                      :ajaxURL => '/user/first_name?search_string=',
+                      :allowFreeText => true }%>
+  
+  <%= text_field_tag "user[last_name]", params[:lastname],
+                     {:id => 'family_name',
+                      :field_type => 'alpha',
+                      :helpText => 'Last name',
+                      :ajaxURL => '/user/last_name?search_string=',
+                      :allowFreeText => true }%>
+
+  <%= select_tag("user[gender]", options_for_select(['','Male','Female'] ,params[:gender]),
+      :helpText =>"Gender",
+      :id => "gender",
+      :allowFreeText => false)
+  %>
+
+ <%= password_field_tag "user[password]", params[:password],
+                     {:id => 'password', :field_type => 'alpha',
+                      :helpText => 'Password',
+                      :textCase => "lower",
+                      :allowFreeText => true }%>
+
+  <%= password_field_tag "user[confirm password]", params[:confirm_password],
+                     {:id => 'confirm_password', :field_type => 'alpha',
+                      :helpText => 'Confirm Password',
+                      :textCase => "lower",
+                      :allowFreeText => true }%>
+
+<%= @roles = ['Administrator', 'Provider'] %> 
+  <%= select_tag("user[role]", options_for_select(@roles ,params[:role]),
+      :helpText =>"Role",
+      :id => "role",
+      :allowFreeText => false)
+  %>
+
+	<label for='summary'>Summary</label>
+	<%= text_field_tag :summary, nil, { :tt_onLoad => "summary();__$('keyboard').style.display = 'none';", 
+      :optional => "true", 
+      :tt_pageStyleClass => "NoControls" } %>
+
+<%end%>
+
+<script>
+
+function summary() {
+
+  var username = document.getElementById('username').value;
+  var first_name = document.getElementById('given_name').value;
+  var last_name = document.getElementById('family_name').value;
+  var gender = document.getElementById('gender').value;
+  var role = document.getElementById('role').value;
+
+  var display = "<div><span class='title'>Username:</span><span class='data'> " + username + "</span></div>";
+  display += "<div><span class='title'>First Name:</span><span class='data'> " + first_name + "</span></div>";
+  display += "<div><span class='title'>Last Name:</span><span class='data'> " + last_name + "</span></div>";
+  display += "<div><span class='title'>Gender:</span><span class='data'> " + gender + "</span></div>";
+  display += "<div><span class='title'>Role:</span><span class='data'> " + role + "</span></div>";
+
+
+	$('inputFrame'+tstCurrentPage).innerHTML = '<div id="summary">' + display + '</div>' ;
+	$("clearButton").style.display = "none";
+		
+
+}
+
+</script>
+
+<style>
+.title {
+  font-size: 50px;
+}
+
+.data {
+  font-size: 40px;
+  color: orangered;
+}
+</style>

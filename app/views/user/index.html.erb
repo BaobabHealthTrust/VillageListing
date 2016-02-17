@@ -116,13 +116,15 @@ img {
   <!-- loop -->
   <div class="cells btncells">
     <%if session[:user]['role'] == 'admin'%>
-    <div class="divbtn" style="background-color:#d24dff;border: 1px solid #2e6da4; width: 99%;" onclick="document.location='/'" >
+      <div class="divbtn" style="background-color:#d24dff;border: 1px solid #2e6da4; width: 99%;" onclick="document.location='/'" >
+    <%else%>
+      <div class="divbtn" style="background-color:#d24dff;border: 1px solid #2e6da4; width: 99%;" onclick="document.location='/'" >
+    <%end%>
         <span class="icons">
           <%=image_tag("icons/demographic.png", class: 'icons')%>
           <p>Edit User</p>
         </span>
     </div>
-    <%end%>
   </div>
   <!-- endloop -->
 

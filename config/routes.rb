@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   
-  
+
   ##################### people ######################
   get 'people/new'
   get 'people/search_results'
@@ -21,7 +21,8 @@ Rails.application.routes.draw do
   get '/logout' => 'user#logout'
   get 'user/new' 
   post 'user/create' 
-  get 'user/list' 
+  get 'user/list'
+
   get 'user/username' 
   get 'user/first_name' 
   get 'user/last_name' 
