@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   get 'people/new'
   get 'people/search_results'
   get 'people/search'
+  get 'people/show'
   ##################### people end ######################
 
   
