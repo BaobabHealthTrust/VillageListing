@@ -105,29 +105,14 @@ img {
   overflow: auto;
 }
 
+.percentage {
+  background-color: gold;
+}
 
 </style>
 
 <%= render :partial => 'user/header' %>
 
-
-<!-- div class="report-attributes">
-  <table style="width: 100%;"> 
-    <tr>
-      <th>District:</th>
-      <td>
-        <select>
-          <%(@districts || []).each do |name|%>
-            <option value="<%=name%>"><%=name%></option>
-          <%end%>
-        </select>
-      </td>
-    </tr>
-    <tr>
-      <th>Total</th><td><%#=@people.length%></td>
-    </tr>
-  </table>
-</div -->
 
 <div class="table-container">
 
@@ -136,7 +121,9 @@ img {
     <tr>
       <th style="text-align: left;">Village</th>
       <th>Female</th>
+      <th class="percentage">Female(%)</th>
       <th>Male</th>
+      <th class="percentage">Male(%)</th>
       <th>Total</th>
     </tr>
   </thead>
@@ -147,7 +134,9 @@ img {
   <tr>
     <td style="text-align: left;"><%=village%></td>
     <td><%=gender['F']%></td>
+    <td class="percentage"><%=(gender['F'].to_i*100)/(gender['M'].to_i + gender['F'])%>%</td>
     <td><%=gender['M']%></td>
+    <td class="percentage"><%=(gender['M'].to_i*100)/(gender['M'].to_i + gender['F'])%>%</td>
     <td><%=(gender['M'].to_i + gender['F'])%></td>
   </tr>
   <%
@@ -158,7 +147,9 @@ img {
   <tr style="background-color: lightgrey;">
     <td style="text-align: left;">Total</td>
     <td><%=total_females%></td>
+    <td class="percentage"><%=(total_females *100)/(total_females + total_males)%>%</td>
     <td><%=total_males%></td>
+    <td class="percentage"><%=(total_males *100)/(total_females + total_males)%>%</td>
     <td><%=(total_females + total_males)%></td>
   </tbody>
   <%end%>
