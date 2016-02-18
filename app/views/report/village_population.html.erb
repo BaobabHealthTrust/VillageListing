@@ -99,6 +99,13 @@ img {
 }
 
 
+.table-container {
+  height: 70%;
+  overflow: auto;
+}
+
+
+
 </style>
 
 <%= render :partial => 'user/header' %>
@@ -122,6 +129,10 @@ img {
   </table>
 </div -->
 
+<br />
+<br />
+
+<div class="table-container">
 
 <table class="people" style="width: 99%">
   <thead>
@@ -130,9 +141,9 @@ img {
       <th>First name</th>
       <th>Last name</th>
       <th>Birthdate</th>
-      <th>Current district</th>
-      <th>Current TA</th>
-      <th>Current Village</th>
+      <th>Home district</th>
+      <th>Home TA</th>
+      <th>Home Village</th>
     </tr>
   </thead>
   <tbody>
@@ -142,13 +153,15 @@ img {
     <td><%=person['names']['given_name']%></td>
     <td><%=person['names']['family_name']%></td>
     <td><%=person['birthdate']%></td>
-    <td><%=person['addresses']['current_district']%></td>
-    <td><%=person['addresses']['current_ta']%></td>
-    <td><%=person['addresses']['current_village']%></td>
+    <td><%=person['addresses']['home_district']%></td>
+    <td><%=person['addresses']['home_ta']%></td>
+    <td><%=person['addresses']['home_village']%></td>
   </tr>
   <%end%>
   </tbody>
 </table>
+
+</div>
 
 <%= render :partial => 'footer' %>
 

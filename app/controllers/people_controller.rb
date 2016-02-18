@@ -16,5 +16,25 @@ class PeopleController < ApplicationController
   def national_id_label
 
   end
-  
+
+  def get_names
+    if params[:search_str].blank?
+      params[:search_str] = 'A'
+    end
+    
+    paramz = {user: session[:user], search_str: params[:search_str], name: params[:name]}
+    server_address = '127.0.0.1:3001'
+    uri = "http://#{server_address}/demographics/#{params[:name]}.json/"
+    names = RestClient.post(uri,paramz)
+
+    unless names.blank?
+      @names = JSON.parse(names)
+      render :text => "<li>" + @names.map{|n| n } .join("</li><li>") + "</li>" and return
+    else
+      @names = [] 
+      render :text => "<li>" + @names.map{|n| n } .join("</li><li>") + "</li>" and return
+    end
+
+  end  
+
 end

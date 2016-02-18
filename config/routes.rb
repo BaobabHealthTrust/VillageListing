@@ -1,13 +1,12 @@
 Rails.application.routes.draw do
   
 
-  get 'people/show'
-
   ##################### people ######################
   get 'people/new'
   get 'people/search_results'
   get 'people/search'
   get 'people/show'
+  get 'people/get_names'
   ##################### people end ######################
 
   

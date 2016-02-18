@@ -735,9 +735,9 @@
   <input type='hidden' name='location_id' value='<%= params[:location_id] %>'/>
 
   <% if @show_current_district == false %>
-    <input type="hidden" value="<%= @state_province_value %>" name="person[addresses][state_province]" id="current_district"></input>
-    <input type="hidden" value="<%= @city_village_value %>" name="person[addresses][city_village]" id="current_location_or_village"></input>
-    <input type="hidden" value="<%= @current_ta_value %>" name="person[addresses][township_division]" id="current_area_of_residence"></input>
+    <input type="hidden" value="<%= session[:user]['district'] %>" name="person[addresses][state_province]" id="current_district"></input>
+    <input type="hidden" value="<%= session[:user]['ta'] %>" name="person[addresses][city_village]" id="current_location_or_village"></input>
+    <input type="hidden" value="<%= session[:user]['village'] %>" name="person[addresses][township_division]" id="current_area_of_residence"></input>
     <input type="hidden" value="OTHER" name="OCCUPATION" id="occupation"></input>
   <% end %>
 
