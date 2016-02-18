@@ -47,32 +47,12 @@ skip_before_action :verify_authenticity_token
   def process_result
   
     json = JSON.parse(params["person"]) rescue {}
-
-    if (json["patient"]["identifiers"].class.to_s.downcase == "hash" rescue false)
-
-      tmp = json["patient"]["identifiers"]
-
-      json["patient"]["identifiers"] = []
-
-      tmp.each do |key, value|
-
-        json["patient"]["identifiers"] << {key => value}
-
-      end
-
-    end
-
-    patient_id = DDE.search_and_or_create(json.to_json) # rescue nil
-
-    json = JSON.parse(params["person"]) rescue {}
-
-    patient = Patient.find(patient_id) rescue nil
-
-    print_and_redirect("/patients/national_id_label?patient_id=#{patient_id}", "/patients/show/#{patient_id}") and return if !patient.blank? and (json["print_barcode"] rescue false)
     
-    redirect_to "/patients/show/#{patient.patient_id}" and return if !patient.blank?
-
-    flash["error"] = "Sorry! Something went wrong. Failed to process properly!"
+    session[:dde_object] = json
+    
+    print_and_redirect("/people/national_id_label", "/people") and return if (json["print_barcode"] rescue false)
+    
+    redirect_to "/people"
 
     redirect_to "/clinic" and return
 
