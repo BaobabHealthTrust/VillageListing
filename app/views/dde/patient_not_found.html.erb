@@ -1,3 +1,8 @@
+
+<script>
+  var tt_cancel_destination = "/";
+</script>
+
 <% if params[:create].blank? %>
 
   <%= form_tag("/patient_not_found/#{@id}") do %>
@@ -11,6 +16,7 @@
   <% end %>
 
 <% else %>
+
   <style type="text/css">
 
     .tt_controls_year_of_birth #qwerty {
@@ -164,60 +170,61 @@
   </style>
 
   <script type="text/javascript">
-  <% if params[:relation] %>
-    var tt_cancel_destination = "/patients/relationships?patient_id=<%=h params[:relation] -%>"
-  <% else %>
-    var tt_cancel_destination = "/clinic"
-  <% end %>
+    
 
-  var showDurrentDistrict = '<%= @show_current_district %>';
-  var freeTextHomeVillage = '';
+    var showDurrentDistrict = '<%= @show_current_district %>';
+    var freeTextHomeVillage = '';
 
-  var dob_year = null;
-  var dob_month = null;
-  dob_day = null;
-  var set_dob = null;
+    var dob_year = null;
+    var dob_month = null;
+    dob_day = null;
+    var set_dob = null;
 
-  var skipped = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    var skipped = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  <%  address = "http://#{request.host_with_port}/process_result"%>
 
-  var json = <%= {
-    "national_id" => "#{@id}",
-    "application" => "#{@settings["application_name"]}",
-    "site_code" => "#{@settings["site_code"]}",
-    "return_path" => "http://#{request.host_with_port}/process_result",
-    "names" =>
+  var json = "{national_id: '<%= @id %>', application: '<%= @settings["application_name"] %>', site_code: '<%= @settings["site_code"] %>', return_path: '<%= address %>', names: {family_name: '', given_name: '', middle_name: '', maiden_name: '' }, gender: '<%= params["gender"] %>', person_attributes: {country_of_residence: '', citizenship: '', occupation: '', home_phone_number: '', cell_phone_number: '', office_phone_number: '', race: ''}, birthdate: '', patient: {identifiers: []}, birthdate_estimated: '', addresses: {current_residence: '', current_village: '', current_ta: '', current_district: '', home_village: '', home_ta: '', home_district: '', landmark: ''}}"
+
+  /*var json = '<%= {
+    'national_id' => "#{@id}",
+    'application' => "#{@settings["application_name"]}",
+    'site_code' => "#{@settings["site_code"]}",
+    'return_path' => "http://#{request.host_with_port}/process_result",
+    'names' =>
       {
-      "family_name" => nil,
-      "given_name" => nil,
-      "middle_name" => nil,
-      "maiden_name" => nil
+      'family_name' => nil,
+      'given_name' => nil,
+      'middle_name' => nil,
+      'maiden_name' => nil
     },
-    "gender" => "#{params["gender"]}",
-    "person_attributes" => {
-      "country_of_residence" => nil,
-      "citizenship" => nil,
-      "occupation" => nil,
-      "home_phone_number" => nil,
-      "cell_phone_number" => nil,
-      "office_phone_number" => nil,
-      "race" => nil
+    'gender' => "#{params["gender"]}",
+    'person_attributes' => {
+      'country_of_residence' => nil,
+      'citizenship' => nil,
+      'occupation' => nil,
+      'home_phone_number' => nil,
+      'cell_phone_number' => nil,
+      'office_phone_number' => nil,
+      'race' => nil
     },
-    "birthdate" => nil,
-    "patient" => {
-      "identifiers" => []
+    'birthdate' => nil,
+    'patient' => {
+      'identifiers' => []
     },
-    "birthdate_estimated" => nil,
-    "addresses" => {
-      "current_residence" => nil,
-      "current_village" => nil,
-      "current_ta" => nil,
-      "current_district" => nil,
-      "home_village" => nil,
-      "home_ta" => nil,
-      "home_district" => nil,
-      "landmark" => nil
+    'birthdate_estimated' => nil,
+    'addresses' => {
+      'current_residence' => nil,
+      'current_village' => nil,
+      'current_ta' => nil,
+      'current_district' => nil,
+      'home_village' => nil,
+      'home_ta' => nil,
+      'home_district' => nil,
+      'landmark' => nil
     }
-  }.to_json %>;
+  }%>)';*/
+
+  json = JSON.parse(JSON.stringify(eval("(" + json + ")")))
 
   function sendToDDE() {
     json.names.given_name = __$("first_name").value;
@@ -754,7 +761,7 @@
 
   <% end %>
 
-  <% form_tag("/dde/send_to_dde", "method" => 'post', "enctype" => 'multipart/form-data',
+  <%= form_tag("/dde/send_to_dde", "method" => 'post', "enctype" => 'multipart/form-data',
     "id" => 'creation', "class" => "form-horizontal", "autocomplete" => "off", "role" => "form", "novalidate" => "novalidate") do %>
 
     <textarea id="person" name="person" style="display: none;" condition="false"></textarea>
