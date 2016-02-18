@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   
 
+  get 'people/show'
+
   ##################### people ######################
   get 'people/new'
   get 'people/search_results'
@@ -173,6 +175,8 @@ Rails.application.routes.draw do
   get'/patients/demographics/:id' => 'dde#edit_patient'
   post'/patients/demographics/:id' => 'dde#edit_patient'
 
+  get '/people/national_id_label'
+  get'/people' => 'people#show'
   # ------------------------------- END OF INSTALLATION GENERATED ----------------------------------------------
   root 'home#index'
 end
