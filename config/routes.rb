@@ -28,6 +28,14 @@ Rails.application.routes.draw do
   get 'user/last_name' 
   ##################### user end ######################
 
+  ##################### report ######################
+  get 'report/index'
+  get '/ta_population' => 'report#ta_population'
+  get '/village_population' => 'report#village_population'
+  get '/ta_population_tabulation' => 'report#ta_population_tabulation'
+  ##################### report end ######################
+
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
