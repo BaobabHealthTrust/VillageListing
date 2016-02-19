@@ -140,6 +140,8 @@ Rails.application.routes.draw do
   get'/search' => 'dde#search_name'
   post'/search' => 'dde#search_name'
 
+  get '/people/edit_demographics'
+  post '/people/update_demographics'
   #map.new_patient '/new_patient', :controller => 'dde', :action => 'new_patient'
   get '/dde/new_patient'
   get'/new_patient' => 'dde#new_patient'
@@ -178,7 +180,9 @@ Rails.application.routes.draw do
   post'/patients/demographics/:id' => 'dde#edit_patient'
 
   get '/people/national_id_label'
+  get'/national_id_label' => 'people#national_id_label'
   get'/people' => 'people#show'
+  get'/demographics' => 'people#demographics'
   # ------------------------------- END OF INSTALLATION GENERATED ----------------------------------------------
   root 'home#index'
 end
