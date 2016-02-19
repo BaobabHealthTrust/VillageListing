@@ -177,6 +177,7 @@ Rails.application.routes.draw do
 
   get '/people/national_id_label'
   get'/people' => 'people#show'
+  get'/demographics' => 'people#demographics'
   # ------------------------------- END OF INSTALLATION GENERATED ----------------------------------------------
   root 'home#index'
 end
