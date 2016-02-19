@@ -131,7 +131,7 @@ img {
 
 <div class="table-container">
 
-<table class="people" style="width: 99%" id="search_results">
+<table class="people" style="width: 99%;" id="search_results">
   <thead>
     <tr>
       <th style="text-align: left;">Village</th>
@@ -159,13 +159,16 @@ img {
   end%>
   
   <%if @stats.length > 0%>
-  <tr style="background-color: lightgrey;">
+  <tfoot>
+   <tr style="background-color: lightgrey;">
     <td style="text-align: left;">Total</td>
     <td><%=total_females%></td>
     <td class="percentage"><%=(total_females *100)/(total_females + total_males)%>%</td>
     <td><%=total_males%></td>
     <td class="percentage"><%=(total_males *100)/(total_females + total_males)%>%</td>
     <td><%=(total_females + total_males)%></td>
+   </tr>
+  <tfoot>
   </tbody>
   <%end%>
 </table>
@@ -178,7 +181,15 @@ img {
   
   function dataT(){          
     dataTable = jQuery('#search_results').dataTable();                                                  
+    setF();
   }
+
+  function setF() {
+    try {
+      document.getElementById('search_results').style.display = "width:99%;height: 90%;";
+    }catch(e) {};
+  }
+  
 
 </script>
   
