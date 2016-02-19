@@ -1,4 +1,6 @@
 class PeopleController < ApplicationController
+  skip_before_action :verify_authenticity_token
+  
   def search
   end
 
@@ -63,8 +65,10 @@ def formatted_dde_object
 
   given_name = dde_object["names"]["given_name"]
   middle_name = dde_object["names"]["middle_name"]
+  maiden_name = dde_object["names"]["maiden_name"]
   family_name = dde_object["names"]["family_name"]
   person_name = given_name.to_s + ' ' + family_name.to_s
+  birthdate_estimated = dde_object["birthdate_estimated"]
   birthdate = dde_object["birthdate"]
   formatted_birthdate = birthdate.to_date.strftime("%d/%b/%Y") rescue birthdate
 
@@ -78,21 +82,43 @@ def formatted_dde_object
   home_district = dde_object["addresses"]["home_district"]
 
   gender = dde_object["gender"]
+  identifiers = []
+  identifiers = dde_object["patient"]["identifiers"] unless dde_object["patient"].blank?
+
+  home_phone_number = dde_object["person_attributes"]["home_phone_number"]
+  cell_phone_number = dde_object["person_attributes"]["cell_phone_number"]
+  office_phone_number = dde_object["person_attributes"]["office_phone_number"]
+
+  race = dde_object["person_attributes"]["race"]
+  occupation = dde_object["person_attributes"]["occupation"]
+  citizenship = dde_object["person_attributes"]["citizenship"]
+  country_of_residence = dde_object["person_attributes"]["country_of_residence"]
 
   patient_bean = {
     :national_id => national_id,
       :first_name => given_name,
       :middle_name => middle_name,
+      :maiden_name => maiden_name,
       :last_name => family_name,
       :name => person_name,
+      :birthdate_estimated => birthdate_estimated,
       :birthdate => formatted_birthdate,
       :current_residence => current_residence,
       :current_village => current_village,
       :current_ta => current_ta,
       :current_district => current_district,
       :home_ta => home_ta,
-      :home_village => home_village, :home_district => home_district,
-      :sex => gender
+      :home_village => home_village,
+      :home_district => home_district,
+      :sex => gender,
+      :identifiers => identifiers,
+      :home_phone_number => home_phone_number,
+      :cell_phone_number => cell_phone_number,
+      :office_phone_number => office_phone_number,
+      :race => race,
+      :occupation => occupation,
+      :citizenship => citizenship,
+      :country_of_residence => country_of_residence
   }
 
   patient_bean = OpenStruct.new patient_bean #Making the keys accessible by a dot operator
@@ -154,4 +180,124 @@ def demographics
   @patient_bean = formatted_dde_object
 end
 
+def edit_demographics
+  @patient_bean = formatted_dde_object
+  @field = params[:field]
+end
+
+def update_demographics
+
+  patient_bean = formatted_dde_object
+  @settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] rescue {}
+
+  dob = (patient_bean.birthdate.to_date.strftime("%Y-%m-%d") rescue nil)
+  estimate = patient_bean.birthdate_estimated == true ? true : false
+
+  if !(params[:person][:birth_month] rescue nil).blank? and (params[:person][:birth_month] rescue nil).to_s.downcase == "unknown"
+    dob = "#{params[:person][:birth_year]}-07-01"
+    dob = Date.parse(dob).strftime("??/???/%Y")
+    estimate = true
+  end
+
+  if !(params[:person][:birth_day] rescue nil).blank? and (params[:person][:birth_month] rescue nil).to_s.downcase == "unknown"
+    dob = "#{params[:person][:birth_year]}-#{"%02d" % params[:person][:birth_month].to_i}-15"
+    dob = Date.parse(dob).strftime("??/%b/%Y")
+    estimate = true
+  end
+
+  if !(params[:person][:birth_month] rescue nil).blank? and (params[:person][:birth_month] rescue nil).to_s.downcase != "unknown" and !(params[:person][:birth_day] rescue nil).blank? and (params[:person][:birth_day] rescue nil).to_s.downcase != "unknown" and !(params[:person][:birth_year] rescue nil).blank? and (params[:person][:birth_year] rescue nil).to_s.downcase != "unknown"
+    dob = "#{params[:person][:birth_year]}-#{"%02d" % params[:person][:birth_month].to_i}-#{"%02d" % params[:person][:birth_day].to_i}"
+    dob = Date.parse(dob).strftime("%d/%b/%Y")
+    estimate = false
+  end
+
+
+  if (params[:person][:attributes]["citizenship"] == "Other" rescue false)
+    params[:person][:attributes]["citizenship"] = params[:person][:attributes]["race"]
+  end
+
+  person = {
+    "national_id" => patient_bean.national_id,
+      "application" => "#{@settings["application_name"]}",
+      "site_code" => "#{@settings["site_code"]}",
+      "return_path" => "http://#{request.host_with_port}/process_result",
+      "patient_id" => (nil),
+      "patient_update" => true,
+      "names" =>
+      {
+      "family_name" => (!(params[:person][:names][:family_name] rescue nil).blank? ? (params[:person][:names][:family_name] rescue nil) : (patient_bean.last_name rescue nil)),
+      "given_name" => (!(params[:person][:names][:given_name] rescue nil).blank? ? (params[:person][:names][:given_name] rescue nil) : (patient_bean.first_name rescue nil)),
+      "middle_name" => (!(params[:person][:names][:middle_name] rescue nil).blank? ? (params[:person][:names][:middle_name] rescue nil) : (patient_bean.middle_name rescue nil)),
+      "maiden_name" => (!(params[:person][:names][:family_name2] rescue nil).blank? ? (params[:person][:names][:family_name2] rescue nil) : (patient_bean.maiden_name rescue nil))
+    },
+      "gender" => (!params["gender"].blank? ? params["gender"] : (patient_bean.sex rescue nil)),
+      "person_attributes" => {
+      "occupation" => (!(params[:person][:attributes][:occupation] rescue nil).blank? ? (params[:person][:attributes][:occupation] rescue nil) :
+          patient_bean.occupation),
+
+      "cell_phone_number" => (!(params[:person][:attributes][:cell_phone_number] rescue nil).blank? ? (params[:person][:attributes][:cell_phone_number] rescue nil) :
+          patient_bean.cell_phone_number),
+
+      "home_phone_number" => (!(params[:person][:attributes][:home_phone_number] rescue nil).blank? ? (params[:person][:attributes][:home_phone_number] rescue nil) :
+          patient_bean.home_phone_number),
+
+      "office_phone_number" => (!(params[:person][:attributes][:office_phone_number] rescue nil).blank? ? (params[:person][:attributes][:office_phone_number] rescue nil) :
+          patient_bean.office_phone_number),
+
+      "country_of_residence" => (!(params[:person][:attributes][:country_of_residence] rescue nil).blank? ? (params[:person][:attributes][:country_of_residence] rescue nil) :
+          patient_bean.country_of_residence),
+
+      "citizenship" => (!(params[:person][:attributes][:citizenship] rescue nil).blank? ? (params[:person][:attributes][:citizenship] rescue nil) :
+          patient_bean.citizenship)
+    },
+      "birthdate" => dob,
+      "patient" => {
+      "identifiers" => patient_bean.identifiers
+    },
+      "birthdate_estimated" => estimate,
+      "addresses" => {
+      "current_residence" => (!(params[:person][:addresses][:address1]  rescue nil).blank? ? (params[:person][:addresses][:address1] rescue nil) : patient_bean.current_residence),
+      "current_village" => (!(params[:person][:addresses][:city_village] rescue nil).blank? ? (params[:person][:addresses][:city_village] rescue nil) : patient_bean.current_village),
+      "current_ta" => (!(params[:person][:addresses][:township_division] rescue nil).blank? ? (params[:person][:addresses][:township_division] rescue nil) : patient_bean.current_ta),
+      "current_district" => (!(params[:person][:addresses][:state_province] rescue nil).blank? ? (params[:person][:addresses][:state_province] rescue nil) : patient_bean.current_district),
+      "home_village" => (!(params[:person][:addresses][:neighborhood_cell] rescue nil).blank? ? (params[:person][:addresses][:neighborhood_cell] rescue nil) : patient_bean.home_village),
+      "home_ta" => (!(params[:person][:addresses][:county_district] rescue nil).blank? ? (params[:person][:addresses][:county_district] rescue nil) : patient_bean.home_ta),
+      "home_district" => (!(params[:person][:addresses][:address2] rescue nil).blank? ? (params[:person][:addresses][:address2] rescue nil) : patient_bean.home_district)
+    }
+  }
+
+  if secure?
+    url = "https://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/process_confirmation"
+  else
+    url = "http://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/process_confirmation"
+  end
+  result = RestClient.post(url, {:person => person, :target => "update"})
+
+  json = JSON.parse(result) rescue {}
+
+  if (json["patient"]["identifiers"] rescue "").class.to_s.downcase == "hash"
+
+    tmp = json["patient"]["identifiers"]
+
+    json["patient"]["identifiers"] = []
+
+    tmp.each do |key, value|
+
+      json["patient"]["identifiers"] << {key => value}
+
+    end
+
+  end
+
+  session[:dde_object] = json
+
+  redirect_to "/people" and return
+
+end
+
+def secure?
+  @settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]
+  secure = @settings["secure_connection"] rescue false
+end
+  
 end
