@@ -1,7 +1,7 @@
 require "rest-client"
 
 class DdeController < ApplicationController
-skip_before_action :verify_authenticity_token
+  skip_before_action :verify_authenticity_token
 
   def index
     session[:cohort] = nil
@@ -72,42 +72,42 @@ skip_before_action :verify_authenticity_token
     address = patient.person.addresses.last rescue nil
 
     person = {
-        "national_id" => national_id,
-        "application" => "#{@settings["application_name"]}",
-        "site_code" => "#{@settings["site_code"]}",
-        "return_path" => "http://#{request.host_with_port}/process_result",
-        "patient_id" => (patient.patient_id rescue nil),
-        "names" =>
-            {
-                "family_name" => (name.family_name rescue nil),
-                "given_name" => (name.given_name rescue nil),
-                "middle_name" => (name.middle_name rescue nil),
-                "maiden_name" => (name.family_name2 rescue nil)
-            },
-        "gender" => (patient.person.gender rescue nil),
-        "person_attributes" => {
-            "occupation" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Occupation").id).value rescue nil),
-            "cell_phone_number" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Cell Phone Number").id).value rescue nil),
-            "home_phone_number" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Home Phone Number").id).value rescue nil),
-            "office_phone_number" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Office Phone Number").id).value rescue nil),
-            "race" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Race").id).value rescue nil),
-            "country_of_residence" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Country of Residence").id).value rescue nil),
-            "citizenship" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Citizenship").id).value rescue nil)
-        },
-        "birthdate" => (patient.person.birthdate rescue nil),
-        "patient" => {
-            "identifiers" => (patient.patient_identifiers.collect { |id| {id.type.name => id.identifier} if id.type.name.downcase != "national id" }.delete_if { |x| x.nil? } rescue [])
-        },
-        "birthdate_estimated" => ((patient.person.birthdate_estimated rescue 0).to_s.strip == '1' ? true : false),
-        "addresses" => {
-            "current_residence" => (address.address1 rescue nil),
-            "current_village" => (address.city_village rescue nil),
-            "current_ta" => (address.township_division rescue nil),
-            "current_district" => (address.state_province rescue nil),
-            "home_village" => (address.neighborhood_cell rescue nil),
-            "home_ta" => (address.county_district rescue nil),
-            "home_district" => (address.address2 rescue nil)
-        }
+      "national_id" => national_id,
+      "application" => "#{@settings["application_name"]}",
+      "site_code" => "#{@settings["site_code"]}",
+      "return_path" => "http://#{request.host_with_port}/process_result",
+      "patient_id" => (patient.patient_id rescue nil),
+      "names" =>
+        {
+        "family_name" => (name.family_name rescue nil),
+        "given_name" => (name.given_name rescue nil),
+        "middle_name" => (name.middle_name rescue nil),
+        "maiden_name" => (name.family_name2 rescue nil)
+      },
+      "gender" => (patient.person.gender rescue nil),
+      "person_attributes" => {
+        "occupation" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Occupation").id).value rescue nil),
+        "cell_phone_number" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Cell Phone Number").id).value rescue nil),
+        "home_phone_number" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Home Phone Number").id).value rescue nil),
+        "office_phone_number" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Office Phone Number").id).value rescue nil),
+        "race" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Race").id).value rescue nil),
+        "country_of_residence" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Country of Residence").id).value rescue nil),
+        "citizenship" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Citizenship").id).value rescue nil)
+      },
+      "birthdate" => (patient.person.birthdate rescue nil),
+      "patient" => {
+        "identifiers" => (patient.patient_identifiers.collect { |id| {id.type.name => id.identifier} if id.type.name.downcase != "national id" }.delete_if { |x| x.nil? } rescue [])
+      },
+      "birthdate_estimated" => ((patient.person.birthdate_estimated rescue 0).to_s.strip == '1' ? true : false),
+      "addresses" => {
+        "current_residence" => (address.address1 rescue nil),
+        "current_village" => (address.city_village rescue nil),
+        "current_ta" => (address.township_division rescue nil),
+        "current_district" => (address.state_province rescue nil),
+        "home_village" => (address.neighborhood_cell rescue nil),
+        "home_ta" => (address.county_district rescue nil),
+        "home_district" => (address.address2 rescue nil)
+      }
     }
 
     render :text => person.to_json
@@ -122,24 +122,24 @@ skip_before_action :verify_authenticity_token
     Person.find(:all, :joins => [:names], :conditions => ["given_name = ? AND family_name = ? AND gender = ?", params["given_name"], params["family_name"], params["gender"]]).each do |person|
 
       json["results"] << {
-          "uuid" => person.id,
-          "person" => {
-              "display" => ("#{person.names.last.given_name} #{person.names.last.family_name}" rescue nil),
-              "age" => ((Date.today - person.birthdate.to_date).to_i / 365 rescue nil),
-              "birthdateEstimated" => ((person.birthdate_estimated.to_s.strip == '1' ? true : false) rescue false),
-              "gender" => (person.gender rescue nil),
-              "preferredAddress" => {
-                  "cityVillage" => (person.addresses.last.city_village rescue nil)
-              }
-          },
-          "identifiers" => person.patient.patient_identifiers.collect { |id|
-            {
-                "identifier" => (id.identifier rescue "Unknown"),
-                "identifierType" => {
-                    "display" => (id.type.name rescue "Unknown")
-                }
+        "uuid" => person.id,
+        "person" => {
+          "display" => ("#{person.names.last.given_name} #{person.names.last.family_name}" rescue nil),
+          "age" => ((Date.today - person.birthdate.to_date).to_i / 365 rescue nil),
+          "birthdateEstimated" => ((person.birthdate_estimated.to_s.strip == '1' ? true : false) rescue false),
+          "gender" => (person.gender rescue nil),
+          "preferredAddress" => {
+            "cityVillage" => (person.addresses.last.city_village rescue nil)
+          }
+        },
+        "identifiers" => person.patient.patient_identifiers.collect { |id|
+          {
+            "identifier" => (id.identifier rescue "Unknown"),
+            "identifierType" => {
+              "display" => (id.type.name rescue "Unknown")
             }
           }
+        }
       }
 
     end
@@ -147,18 +147,18 @@ skip_before_action :verify_authenticity_token
     json["results"].each do |o|
 
       person = {
-          :uuid => (o["uuid"] rescue nil),
-          :name => (o["person"]["display"] rescue nil),
-          :age => (o["person"]["age"] rescue nil),
-          :estimated => (o["person"]["birthdateEstimated"] rescue nil),
-          :identifiers => o["identifiers"].collect { |id|
-            {
-                :identifier => (id["identifier"] rescue nil),
-                :idtype => (id["identifierType"]["display"] rescue nil)
-            }
-          },
-          :gender => (o["person"]["gender"] rescue nil),
-          :village => (o["person"]["preferredAddress"]["cityVillage"] rescue nil)
+        :uuid => (o["uuid"] rescue nil),
+        :name => (o["person"]["display"] rescue nil),
+        :age => (o["person"]["age"] rescue nil),
+        :estimated => (o["person"]["birthdateEstimated"] rescue nil),
+        :identifiers => o["identifiers"].collect { |id|
+          {
+            :identifier => (id["identifier"] rescue nil),
+            :idtype => (id["identifierType"]["display"] rescue nil)
+          }
+        },
+        :gender => (o["person"]["gender"] rescue nil),
+        :village => (o["person"]["preferredAddress"]["cityVillage"] rescue nil)
       }
 
       result[o["uuid"]] = person
@@ -218,8 +218,8 @@ skip_before_action :verify_authenticity_token
     @show_country_of_residence = (settings["show_country_of_residence"] == true ? true : false) rescue false
     
     @occupations = ['','Driver','Housewife','Messenger','Business','Farmer','Salesperson','Teacher',
-                    'Student','Security guard','Domestic worker', 'Police','Office worker',
-                    'Preschool child','Mechanic','Prisoner','Craftsman','Healthcare Worker','Soldier'].sort.concat(["Other","Unknown"])
+      'Student','Security guard','Domestic worker', 'Police','Office worker',
+      'Preschool child','Mechanic','Prisoner','Craftsman','Healthcare Worker','Soldier'].sort.concat(["Other","Unknown"])
 
     @destination = request.referrer
     @state_province_value = GlobalProperty.find_by_property("state_province").property_value rescue ''
@@ -283,8 +283,8 @@ skip_before_action :verify_authenticity_token
     @show_country_of_residence = (settings["show_country_of_residence"] == true ? true : false) rescue false
 
     @occupations = ['','Driver','Housewife','Messenger','Business','Farmer','Salesperson','Teacher',
-                    'Student','Security guard','Domestic worker', 'Police','Office worker',
-                    'Preschool child','Mechanic','Prisoner','Craftsman','Healthcare Worker','Soldier'].sort.concat(["Other","Unknown"])
+      'Student','Security guard','Domestic worker', 'Police','Office worker',
+      'Preschool child','Mechanic','Prisoner','Craftsman','Healthcare Worker','Soldier'].sort.concat(["Other","Unknown"])
 
     @person = Person.find(person_id)
 
@@ -352,8 +352,8 @@ skip_before_action :verify_authenticity_token
     @show_country_of_residence = (settings["show_country_of_residence"] == true ? true : false) rescue false
 
     @occupations = ['','Driver','Housewife','Messenger','Business','Farmer','Salesperson','Teacher',
-                    'Student','Security guard','Domestic worker', 'Police','Office worker',
-                    'Preschool child','Mechanic','Prisoner','Craftsman','Healthcare Worker','Soldier'].sort.concat(["Other","Unknown"])
+      'Student','Security guard','Domestic worker', 'Police','Office worker',
+      'Preschool child','Mechanic','Prisoner','Craftsman','Healthcare Worker','Soldier'].sort.concat(["Other","Unknown"])
 
   end
 
@@ -437,59 +437,59 @@ skip_before_action :verify_authenticity_token
     }
 
     person = {
-        "national_id" => national_id,
-        "application" => "#{@settings["application_name"]}",
-        "site_code" => "#{@settings["site_code"]}",
-        "return_path" => "http://#{request.host_with_port}/process_result",
-        "patient_id" => (patient.patient_id rescue nil),
-        "patient_update" => true,
-        "names" =>
-            {
-                "family_name" => (!(params[:person][:names][:family_name] rescue nil).blank? ? (params[:person][:names][:family_name] rescue nil) : (name.family_name rescue nil)),
-                "given_name" => (!(params[:person][:names][:given_name] rescue nil).blank? ? (params[:person][:names][:given_name] rescue nil) : (name.given_name rescue nil)),
-                "middle_name" => (!(params[:person][:names][:middle_name] rescue nil).blank? ? (params[:person][:names][:middle_name] rescue nil) : (name.middle_name rescue nil)),
-                "maiden_name" => (!(params[:person][:names][:family_name2] rescue nil).blank? ? (params[:person][:names][:family_name2] rescue nil) : (name.family_name2 rescue nil))
-            },
-        "gender" => (!params["gender"].blank? ? params["gender"] : (patient.person.gender rescue nil)),
-        "person_attributes" => {
-            "occupation" => (!(params[:person][:attributes][:occupation] rescue nil).blank? ? (params[:person][:attributes][:occupation] rescue nil) :
-                (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Occupation").id).value rescue nil)),
+      "national_id" => national_id,
+      "application" => "#{@settings["application_name"]}",
+      "site_code" => "#{@settings["site_code"]}",
+      "return_path" => "http://#{request.host_with_port}/process_result",
+      "patient_id" => (patient.patient_id rescue nil),
+      "patient_update" => true,
+      "names" =>
+        {
+        "family_name" => (!(params[:person][:names][:family_name] rescue nil).blank? ? (params[:person][:names][:family_name] rescue nil) : (name.family_name rescue nil)),
+        "given_name" => (!(params[:person][:names][:given_name] rescue nil).blank? ? (params[:person][:names][:given_name] rescue nil) : (name.given_name rescue nil)),
+        "middle_name" => (!(params[:person][:names][:middle_name] rescue nil).blank? ? (params[:person][:names][:middle_name] rescue nil) : (name.middle_name rescue nil)),
+        "maiden_name" => (!(params[:person][:names][:family_name2] rescue nil).blank? ? (params[:person][:names][:family_name2] rescue nil) : (name.family_name2 rescue nil))
+      },
+      "gender" => (!params["gender"].blank? ? params["gender"] : (patient.person.gender rescue nil)),
+      "person_attributes" => {
+        "occupation" => (!(params[:person][:attributes][:occupation] rescue nil).blank? ? (params[:person][:attributes][:occupation] rescue nil) :
+            (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Occupation").id).value rescue nil)),
 
-            "cell_phone_number" => (!(params[:person][:attributes][:cell_phone_number] rescue nil).blank? ? (params[:person][:attributes][:cell_phone_number] rescue nil) :
-                (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Cell Phone Number").id).value rescue nil)),
+        "cell_phone_number" => (!(params[:person][:attributes][:cell_phone_number] rescue nil).blank? ? (params[:person][:attributes][:cell_phone_number] rescue nil) :
+            (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Cell Phone Number").id).value rescue nil)),
 
-            "home_phone_number" => (!(params[:person][:attributes][:home_phone_number] rescue nil).blank? ? (params[:person][:attributes][:home_phone_number] rescue nil) :
-                (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Home Phone Number").id).value rescue nil)),
+        "home_phone_number" => (!(params[:person][:attributes][:home_phone_number] rescue nil).blank? ? (params[:person][:attributes][:home_phone_number] rescue nil) :
+            (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Home Phone Number").id).value rescue nil)),
 
-            "office_phone_number" => (!(params[:person][:attributes][:office_phone_number] rescue nil).blank? ? (params[:person][:attributes][:office_phone_number] rescue nil) :
-                (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Office Phone Number").id).value rescue nil)),
+        "office_phone_number" => (!(params[:person][:attributes][:office_phone_number] rescue nil).blank? ? (params[:person][:attributes][:office_phone_number] rescue nil) :
+            (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Office Phone Number").id).value rescue nil)),
 
-            "country_of_residence" => (!(params[:person][:attributes][:country_of_residence] rescue nil).blank? ? (params[:person][:attributes][:country_of_residence] rescue nil) :
-                (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Country of Residence").id).value rescue nil)),
+        "country_of_residence" => (!(params[:person][:attributes][:country_of_residence] rescue nil).blank? ? (params[:person][:attributes][:country_of_residence] rescue nil) :
+            (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Country of Residence").id).value rescue nil)),
 
-            "citizenship" => (!(params[:person][:attributes][:citizenship] rescue nil).blank? ? (params[:person][:attributes][:citizenship] rescue nil) :
-                (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Citizenship").id).value rescue nil))
-        },
-        "birthdate" => dob,
-        "patient" => {
-            "identifiers" => identifiers
-        },
-        "birthdate_estimated" => estimate,
-        "addresses" => {
-            "current_residence" => (!(params[:person][:addresses][:address1]  rescue nil).blank? ? (params[:person][:addresses][:address1] rescue nil) : (address.address1 rescue nil)),
-            "current_village" => (!(params[:person][:addresses][:city_village] rescue nil).blank? ? (params[:person][:addresses][:city_village] rescue nil) : (address.city_village rescue nil)),
-            "current_ta" => (!(params[:person][:addresses][:township_division] rescue nil).blank? ? (params[:person][:addresses][:township_division] rescue nil) : (address.township_division rescue nil)),
-            "current_district" => (!(params[:person][:addresses][:state_province] rescue nil).blank? ? (params[:person][:addresses][:state_province] rescue nil) : (address.state_province rescue nil)),
-            "home_village" => (!(params[:person][:addresses][:neighborhood_cell] rescue nil).blank? ? (params[:person][:addresses][:neighborhood_cell] rescue nil) : (address.neighborhood_cell rescue nil)),
-            "home_ta" => (!(params[:person][:addresses][:county_district] rescue nil).blank? ? (params[:person][:addresses][:county_district] rescue nil) : (address.county_district rescue nil)),
-            "home_district" => (!(params[:person][:addresses][:address2] rescue nil).blank? ? (params[:person][:addresses][:address2] rescue nil) : (address.address2 rescue nil))
-        }
+        "citizenship" => (!(params[:person][:attributes][:citizenship] rescue nil).blank? ? (params[:person][:attributes][:citizenship] rescue nil) :
+            (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Citizenship").id).value rescue nil))
+      },
+      "birthdate" => dob,
+      "patient" => {
+        "identifiers" => identifiers
+      },
+      "birthdate_estimated" => estimate,
+      "addresses" => {
+        "current_residence" => (!(params[:person][:addresses][:address1]  rescue nil).blank? ? (params[:person][:addresses][:address1] rescue nil) : (address.address1 rescue nil)),
+        "current_village" => (!(params[:person][:addresses][:city_village] rescue nil).blank? ? (params[:person][:addresses][:city_village] rescue nil) : (address.city_village rescue nil)),
+        "current_ta" => (!(params[:person][:addresses][:township_division] rescue nil).blank? ? (params[:person][:addresses][:township_division] rescue nil) : (address.township_division rescue nil)),
+        "current_district" => (!(params[:person][:addresses][:state_province] rescue nil).blank? ? (params[:person][:addresses][:state_province] rescue nil) : (address.state_province rescue nil)),
+        "home_village" => (!(params[:person][:addresses][:neighborhood_cell] rescue nil).blank? ? (params[:person][:addresses][:neighborhood_cell] rescue nil) : (address.neighborhood_cell rescue nil)),
+        "home_ta" => (!(params[:person][:addresses][:county_district] rescue nil).blank? ? (params[:person][:addresses][:county_district] rescue nil) : (address.county_district rescue nil)),
+        "home_district" => (!(params[:person][:addresses][:address2] rescue nil).blank? ? (params[:person][:addresses][:address2] rescue nil) : (address.address2 rescue nil))
+      }
     }
     
     if secure?
-     url = "https://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/process_confirmation"
+      url = "https://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/process_confirmation"
     else
-     url = "http://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/process_confirmation"
+      url = "http://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/process_confirmation"
     end
     result = RestClient.post(url, {:person => person, :target => "update"})
 
@@ -548,180 +548,13 @@ skip_before_action :verify_authenticity_token
       
       result = JSON.parse(JSON.parse(@results)[0])
 
-      checked = DDE.compare_people(result, @json) # rescue false
+      session[:dde_object] = result
 
-      if checked
-       
-        result["patient_id"] = @json["patient_id"] if !@json["patient_id"].blank?
-
-        @results = result.to_json
-
-        person = JSON.parse(@results) #["person"]
-        
-        if secure?
-         url = "https://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/process_confirmation"
-        else
-         url = "http://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/process_confirmation"
-        end 
-        
-        @results = RestClient.post(url, {:person => person, :target => "select"})
-
-        @dontstop = true
-
-      elsif !checked and @json["names"]["given_name"].blank? and @json["names"]["family_name"].blank? and @json["gender"].blank?
-        
-        # result["patient_id"] = @json["patient_id"] if !@json["patient_id"].blank?
-
-        @results = result.to_json
-
-        person = JSON.parse(@results) #["person"]
-        
-        if secure?
-           url = "https://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/process_confirmation"
-        else
-           url = "http://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/process_confirmation"
-        end
-        
-        @results = RestClient.post(url, {:person => person, :target => "select"})
-
-        @dontstop = true
-
-      else
-       
-        @results = []
-
-        @results << result
-
-        patient = PatientIdentifier.find_by_identifier(@json["national_id"]).patient rescue nil
-
-        if !patient.nil?
-
-          national_id = ((patient.patient_identifiers.find_by_identifier_type(PatientIdentifierType.find_by_name("National id").id).identifier rescue nil) || params[:id])
-
-          name = patient.person.names.last rescue nil
-
-          address = patient.person.addresses.last rescue nil
-
-          verifier = {
-              "national_id" => national_id,
-              "patient_id" => (patient.patient_id rescue nil),
-              "names" =>
-                  {
-                      "family_name" => (name.family_name rescue nil),
-                      "given_name" => (name.given_name rescue nil),
-                      "middle_name" => (name.middle_name rescue nil),
-                      "maiden_name" => (name.family_name2 rescue nil)
-                  },
-              "gender" => (patient.person.gender rescue nil),
-              "person_attributes" => {
-                  "occupation" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Occupation").id).value rescue nil),
-                  "cell_phone_number" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Cell Phone Number").id).value rescue nil),
-                  "home_phone_number" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Home Phone Number").id).value rescue nil),
-                  "office_phone_number" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Office Phone Number").id).value rescue nil),
-                  "race" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Race").id).value rescue nil),
-                  "country_of_residence" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Country of Residence").id).value rescue nil),
-                  "citizenship" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Citizenship").id).value rescue nil)
-              },
-              "birthdate" => (patient.person.birthdate rescue nil),
-              "patient" => {
-                  "identifiers" => (patient.patient_identifiers.collect { |id| {id.type.name => id.identifier} if id.type.name.downcase != "national id" }.delete_if { |x| x.nil? } rescue [])
-              },
-              "birthdate_estimated" => ((patient.person.birthdate_estimated rescue 0).to_s.strip == '1' ? true : false),
-              "addresses" => {
-                  "current_residence" => (address.address1 rescue nil),
-                  "current_village" => (address.city_village rescue nil),
-                  "current_ta" => (address.township_division rescue nil),
-                  "current_district" => (address.state_province rescue nil),
-                  "home_village" => (address.neighborhood_cell rescue nil),
-                  "home_ta" => (address.county_district rescue nil),
-                  "home_district" => (address.address2 rescue nil)
-              }
-          }.to_json
-
-          checked = DDE.compare_people(result, verifier) # rescue false
-
-          if checked
-
-            result["patient_id"] = @json["patient_id"] if !@json["patient_id"].blank?
-
-            @results = result.to_json
-
-            person = JSON.parse(@results) #["person"]
-            
-            if secure?
-              url = "https://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/process_confirmation"
-            else
-              url = "http://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/process_confirmation"
-            end
-            
-            @results = RestClient.post(url, {:person => person, :target => "select"})
-
-            @dontstop = true
-
-          end
-
-        else
-
-          @dontstop = true
-
-        end
-      end
+      redirect_to ("/people") and return
 
     elsif JSON.parse(@results).length == 0
-      
-      patient = PatientIdentifier.find_by_identifier(@json["national_id"]).patient rescue nil
-
-      if !patient.nil?
-        @results = []
-
-        national_id = ((patient.patient_identifiers.find_by_identifier_type(PatientIdentifierType.find_by_name("National id").id).identifier rescue nil) || params[:id])
-
-        name = patient.person.names.last rescue nil
-
-        address = patient.person.addresses.last rescue nil
-
-        @results << {
-            "national_id" => national_id,
-            "patient_id" => (patient.patient_id rescue nil),
-            "names" =>
-                {
-                    "family_name" => (name.family_name rescue nil),
-                    "given_name" => (name.given_name rescue nil),
-                    "middle_name" => (name.middle_name rescue nil),
-                    "maiden_name" => (name.family_name2 rescue nil)
-                },
-            "gender" => (patient.person.gender rescue nil),
-            "person_attributes" => {
-                "occupation" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Occupation").id).value rescue nil),
-                "cell_phone_number" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Cell Phone Number").id).value rescue nil),
-                "home_phone_number" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Home Phone Number").id).value rescue nil),
-                "office_phone_number" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Office Phone Number").id).value rescue nil),
-                "race" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Race").id).value rescue nil),
-                "country_of_residence" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Country of Residence").id).value rescue nil),
-                "citizenship" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Citizenship").id).value rescue nil)
-            },
-            "birthdate" => (patient.person.birthdate rescue nil),
-            "patient" => {
-                "identifiers" => (patient.patient_identifiers.collect { |id| {id.type.name => id.identifier} if id.type.name.downcase != "national id" }.delete_if { |x| x.nil? } rescue [])
-            },
-            "birthdate_estimated" => ((patient.person.birthdate_estimated rescue 0).to_s.strip == '1' ? true : false),
-            "addresses" => {
-                "current_residence" => (address.address1 rescue nil),
-                "current_village" => (address.city_village rescue nil),
-                "current_ta" => (address.township_division rescue nil),
-                "current_district" => (address.state_province rescue nil),
-                "home_village" => (address.neighborhood_cell rescue nil),
-                "home_ta" => (address.county_district rescue nil),
-                "home_district" => (address.address2 rescue nil)
-            }
-        }.to_json
-
-        @dontstop = true
-
-      else
-        redirect_to "/patient_not_found/#{(@json["national_id"] || @json["_id"])}" and return
-      end
-
+ 
+      redirect_to "/patient_not_found/#{(@json["national_id"] || @json["_id"])}" and return
     end
 
     render :layout => "ts"
@@ -737,9 +570,9 @@ skip_before_action :verify_authenticity_token
 
     if !person.blank?
       if secure?
-       url = "https://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/ajax_process_data"
+        url = "https://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/ajax_process_data"
       else
-       url = "http://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/ajax_process_data"
+        url = "http://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/ajax_process_data"
       end
       
       results = RestClient.post(url, {:person => person, :page => params[:page]}, {:accept => :json})
@@ -757,40 +590,40 @@ skip_before_action :verify_authenticity_token
         address = patient.person.addresses.last rescue nil
 
         result << {
-            "_id" => json["national_id"],
-            "patient_id" => (patient.patient_id rescue nil),
-            "local" => true,
-            "names" =>
-                {
-                    "family_name" => (name.family_name rescue nil),
-                    "given_name" => (name.given_name rescue nil),
-                    "middle_name" => (name.middle_name rescue nil),
-                    "maiden_name" => (name.family_name2 rescue nil)
-                },
-            "gender" => (patient.person.gender rescue nil),
-            "person_attributes" => {
-                "occupation" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Occupation").id).value rescue nil),
-                "cell_phone_number" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Cell Phone Number").id).value rescue nil),
-                "home_phone_number" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Home Phone Number").id).value rescue nil),
-                "office_phone_number" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Office Phone Number").id).value rescue nil),
-                "race" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Race").id).value rescue nil),
-                "country_of_residence" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Country of Residence").id).value rescue nil),
-                "citizenship" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Citizenship").id).value rescue nil)
-            },
-            "birthdate" => (patient.person.birthdate rescue nil),
-            "patient" => {
-                "identifiers" => (patient.patient_identifiers.collect { |id| {id.type.name => id.identifier} if id.type.name.downcase != "national id" }.delete_if { |x| x.nil? } rescue [])
-            },
-            "birthdate_estimated" => ((patient.person.birthdate_estimated rescue 0).to_s.strip == '1' ? true : false),
-            "addresses" => {
-                "current_residence" => (address.address1 rescue nil),
-                "current_village" => (address.city_village rescue nil),
-                "current_ta" => (address.township_division rescue nil),
-                "current_district" => (address.state_province rescue nil),
-                "home_village" => (address.neighborhood_cell rescue nil),
-                "home_ta" => (address.county_district rescue nil),
-                "home_district" => (address.address2 rescue nil)
-            }
+          "_id" => json["national_id"],
+          "patient_id" => (patient.patient_id rescue nil),
+          "local" => true,
+          "names" =>
+            {
+            "family_name" => (name.family_name rescue nil),
+            "given_name" => (name.given_name rescue nil),
+            "middle_name" => (name.middle_name rescue nil),
+            "maiden_name" => (name.family_name2 rescue nil)
+          },
+          "gender" => (patient.person.gender rescue nil),
+          "person_attributes" => {
+            "occupation" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Occupation").id).value rescue nil),
+            "cell_phone_number" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Cell Phone Number").id).value rescue nil),
+            "home_phone_number" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Home Phone Number").id).value rescue nil),
+            "office_phone_number" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Office Phone Number").id).value rescue nil),
+            "race" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Race").id).value rescue nil),
+            "country_of_residence" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Country of Residence").id).value rescue nil),
+            "citizenship" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Citizenship").id).value rescue nil)
+          },
+          "birthdate" => (patient.person.birthdate rescue nil),
+          "patient" => {
+            "identifiers" => (patient.patient_identifiers.collect { |id| {id.type.name => id.identifier} if id.type.name.downcase != "national id" }.delete_if { |x| x.nil? } rescue [])
+          },
+          "birthdate_estimated" => ((patient.person.birthdate_estimated rescue 0).to_s.strip == '1' ? true : false),
+          "addresses" => {
+            "current_residence" => (address.address1 rescue nil),
+            "current_village" => (address.city_village rescue nil),
+            "current_ta" => (address.township_division rescue nil),
+            "current_district" => (address.state_province rescue nil),
+            "home_village" => (address.neighborhood_cell rescue nil),
+            "home_ta" => (address.county_district rescue nil),
+            "home_district" => (address.address2 rescue nil)
+          }
         }.to_json
 
       end
@@ -816,9 +649,9 @@ skip_before_action :verify_authenticity_token
 
     if !@json.blank?
       if secure?
-       url = "https://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/process_confirmation" 
+        url = "https://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/process_confirmation"
       else
-       url = "http://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/process_confirmation" 
+        url = "http://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/process_confirmation"
       end
       @results = RestClient.post(url, {:person => @json, :target => target}, {:accept => :json})
     end
@@ -878,8 +711,8 @@ skip_before_action :verify_authenticity_token
     @show_country_of_residence = (settings["show_country_of_residence"] == true ? true : false) rescue false
     
     @occupations = ['','Driver','Housewife','Messenger','Business','Farmer','Salesperson','Teacher',
-                    'Student','Security guard','Domestic worker', 'Police','Office worker',
-                    'Preschool child','Mechanic','Prisoner','Craftsman','Healthcare Worker','Soldier'].sort.concat(["Other","Unknown"])
+      'Student','Security guard','Domestic worker', 'Police','Office worker',
+      'Preschool child','Mechanic','Prisoner','Craftsman','Healthcare Worker','Soldier'].sort.concat(["Other","Unknown"])
 
     @destination = request.referrer
 
@@ -909,11 +742,11 @@ skip_before_action :verify_authenticity_token
     settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] # rescue {}
 
     search_hash = {
-        "names" => {
-            "given_name" => (params["given_name"] rescue nil),
-            "family_name" => (params["family_name"] rescue nil)
-        },
-        "gender" => params["gender"]
+      "names" => {
+        "given_name" => (params["given_name"] rescue nil),
+        "family_name" => (params["family_name"] rescue nil)
+      },
+      "gender" => params["gender"]
     }
 
     if !search_hash["names"]["given_name"].blank? and !search_hash["names"]["family_name"].blank? and !search_hash["gender"].blank? # and result.length < pagesize
@@ -1037,8 +870,11 @@ skip_before_action :verify_authenticity_token
     end
     @results = RestClient.post(url, {"person" => params["person"]})
     if params["notfound"]
+
       json = JSON.parse(JSON.parse(@results)[0])
+
       session[:dde_object] = json
+      
       redirect_to "/" and return
 =begin     
       patient_id = DDE.search_and_or_create(json.to_json)  rescue nil 
@@ -1059,8 +895,8 @@ skip_before_action :verify_authenticity_token
   end
   
   def secure?
-     @settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]
-     secure = @settings["secure_connection"] rescue false
+    @settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]
+    secure = @settings["secure_connection"] rescue false
   end
 
   def duplicates
@@ -1258,36 +1094,36 @@ skip_before_action :verify_authenticity_token
       person_id = target.patient.person.person_id rescue nil
 
       PatientIdentifier.create("patient_id" => person_id,
-                               "identifier" => merged["National ID"],
-                               "identifier_type" => PatientIdentifierType.find_by_name("Old Identification Number").id) rescue nil
+        "identifier" => merged["National ID"],
+        "identifier_type" => PatientIdentifierType.find_by_name("Old Identification Number").id) rescue nil
 
       merged["Identifiers"].each do |id|
 
         PatientIdentifier.create("patient_id" => person_id,
-                                 "identifier" => id[id.keys[0]],
-                                 "identifier_type" => PatientIdentifierType.find_by_name(id.keys[0]).id) rescue nil
+          "identifier" => id[id.keys[0]],
+          "identifier_type" => PatientIdentifierType.find_by_name(id.keys[0]).id) rescue nil
 
       end
 
       fields = [
-          "Given Name",
-          "Middle Name",
-          "Family Name",
-          "Gender",
-          "Birthdate",
-          "Birthdate Estimated",
-          "Current Village",
-          "Current T/A",
-          "Current District",
-          "Home Village",
-          "Home T/A",
-          "Home District",
-          "Occupation",
-          "Home Phone Number",
-          "Cell Phone Number",
-          "Office Phone Number",
-          "Citizenship",
-          "Race"
+        "Given Name",
+        "Middle Name",
+        "Family Name",
+        "Gender",
+        "Birthdate",
+        "Birthdate Estimated",
+        "Current Village",
+        "Current T/A",
+        "Current District",
+        "Home Village",
+        "Home T/A",
+        "Home District",
+        "Occupation",
+        "Home Phone Number",
+        "Cell Phone Number",
+        "Office Phone Number",
+        "Citizenship",
+        "Race"
       ]
 
       person = Person.find(person_id) rescue nil
@@ -1305,57 +1141,57 @@ skip_before_action :verify_authenticity_token
         fields.each do |field|
 
           case field
-            when "Given Name"
-              name.given_name = data[field]
+          when "Given Name"
+            name.given_name = data[field]
 
-            when "Middle Name"
-              name.middle_name = data[field]
+          when "Middle Name"
+            name.middle_name = data[field]
 
-            when "Family Name"
-              name.family_name = data[field]
+          when "Family Name"
+            name.family_name = data[field]
 
-            when "Gender"
-              person.gender = data[field][0, 1] rescue nil
+          when "Gender"
+            person.gender = data[field][0, 1] rescue nil
 
-            when "Birthdate"
-              person.birthdate = data[field]
+          when "Birthdate"
+            person.birthdate = data[field]
 
-            when "Birthdate Estimated"
-              person.birthdate_estimated = data[field]
+          when "Birthdate Estimated"
+            person.birthdate_estimated = data[field]
 
-            when "Current Village"
-              addresses.city_village = data[field]
+          when "Current Village"
+            addresses.city_village = data[field]
 
-            when "Current T/A"
-              addresses.township_division = data[field]
+          when "Current T/A"
+            addresses.township_division = data[field]
 
-            when "Current District"
-              addresses.state_province = data[field]
+          when "Current District"
+            addresses.state_province = data[field]
 
-            when "Home Village"
-              addresses.neighborhood_cell = data[field]
+          when "Home Village"
+            addresses.neighborhood_cell = data[field]
 
-            when "Home T/A"
-              addresses.county_district = data[field]
+          when "Home T/A"
+            addresses.county_district = data[field]
 
-            when "Home District"
-              addresses.address2 = data[field]
+          when "Home District"
+            addresses.address2 = data[field]
 
-            else
+          else
 
-              if ["Occupation", "Home Phone Number", "Cell Phone Number", "Office Phone Number", "Citizenship", "Race"].include?(field)
+            if ["Occupation", "Home Phone Number", "Cell Phone Number", "Office Phone Number", "Citizenship", "Race"].include?(field)
 
-                attribute = PersonAttribute.find_by_person_id(person_id, :conditions => ["person_attribute_type_id = ?", PersonAttributeType.find_by_name(field).id]) rescue nil
+              attribute = PersonAttribute.find_by_person_id(person_id, :conditions => ["person_attribute_type_id = ?", PersonAttributeType.find_by_name(field).id]) rescue nil
 
-                attribute = PersonAttribute.new if attribute.nil?
+              attribute = PersonAttribute.new if attribute.nil?
 
-                attribute.value = data[field]
+              attribute.value = data[field]
 
-                attribute.person_id = person_id
+              attribute.person_id = person_id
 
-                attribute.save if !data[field].blank?
+              attribute.save if !data[field].blank?
 
-              end
+            end
           end
         end
 
@@ -1398,13 +1234,13 @@ skip_before_action :verify_authenticity_token
     user_mgmt_address = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"]
     paramz = {user: session[:user], region: params[:filter_value], district_name: params[:search_string]}
     uri = "http://#{user_mgmt_address}/demographics/districts.json/"
-        data = RestClient.post(uri,paramz)
-        unless data.blank?
-          data = JSON.parse(data)
-          render :text => "<li>" + data.map{|n| n } .join("</li><li>") + "</li>" and return
-        else
-          render :text => [].to_json and return
-        end
+    data = RestClient.post(uri,paramz)
+    unless data.blank?
+      data = JSON.parse(data)
+      render :text => "<li>" + data.map{|n| n } .join("</li><li>") + "</li>" and return
+    else
+      render :text => [].to_json and return
+    end
     #render :text => districts.join('') + "<li value='Other'>Other</li>" and return
   end
 
@@ -1423,13 +1259,13 @@ skip_before_action :verify_authenticity_token
     user_mgmt_address = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"]
     paramz = {user: session[:user], ta_name: params[:search_string], district_name: params[:filter_value]}
     uri = "http://#{user_mgmt_address}/demographics/traditional_authorities.json/"
-        data = RestClient.post(uri,paramz)
-        unless data.blank?
-          data = JSON.parse(data)
-          render :text => "<li>" + data.map{|n| n } .join("</li><li>") + "</li>" and return
-        else
-          render :text => [].to_json and return
-        end
+    data = RestClient.post(uri,paramz)
+    unless data.blank?
+      data = JSON.parse(data)
+      render :text => "<li>" + data.map{|n| n } .join("</li><li>") + "</li>" and return
+    else
+      render :text => [].to_json and return
+    end
   end
 
   # Villages containing the string given in params[:value]
@@ -1447,13 +1283,13 @@ skip_before_action :verify_authenticity_token
     user_mgmt_address = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"]
     paramz = {user: session[:user], village_name: params[:search_string], ta_name: params[:filter_value]}
     uri = "http://#{user_mgmt_address}/demographics/villages.json/"
-        data = RestClient.post(uri,paramz)
-        unless data.blank?
-          data = JSON.parse(data)
-          render :text => "<li>" + data.map{|n| n } .join("</li><li>") + "</li>" and return
-        else
-          render :text => [].to_json and return
-        end
+    data = RestClient.post(uri,paramz)
+    unless data.blank?
+      data = JSON.parse(data)
+      render :text => "<li>" + data.map{|n| n } .join("</li><li>") + "</li>" and return
+    else
+      render :text => [].to_json and return
+    end
   end
 
   def district_villages
@@ -1472,13 +1308,13 @@ skip_before_action :verify_authenticity_token
     user_mgmt_address = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"]
     paramz = {user: session[:user], village_name: params[:search_string], district_name: params[:filter_value]}
     uri = "http://#{user_mgmt_address}/demographics/villages.json/"
-        data = RestClient.post(uri,paramz)
-        unless data.blank?
-          data = JSON.parse(data)
-          render :text => "<li>" + data.map{|n| n } .join("</li><li>") + "</li>" and return
-        else
-          render :text => [].to_json and return
-        end
+    data = RestClient.post(uri,paramz)
+    unless data.blank?
+      data = JSON.parse(data)
+      render :text => "<li>" + data.map{|n| n } .join("</li><li>") + "</li>" and return
+    else
+      render :text => [].to_json and return
+    end
   end
 
   # Landmark containing the string given in params[:value]

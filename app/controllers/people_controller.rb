@@ -9,7 +9,7 @@ class PeopleController < ApplicationController
 
     @national_id = dde_object["national_id"]
     @given_name = dde_object["names"]["given_name"]
-    @family_name = dde_objec["names"]["family_name"]
+    @family_name = dde_object["names"]["family_name"]
     person_name = @given_name.to_s + ' ' + @family_name.to_s
     @birthdate = dde_object["birthdate"]
     formatted_birthdate = @birthdate.to_date.strftime("%d/%b/%Y") rescue @birthdate
