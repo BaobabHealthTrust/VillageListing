@@ -18,7 +18,7 @@ class PeopleController < ApplicationController
     @home_village = dde_object["addresses"]["home_village"]
     @home_ta = dde_object["addresses"]["home_ta"]
     @home_district = dde_object["addresses"]["home_district"]
-    @gender = dde_object["addresses"]["gender"]
+    @gender = dde_object["gender"]
 
     @patient_bean = {:national_id => @national_id, :name => person_name, 
       :birthdate => formatted_birthdate, :home_ta => @home_ta,
