@@ -176,6 +176,7 @@ Rails.application.routes.draw do
   post'/patients/demographics/:id' => 'dde#edit_patient'
 
   get '/people/national_id_label'
+  get'/national_id_label' => 'people#national_id_label'
   get'/people' => 'people#show'
   get'/demographics' => 'people#demographics'
   # ------------------------------- END OF INSTALLATION GENERATED ----------------------------------------------

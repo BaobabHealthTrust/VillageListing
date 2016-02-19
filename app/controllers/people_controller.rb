@@ -14,9 +14,10 @@ class PeopleController < ApplicationController
 
   def national_id_label
     patient_bean = formatted_dde_object
+    national_id = patient_bean.national_id.downcase.gsub("-", "_")
     print_string = patient_national_id_label(patient_bean)
     send_data(print_string,:type=>"application/label; charset=utf-8", :stream=> false,
-      :filename=>"test.lbl", :disposition => "inline")
+      :filename=>"#{national_id}.lbl", :disposition => "inline")
   end
 
   def get_names
@@ -25,7 +26,7 @@ class PeopleController < ApplicationController
     end
     
     paramz = {user: session[:user], search_str: params[:search_str], name: params[:name]}
-    server_address = '127.0.0.1:3001'
+    server_address = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"]
     uri = "http://#{server_address}/demographics/#{params[:name]}.json/"
     names = RestClient.post(uri,paramz)
 
@@ -47,9 +48,9 @@ Q305,026
 ZT
 B35,170,0,1,5,15,100,N,"#{patient_bean.national_id}"
 A35,30,0,2,2,2,N,"#{patient_bean.name}"
-A35,76,0,2,2,2,N,"#{patient_bean.national_id} #{patient_bean.birthdate}(#{patient_bean.gender})"
-    A35,122,0,2,2,2,N,"#{patient_bean.home_ta}, #{patient_bean.home_village}"
-    P1)
+A35,76,0,2,2,2,N,"#{patient_bean.national_id} #{patient_bean.birthdate}(#{patient_bean.sex})"
+A35,122,0,2,2,2,N,"#{patient_bean.home_ta}, #{patient_bean.home_village}"
+P1)
   return print_string
     
 end
