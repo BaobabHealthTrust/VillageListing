@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   get 'people/search'
   get 'people/show'
   get 'people/get_names'
+  get '/outcomes' => 'people#outcome'
+  post '/outcomes' => 'people#outcome'
   ##################### people end ######################
 
   

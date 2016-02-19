@@ -5,6 +5,9 @@ class ReportController < ApplicationController
   end
 
   def village_population
+    
+    @report_title = 'Village people list'
+
     if params[:run] == 'true'
       server_address = '127.0.0.1:3002' #YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
       uri = "http://#{server_address}/population_stats.json/"
@@ -27,6 +30,9 @@ class ReportController < ApplicationController
   end
 
   def ta_population_tabulation
+    
+    @report_title = 'TA villages (citizen counts)'
+
     if params[:run] == 'true'
       server_address = '127.0.0.1:3002' #YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
       uri = "http://#{server_address}/population_stats.json/"
@@ -53,6 +59,9 @@ class ReportController < ApplicationController
   end
 
   def ta_population
+    
+    @report_title = 'TA counts'
+
     if params[:run] == 'true'
       server_address = '127.0.0.1:3002' #YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
       uri = "http://#{server_address}/population_stats.json/"
@@ -78,6 +87,9 @@ class ReportController < ApplicationController
   end
 
   def village_age_groups
+    
+    @report_title = 'Village people count/break-down by Gender and Age groups'
+
     if params[:run] == 'true'
       server_address = '127.0.0.1:3002' #YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
       uri = "http://#{server_address}/population_stats.json/"

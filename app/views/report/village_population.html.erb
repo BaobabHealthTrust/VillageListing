@@ -109,11 +109,14 @@ img {
   display: none;
 }
 
+tfoot tr {
+  background-color: lightgrey;
+}
 
 /* datatable ....................... */
 </style>
 
-<%= render :partial => 'user/header' %>
+<%= render :partial => 'header' %>
 
 <%=javascript_include_tag "DataTables/jquery" %>                          
 <%=javascript_include_tag "DataTables/prototype" %>                          
@@ -193,5 +196,6 @@ img {
       document.getElementById('results').style.display = "width:99%;height: 82%;";
     }catch(e) {};
   }
+
 </script>
   

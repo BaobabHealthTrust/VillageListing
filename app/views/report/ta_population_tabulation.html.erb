@@ -118,7 +118,7 @@ img {
 /* datatable ....................... */
 </style>
 
-<%= render :partial => 'user/header' %>
+<%= render :partial => 'header' %>
 
 <%=javascript_include_tag "DataTables/jquery" %>                          
 <%=javascript_include_tag "DataTables/prototype" %>                          
@@ -149,9 +149,9 @@ img {
   <tr>
     <td style="text-align: left;"><%=village%></td>
     <td><%=gender['F']%></td>
-    <td class="percentage"><%=(gender['F'].to_i*100)/(gender['M'].to_i + gender['F'].to_i)%>%</td>
+    <td class="percentage"><%=((gender['F'].to_f*100)/(gender['M'].to_i + gender['F'].to_i)).round(2)%>%</td>
     <td><%=gender['M']%></td>
-    <td class="percentage"><%=(gender['M'].to_i*100)/(gender['M'].to_i + gender['F'].to_i)%>%</td>
+    <td class="percentage"><%=((gender['M'].to_f*100)/(gender['M'].to_i + gender['F'].to_i)).round(2)%>%</td>
     <td><%=(gender['M'].to_i + gender['F'].to_i)%></td>
   </tr>
   <%
@@ -163,9 +163,9 @@ img {
    <tr style="background-color: lightgrey;">
     <td style="text-align: left;">Total</td>
     <td><%=total_females%></td>
-    <td class="percentage"><%=(total_females *100)/(total_females + total_males)%>%</td>
+    <td class="percentage"><%=((total_females.to_f*100)/(total_females + total_males)).round(2)%>%</td>
     <td><%=total_males%></td>
-    <td class="percentage"><%=(total_males *100)/(total_females + total_males)%>%</td>
+    <td class="percentage"><%=((total_males.to_f*100)/(total_females + total_males)).round(2)%>%</td>
     <td><%=(total_females + total_males)%></td>
    </tr>
   <tfoot>
