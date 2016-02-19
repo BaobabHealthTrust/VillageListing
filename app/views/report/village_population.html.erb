@@ -100,46 +100,44 @@ img {
 
 
 .table-container {
-  height: 70%;
+  height: 80%;
   overflow: auto;
 }
 
+/* datatable ....................... */
+#results_info,  #results_filter {
+  display: none;
+}
 
 
+/* datatable ....................... */
 </style>
 
 <%= render :partial => 'user/header' %>
 
+<%=javascript_include_tag "DataTables/jquery" %>                          
+<%=javascript_include_tag "DataTables/prototype" %>                          
+<script>jQuery.noConflict();</script>
+<%=javascript_include_tag "DataTables/jquery.dataTables.min" %>
 
-<!-- div class="report-attributes">
-  <table style="width: 100%;"> 
-    <tr>
-      <th>District:</th>
-      <td>
-        <select>
-          <%(@districts || []).each do |name|%>
-            <option value="<%=name%>"><%=name%></option>
-          <%end%>
-        </select>
-      </td>
-    </tr>
-    <tr>
-      <th>Total</th><td><%=@people.length%></td>
-    </tr>
-  </table>
-</div -->
+<%= stylesheet_link_tag "DataTables/demo_table_jui" %>                                     
+<%= stylesheet_link_tag "DataTables/jquery.dataTables" %>                                     
+
+
+<div class="table-container">
 
 <br />
 <br />
 
 <div class="table-container">
 
-<table class="people" style="width: 99%">
+<table class="people" style="width:99%;" id="results">
   <thead>
     <tr>
       <th>Identifier</th>
       <th>First name</th>
       <th>Last name</th>
+      <th>Gender</th>
       <th>Birthdate</th>
       <th>Home district</th>
       <th>Home TA</th>
@@ -147,17 +145,34 @@ img {
     </tr>
   </thead>
   <tbody>
-  <%(@people || []).each do |person|%>
+  <%total_people = 0
+  (@people || []).each_with_index do |person, i|%>
   <tr>
     <td><%=person['_id'] rescue 'Not assigned'%></td>
     <td><%=person['names']['given_name']%></td>
     <td><%=person['names']['family_name']%></td>
+    <td><%=person['gender']%></td>
     <td><%=person['birthdate']%></td>
     <td><%=person['addresses']['home_district']%></td>
     <td><%=person['addresses']['home_ta']%></td>
     <td><%=person['addresses']['home_village']%></td>
   </tr>
-  <%end%>
+  <%total_people = i
+  end
+  if @people.length > 0%>
+  <tfoot>
+    <tr>
+      <td style="border-right:0px;">Total people</td>
+      <td style="border-width:1px 0px 1px 0px;"></td>
+      <td style="border-width:1px 0px 1px 0px;"></td>
+      <td style="border-width:1px 0px 1px 0px;"></td>
+      <td style="border-width:1px 0px 1px 0px;"></td>
+      <td style="border-left:0px; border-right:0px;"></td>
+      <td style="border-width:1px 1px 1px 0px;"></td>
+      <td style="border-width:1px 1px 1px 1px;"><%=(total_people+1)%></td>
+    </tr>
+   </tfoot>
+   <%end%>
   </tbody>
 </table>
 
@@ -165,3 +180,21 @@ img {
 
 <%= render :partial => 'footer' %>
 
+<script>                                                                        
+  dataT();                   
+  
+  function dataT(){          
+    table = jQuery('#results').dataTable();                                                  
+    setF();
+  }
+
+  function setF() {
+    try {
+      sel = document.getElementsByName('results_length')[0];
+      sel.innerHTML = "<option value='<%=total_people%>'><%=total_people%></option>";
+      document.getElementById('results_length').style.display = "none";
+      document.getElementById('results').style.display = "width:99%;height: 90%;";
+    }catch(e) {};
+  }
+</script>
+  
