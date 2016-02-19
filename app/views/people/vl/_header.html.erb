@@ -81,7 +81,7 @@
         </tr>
         <tr>
           <th style="width:100px;">TA Wakwanu:</th>
-          <td style="text-align: left;"><%=%></td>
+          <td style="text-align: left;"><%= @patient_bean.home_ta %></td>
         </tr>
       </table> 
     </div>
@@ -90,17 +90,17 @@
       <table class="attributes-table">
         <tr>
           <th style="width:185px;">Boma Lomwe Mukukhala:</th>
-          <td style="text-align: left;"></td>
+          <td style="text-align: left;"><%= @patient_bean.current_district %></td>
           <th style="width:100px;">Zotsatila:</th>
           <td style="text-align: left;"></td>
         </tr>
         <tr>
-          <th style="width:185px;">Mfumu Yayikulu:</th>
-          <td style="text-align: left;">&nbsp;</td>
+          <th style="width:185px;">T/A wakumene mukukhala:</th>
+          <td style="text-align: left;"><%= @patient_bean.current_ta %></td>
         </tr>
         <tr>
           <th style="width:185px;">Mudzi Omwe Mukukhala:</th>
-          <td style="text-align: left;"></td>
+          <td style="text-align: left;"><%= @patient_bean.current_village %></td>
         </tr>
       </table> 
     </div>

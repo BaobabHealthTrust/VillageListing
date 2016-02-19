@@ -15,17 +15,33 @@ class PeopleController < ApplicationController
     person_name = @given_name.to_s + ' ' + @family_name.to_s
     @birthdate = dde_object["birthdate"]
     formatted_birthdate = @birthdate.to_date.strftime("%d/%b/%Y") rescue @birthdate
+    
+    @current_residence = dde_object["addresses"]["current_residence"]
+    @current_village = dde_object["addresses"]["current_village"]
+    @current_ta = dde_object["addresses"]["current_ta"]
+    @current_district = dde_object["addresses"]["current_district"]
+
     @home_village = dde_object["addresses"]["home_village"]
     @home_ta = dde_object["addresses"]["home_ta"]
     @home_district = dde_object["addresses"]["home_district"]
+    
     @gender = dde_object["gender"]
 
-    @patient_bean = {:national_id => @national_id, :name => person_name, 
-      :birthdate => formatted_birthdate, :home_ta => @home_ta,
+    @patient_bean = {
+      :national_id => @national_id,
+      :name => person_name,
+      :birthdate => formatted_birthdate,
+      :current_residence => @current_residence,
+      :current_village => @current_village,
+      :current_ta => @current_ta,
+      :current_district => @current_district,
+      :home_ta => @home_ta,
       :home_village => @home_village, :home_district => @home_district,
-      :sex => @gender}
+      :sex => @gender
+    }
 
     @patient_bean = OpenStruct.new @patient_bean #Making the keys accessible by a dot operator
+    
   end
 
   def national_id_label
@@ -68,28 +84,28 @@ A35,76,0,2,2,2,N,"#{patient_bean.national_id} #{patient_bean.birthdate}(#{patien
     P1)
   return print_string
     
-  end
+end
 
-  def formatted_dde_object
-    dde_object = session[:dde_object]
+def formatted_dde_object
+  dde_object = session[:dde_object]
 
-    national_id = dde_object["national_id"]
-    given_name = dde_object["names"]["given_name"]
-    family_name = dde_objec["names"]["family_name"]
-    person_name = given_name.to_s + ' ' + family_name.to_s
-    birthdate = dde_object["birthdate"]
-    formatted_birthdate = birthdate.to_date.strftime("%d/%b/%Y") rescue birthdate
-    home_village = dde_object["addresses"]["home_village"]
-    home_ta = dde_object["addresses"]["home_ta"]
-    home_district = dde_object["addresses"]["home_district"]
+  national_id = dde_object["national_id"]
+  given_name = dde_object["names"]["given_name"]
+  family_name = dde_objec["names"]["family_name"]
+  person_name = given_name.to_s + ' ' + family_name.to_s
+  birthdate = dde_object["birthdate"]
+  formatted_birthdate = birthdate.to_date.strftime("%d/%b/%Y") rescue birthdate
+  home_village = dde_object["addresses"]["home_village"]
+  home_ta = dde_object["addresses"]["home_ta"]
+  home_district = dde_object["addresses"]["home_district"]
 
-    patient_bean = {:national_id => national_id, :name => person_name,
-        :birthdate => formatted_birthdate, :home_ta => home_ta,
-        :home_village => home_village, :home_district => home_district}
+  patient_bean = {:national_id => national_id, :name => person_name,
+      :birthdate => formatted_birthdate, :home_ta => home_ta,
+      :home_village => home_village, :home_district => home_district}
 
-    patient_bean = OpenStruct.new patient_bean #Making the keys accessible by a dot operator
-    return patient_bean
-  end
+  patient_bean = OpenStruct.new patient_bean #Making the keys accessible by a dot operator
+  return patient_bean
+end
 
 
 end
