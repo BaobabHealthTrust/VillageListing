@@ -47,7 +47,7 @@ skip_before_action :verify_authenticity_token
   def process_result
   
     json = JSON.parse(params["person"]) rescue {}
-    
+
     session[:dde_object] = json
     
     print_and_redirect("/people/national_id_label", "/people") and return if (json["print_barcode"] rescue false)
@@ -959,7 +959,7 @@ skip_before_action :verify_authenticity_token
     end
 
     # pagesize = ((pagesize) * 2) - result.length
-
+=begin
     Person.find(:all, :joins => [:names], :limit => pagesize, :offset => offset, :conditions => ["given_name = ? AND family_name = ? AND gender = ?", params["given_name"], params["family_name"], params["gender"]]).each do |person|
 
       patient = person.patient # rescue nil
@@ -1020,7 +1020,7 @@ skip_before_action :verify_authenticity_token
       # break if result.length >= 7
 
     end if pagesize > 0 and result.length < 8
-
+=end
     render :text => result.to_json
   end
 
