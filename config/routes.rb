@@ -1,13 +1,12 @@
 Rails.application.routes.draw do
   
 
-  get 'people/show'
-
   ##################### people ######################
   get 'people/new'
   get 'people/search_results'
   get 'people/search'
   get 'people/show'
+  get 'people/get_names'
   ##################### people end ######################
 
   
@@ -36,6 +35,7 @@ Rails.application.routes.draw do
   get '/ta_population' => 'report#ta_population'
   get '/village_population' => 'report#village_population'
   get '/ta_population_tabulation' => 'report#ta_population_tabulation'
+  get '/village_age_groups' => 'report#village_age_groups'
   ##################### report end ######################
 
 
