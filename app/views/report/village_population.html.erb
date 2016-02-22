@@ -138,7 +138,9 @@ tfoot tr {
       <th>First name</th>
       <th>Last name</th>
       <th>Gender</th>
+      <th>Outcome</th>
       <th>Birthdate</th>
+      <th>Outcome date</th>
       <th>Home district</th>
       <th>Home TA</th>
       <th>Home Village</th>
@@ -153,6 +155,8 @@ tfoot tr {
     <td><%=person['names']['family_name']%></td>
     <td><%=person['gender']%></td>
     <td><%=person['birthdate']%></td>
+    <td><%=person['outcome']%></td>
+    <td><%=person['outcome_date']%></td>
     <td><%=person['addresses']['home_district']%></td>
     <td><%=person['addresses']['home_ta']%></td>
     <td><%=person['addresses']['home_village']%></td>
@@ -163,6 +167,8 @@ tfoot tr {
   <tfoot>
     <tr>
       <td style="border-right:0px;">Total people</td>
+      <td style="border-width:1px 0px 1px 0px;"></td>
+      <td style="border-width:1px 0px 1px 0px;"></td>
       <td style="border-width:1px 0px 1px 0px;"></td>
       <td style="border-width:1px 0px 1px 0px;"></td>
       <td style="border-width:1px 0px 1px 0px;"></td>
