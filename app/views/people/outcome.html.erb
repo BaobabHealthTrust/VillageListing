@@ -21,13 +21,12 @@
 
 
 <%=form_tag '/outcomes' do%>
-	<%= hidden_field_tag "encounter[encounter_type_name]", "UPDATE OUTCOME" %>
-	<%= hidden_field_tag "encounter[encounter_datetime]", DateTime.now() %>
+	<%= hidden_field_tag "person[identifier]", @patient_bean.national_id %>
 
   <%outcomes = ["", "Died","Transfer Out"]%>
   <%months = Date::MONTHNAMES + ['Unknown']%>
 
-  <%= select_tag("outcome", options_for_select(outcomes ,''),
+  <%= select_tag("outcome[outcome]", options_for_select(outcomes ,''),
               :helpText =>"Select outcome",
               :id => "outcome",
               :allowFreeText => false)
@@ -42,12 +41,12 @@
 
   <%= select_tag "outcome_month",  options_for_select(months ,''), {:helpText => 'Outcome Month', 
       :condition => '$("outcome_year").value.toLowerCase() != "unknown";',
-      :tt_onLoad =>"__$('keyboard').style.display = 'none'"}%>
+      :tt_onLoad =>"validateDate();__$('keyboard').style.display = 'none'"}%>
 
   <%= text_field_tag "outcome_day",  nil, :field_type => 'number', 
       :helpText => 'Outcome Day', 
       :condition => '($("outcome_year").value != "Unknown") && ($("outcome_month").value != "Unknown");', 
-      :tt_onLoad => "getDayOfMonthPicker($('outcome_year').value, getMonth($('outcome_month').value))" %>
+      :tt_onLoad => "changeFinishButton();getDayOfMonthPicker($('outcome_year').value, getMonth($('outcome_month').value))"  %>
 
 <%end%>
 
@@ -59,4 +58,73 @@
     return (months.indexOf(month) + 1);
   }
 
+ function validationDate() {
+   year = document.getElementById('outcome_year').value;
+   month = document.getElementById('outcome_month').value;
+   day = document.getElementById('outcome_day').value;
+
+   return false;
+ }
+
+ function validateDate() {
+      selectYear = parseInt(document.getElementById('outcome_year').value);
+      selectDay = getMonth(document.getElementById('outcome_month').value);
+      date = new Date
+      currYear = date.getFullYear();
+      currDay = date.getDate();
+      availableMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+      if (selectYear == currYear){
+          currentMonth = [];
+          numOfloops = ((new Date).getMonth() + 1);
+          for(var i = 0; i < numOfloops; i++){
+              currentMonth.push(availableMonths[i]);
+          }
+          rule = currentMonth.join("|");
+          rule = rule + "|Unknown";
+          return $('touchscreenInput'+tstCurrentPage).setAttribute('validationRule',rule);
+      }
+      if (selectYear != currYear) {
+          rule = availableMonths.join("|");
+          rule = rule + "|Unknown";
+          return $('touchscreenInput'+tstCurrentPage).setAttribute('validationRule',rule);
+      }
+  }
+
+  function validateDay(){
+      date = new Date
+      currYear = date.getFullYear();
+      currDay = date.getDate();
+      currMonth = date.getMonth() + 1;
+      selected_month = getMonth(document.getElementById('outcome_month').value);
+      selectYear = parseInt(document.getElementById('outcome_year').value);
+      if (selectYear == currYear) {
+          if (selected_month == currMonth){
+              return $('touchscreenInput'+tstCurrentPage).setAttribute('absoluteMax',currDay);
+          }
+      }
+  }
+
+  function changeFinishButton() {
+    var buttons = document.getElementsByClassName('button');
+    button = null;
+    for(var i = 0; i < buttons.length; i++){
+      if(buttons[i].id == 'nextButton') {
+        button = buttons[i];
+        break;
+      }
+
+    }
+
+    button.setAttribute('onmousedown','validateDayOfMonth();')
+  }
+
+  function validateDayOfMonth() {
+    selected_day = parseInt($('touchscreenInput'+tstCurrentPage).value);
+    if(selected_day > date.getDate()) {
+      return false;
+    }else{
+      gotoNextPage();
+    }
+  }
 </script>

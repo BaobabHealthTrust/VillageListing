@@ -1,0 +1,22 @@
+<script>
+  var tt_cancel_destination = "/report/index";
+</script>
+
+<style>
+.inputFrameClass {
+  height: 85%;
+}
+
+.options {
+  height: 88%;
+}
+
+</style>
+
+
+<%=form_tag "/#{params[:report_path]}" do%>
+  <%= select_tag 'ta[villages][]',
+      options_for_select(@villages.sort, []),
+      :helpText => "Select villages under TA: #{session[:user]['ta']}" ,
+      :multiple =>  true %> 
+<%end%>

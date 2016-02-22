@@ -31,28 +31,26 @@ class ReportController < ApplicationController
 
   def ta_population_tabulation
     
+    @selected_villages = params[:ta]['villages']
     @report_title = 'TA villages (citizen counts)'
+    @report_generation_path = []
 
-    if params[:run] == 'true'
-      server_address = '127.0.0.1:3002' #YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
-      uri = "http://#{server_address}/population_stats.json/"
-      paramz = {district: session[:user]['district'], ta: session[:user]['ta'], stat: 'ta_population_tabulation'}
-      #paramz = {district: session[:user]['district'], ta: session[:user]['ta'], village: session[:user]['village']}
-      data = RestClient.post(uri,paramz)
+    server_address = '127.0.0.1:3002' #YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
+    uri = "http://#{server_address}/population_stats.json/"
+    paramz = {district: session[:user]['district'], ta: session[:user]['ta'], stat: 'ta_population_tabulation'}
+    data = RestClient.post(uri,paramz)
 
-      unless data.blank?
-        @stats = {}
-        data = JSON.parse(data)
-        (data).each do |person|
-          @stats[person['addresses']['current_village']] = {} if @stats[person['addresses']['current_village']].blank? 
-          @stats[person['addresses']['current_village']][person['gender']] = 0 if @stats[person['addresses']['current_village']][person['gender']] .blank? 
-          @stats[person['addresses']['current_village']][person['gender']] += 1
-        end
-      else
-        @stats = {}
+    unless data.blank?
+      @stats = {}
+      data = JSON.parse(data)
+      (data).each do |person|
+        village_name = person['addresses']['current_village']
+        next unless @selected_villages.include?(village_name) 
+        @stats[person['addresses']['current_village']] = {} if @stats[person['addresses']['current_village']].blank? 
+        @stats[person['addresses']['current_village']][person['gender']] = 0 if @stats[person['addresses']['current_village']][person['gender']] .blank? 
+        @stats[person['addresses']['current_village']][person['gender']] += 1
       end
     else
-      @report_generation_path = "/ta_population_tabulation?run=true"
       @stats = {}
     end
     render :layout => false
@@ -109,10 +107,23 @@ class ReportController < ApplicationController
       end
     else
       @report_generation_path = "/village_age_groups?run=true"
-      @stats = {}
+      @stats = {} 
     end
     
     render :layout => false
+  end
+
+  def village_selection
+    paramz = {ta_name: session[:user]['ta'], user: session[:user] }
+    server_address = '127.0.0.1:3001'
+    uri = "http://#{server_address}/demographics/villages.json/"
+    data = RestClient.post(uri,paramz)
+ 
+    unless data.blank?
+      @villages = JSON.parse(data)
+    else
+      @villages = {}
+    end
   end
 
   def get_age_group(person)

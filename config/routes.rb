@@ -36,8 +36,9 @@ Rails.application.routes.draw do
   get 'report/index'
   get '/ta_population' => 'report#ta_population'
   get '/village_population' => 'report#village_population'
-  get '/ta_population_tabulation' => 'report#ta_population_tabulation'
+  get 'village_selection/:report_path'=> 'report#village_selection'
   get '/village_age_groups' => 'report#village_age_groups'
+  post '/ta_population_tabulation' => 'report#ta_population_tabulation'
   ##################### report end ######################
 
 
