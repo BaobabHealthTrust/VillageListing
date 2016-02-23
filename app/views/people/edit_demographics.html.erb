@@ -246,11 +246,8 @@
       :absoluteMax => Date.today.year,
       :tt_pageStyleClass => "Numeric NumbersOnly",
       :tt_onLoad => 'seen(tstCurrentPage);'} %>
-    <% months =  month_name_options.to_a
-    months = months[0 .. 12].to_s
 
-  %>
-    <%= select_tag "person[birth_month]", months,
+    <%= select_tag "person[birth_month]", month_name_options,
       {:helpText => 'Month of Birth',
       :condition => '$("person_birth_year").value.toLowerCase() != "unknown"'} %>
 
