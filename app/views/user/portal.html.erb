@@ -1,0 +1,122 @@
+<style>
+
+body {
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  -moz-user-select: none;     /* Firefox all */
+  -ms-user-select: none;      /* IE 10+ */
+  user-select: none;          /* Likely future */ 
+}
+
+img {
+  user-drag: none; 
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  pointer-events: none;
+}
+
+.table-container  {
+  display: table;
+  width: 100%;
+  padding: 0px 1px 0px 1px;
+}
+
+.table-row  {
+  display: table-row;
+}
+
+.table-cell {
+  display: table-cell;
+}
+
+
+/* ...................................... */
+.app-title {
+  font-size: 45px;
+}
+
+.header .icons {
+  width: 100px;
+  height: 100px;
+}
+/* ............................... */
+.second-table {
+  display: table;
+  width: 100%;
+  padding: 0px 1px 0px 1px;
+}
+
+.second-table-row {
+  display: table-row;
+}
+
+.second-table-cell {
+  display: table-cell;
+}
+
+.xicons {
+  width: 250px;
+  height: 250px;
+}
+
+.divbtn {
+  height: 265px;
+  display: table;
+  margin-top: 10px;
+  cursor:pointer;
+}
+
+.divbtn p {
+  font-weight: bold;
+}
+/* ............................... */
+
+</style>
+<div class="table-container header" style="border-style: solid; border-width: 0px 0px 1px 0px; height: 105;">
+  <div class="table-row">
+
+    <div class="table-cell" style="width: 90%; vertical-align: middle; text-align: left; ">
+      <span class='app-title'>Zamudzi Mwathu</span>
+    </div>
+
+    <div class="table-cell" style="width: 10%; vertical-align: middle; text-align: center;">
+      <span class="icons small-icons">
+        <%=image_tag("icons/village-2.png", class: 'icons')%>
+      </span>
+    </div>
+
+  </div>
+</div>
+
+
+<div class="table-container table-body" style="">
+  <div class="table-row">
+
+    <div class="table-cell" style="width: 100%; vertical-align: middle; text-align: center; padding-top: 5%;">
+      <div class='second-table'>
+        <div class='second-table-row'>
+         
+           <div class='second-table-cell' style="padding-right: 5px;">
+            <div class="divbtn" style="background-color: #f0f0f0; border: 1px solid #2e6da4; width: 295px; float: right;" onclick="document.location='<%=@new_app_path%>'" >
+              <%=image_tag("icons/family.png", class: 'xicons')%>
+              <p>Kalembera</p>
+            </div>
+          </div>
+
+           <div class='second-table-cell' style="padding-left: 5px;">
+            <div class="divbtn" style="background-color: #ffff75; border: 1px solid #2e6da4; 
+                width: 295px; float: left;" onclick="document.location='/logout'" >
+              <%=image_tag("icons/news.png", class: 'xicons')%>
+              <p>Nkhani</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<%= render :partial => 'home/footer' %>

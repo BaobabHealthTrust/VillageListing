@@ -11,9 +11,14 @@ class UserController < ApplicationController
     end
   end
 
+  def portal
+    @new_app_path = '/'
+    render :layout => false
+  end
+
   def logout
     reset_session
-    redirect_to '/login' and return
+    redirect_to '/portal' and return
   end
 
   def index
