@@ -55,7 +55,10 @@ class ReportController < ApplicationController
 
   def ta_population_tabulation
     
-    @selected_villages = params[:ta]['villages']
+    @selected_villages = []
+    params[:ta]['villages'].each do |village|
+      @selected_villages << village.squish.capitalize
+    end
     @report_title = 'TA villages (citizen counts)'
     @report_generation_path = []
 
@@ -69,12 +72,14 @@ class ReportController < ApplicationController
       data = JSON.parse(data)
       (data).each do |person|
         village_name = person['addresses']['current_village']
-        next unless @selected_villages.include?(village_name) 
+        next unless @selected_villages.include?(village_name.squish.capitalize) 
         @stats[person['addresses']['current_village']] = {} if @stats[person['addresses']['current_village']].blank? 
         @stats[person['addresses']['current_village']][person['gender']] = 0 if @stats[person['addresses']['current_village']][person['gender']] .blank? 
         @stats[person['addresses']['current_village']][person['gender']] += 1
       end
+      @export_to_csv = true
     else
+      @export_to_csv = false
       @stats = {}
     end
     render :layout => false
@@ -129,6 +134,7 @@ class ReportController < ApplicationController
           @stats[age_group][gender] += 1
         end
       end
+      @report_generation_path = "/village_age_groups?run=true"
     else
       @report_generation_path = "/village_age_groups?run=true"
       @stats = {} 

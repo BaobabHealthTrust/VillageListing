@@ -16,8 +16,6 @@ Rails.application.routes.draw do
   get '/' => 'home#index'
   ##################### home end ######################
 
-
-
   ##################### user ######################
   get '/admin' => 'user#index'
   get '/login' => 'user#login'
@@ -26,10 +24,10 @@ Rails.application.routes.draw do
   get 'user/new' 
   post 'user/create' 
   get 'user/list'
-
   get 'user/username' 
   get 'user/first_name' 
   get 'user/last_name' 
+  get '/portal' => 'user#portal'
   ##################### user end ######################
 
   ##################### report ######################

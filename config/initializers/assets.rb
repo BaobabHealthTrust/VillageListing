@@ -12,3 +12,4 @@ Rails.application.config.assets.version = '1.0'
 Rails.application.config.assets.precompile += %w( touch-fancy.css )
 Rails.application.config.assets.precompile += %w( DataTables/* )
 Rails.application.config.assets.precompile += %w( multi_column_controls.js )
+Rails.application.config.assets.precompile += %w( toCSV/* )
