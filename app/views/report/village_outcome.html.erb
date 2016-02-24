@@ -1,3 +1,4 @@
+
 <style>
 
 body {
@@ -89,28 +90,44 @@ img {
 .people th {
   border-style: solid;
   border-width: 1px;
-  text-align: left;
+  text-align: right;
+  padding-right: 10px;
 }
 
 .people td {
   border-style: solid;
   border-width: 1px;
-  text-align: left;
+  text-align: right;
+  padding-right: 10px;
 }
 
-
 .table-container {
-  height: 82%;
+  height: 75%;
   overflow: auto;
 }
 
+.percentage {
+  background-color: gold;
+}
+
 /* datatable ....................... */
-#results_info,  #results_filter {
+#search_results_info, #search_results_paginate, #search_results_length, #search_results_filter {
   display: none;
 }
 
-tfoot tr {
-  background-color: lightgrey;
+#percentage_length, #percentage_filter, #percentage_info, #percentage_paginate {
+  display: none;
+}
+
+#percentage {
+  width: 50%;
+  height: 50px;
+  float: left;
+  padding-left: 5px;
+}
+
+.dataTables_wrapper {
+  min-height: 230px !important;
 }
 
 /* datatable ....................... */
@@ -129,72 +146,43 @@ tfoot tr {
 
 <div class="table-container">
 
-<div class="table-container">
-
-<table class="people" style="width:99%;" id="results">
+<table class="people" style="width: 99%; height: 90px;" id="search_results">
   <thead>
     <tr>
-      <th>Identifier</th>
-      <th>First name</th>
-      <th>Last name</th>
-      <th>Gender</th>
-      <th>Birthdate</th>
-      <th>Home district</th>
-      <th>Home TA</th>
-      <th>Home Village</th>
+      <th style="text-align: left;">Outcome</th>
+      <th>Count</th>
     </tr>
   </thead>
   <tbody>
-  <%total_people = 0
-  (@people || []).each_with_index do |person, i|%>
+  <%
+  total = 0
+  (@stats || {}).each do |outcome, count|%>
   <tr>
-    <td><%=person['_id'] rescue 'Not assigned'%></td>
-    <td><%=person['names']['given_name']%></td>
-    <td><%=person['names']['family_name']%></td>
-    <td><%=person['gender']%></td>
-    <td><%=person['birthdate']%></td>
-    <td><%=person['addresses']['home_district']%></td>
-    <td><%=person['addresses']['home_ta']%></td>
-    <td><%=person['addresses']['home_village']%></td>
+    <td style="text-align: left;"><%=outcome.gsub('_',' ').titleize%></td>
+    <td><%=count%></td>
   </tr>
-  <%total_people = i
-  end
-  if @people.length > 0%>
+  <%
+  total +=  count
+  end%>
+  
   <tfoot>
-    <tr>
-      <td style="border-right:0px;">Total people</td>
-      <td style="border-width:1px 0px 1px 0px;"></td>
-      <td style="border-width:1px 0px 1px 0px;"></td>
-      <td style="border-width:1px 0px 1px 0px;"></td>
-      <td style="border-width:1px 0px 1px 0px;"></td>
-      <td style="border-left:0px; border-right:0px;"></td>
-      <td style="border-width:1px 1px 1px 0px;"></td>
-      <td style="border-width:1px 1px 1px 1px;"><%=(total_people+1)%></td>
+    <tr style="background-color: lightgrey;">
+      <td style="text-align: left;">Total</td>
+      <td><%=total < 1 ? '' : total%></td>
     </tr>
-   </tfoot>
-   <%end%>
+  </tfoot>
   </tbody>
 </table>
 
-</div>
 
+</div>
 <%= render :partial => 'footer' %>
 
 <script>                                                                        
   dataT();                   
   
   function dataT(){          
-    table = jQuery('#results').dataTable();                                                  
-    setF();
-  }
-
-  function setF() {
-    try {
-      sel = document.getElementsByName('results_length')[0];
-      sel.innerHTML = "<option value='<%=total_people%>'><%=total_people%></option>";
-      document.getElementById('results_length').style.display = "none";
-      document.getElementById('results').style.display = "width:99%;height: 82%;";
-    }catch(e) {};
+    table = jQuery('#search_results').dataTable();                                                  
   }
 
 </script>
