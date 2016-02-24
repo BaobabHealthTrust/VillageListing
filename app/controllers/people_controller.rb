@@ -98,7 +98,7 @@ P1)
     url = "http://localhost:3002/population_stats"
     outcome_paramz = {}
     outcome_paramz['stat'] = 'fetch_outcome' ; outcome_paramz['identifier'] = national_id
-    result = RestClient.post(url, outcome_paramz)
+    result = RestClient.post(url, outcome_paramz) rescue {}
     data = JSON.parse(result) rescue {}
 
     session[:dde_object]['outcome'] = data['outcome'] rescue nil
