@@ -145,7 +145,7 @@ class ReportController < ApplicationController
 
   def village_selection
     paramz = {ta_name: session[:user]['ta'], user: session[:user] }
-    server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
+    server_address = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
     uri = "http://#{server_address}/demographics/villages.json/"
     data = RestClient.post(uri,paramz)
  
