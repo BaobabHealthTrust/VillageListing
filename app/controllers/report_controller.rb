@@ -134,6 +134,7 @@ class ReportController < ApplicationController
           @stats[age_group][gender] += 1
         end
       end
+      @report_generation_path = "/village_age_groups?run=true"
     else
       @report_generation_path = "/village_age_groups?run=true"
       @stats = {} 
