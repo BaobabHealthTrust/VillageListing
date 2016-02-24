@@ -95,7 +95,8 @@ P1)
     country_of_residence = dde_object["person_attributes"]["country_of_residence"]
 
     #################### Code to pull person outcome from the DDE ############################
-    url = "http://localhost:3002/population_stats"
+    dde_server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue "raise dde_server_address not set in dde_connection.yml"
+    url = "http://#{dde_server_address}/population_stats"
     outcome_paramz = {}
     outcome_paramz['stat'] = 'fetch_outcome' ; outcome_paramz['identifier'] = national_id
     result = RestClient.post(url, outcome_paramz) rescue {}
@@ -316,8 +317,8 @@ P1)
   def outcome
     @patient_bean = formatted_dde_object
     if request.post?
-      @settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]
-      url = "http://localhost:3002/population_stats"
+      dde_server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
+      url = "http://#{dde_server_address}/population_stats"
       outcome_paramz = {}
       outcome_paramz['outcome'] = {outcome: params[:outcome]['outcome'], 
                         year: params[:outcome_year],month: params[:outcome_month],

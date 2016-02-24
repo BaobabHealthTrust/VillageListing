@@ -37,7 +37,7 @@ class UserController < ApplicationController
 
   def create
     param = {user: session[:user], new_user: params[:user]}
-    server_address = '127.0.0.1:3001'
+    server_address = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
     uri = "http://#{server_address}/remote_create_user.json/"
     user = RestClient.post(uri,param)
     if user.blank?
@@ -51,7 +51,7 @@ class UserController < ApplicationController
 
   def search(field_name, params)
     
-    server_address = '127.0.0.1:3001'
+    server_address = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
 
     case field_name
       when 'username'
