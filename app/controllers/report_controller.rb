@@ -4,6 +4,29 @@ class ReportController < ApplicationController
     render :layout => false
   end
 
+  def village_outcome
+    @report_title = 'Village outcome stats'
+
+    if params[:run] == 'true'
+      server_address = '127.0.0.1:3002' #YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
+      uri = "http://#{server_address}/population_stats.json/"
+      paramz = {district: session[:user]['district'], ta: session[:user]['ta'], 
+                stat: 'current_village_outcomes', village: session[:user]['village']}
+      data = RestClient.post(uri,paramz)
+      
+      unless data.blank?
+        @stats = JSON.parse(data)
+      else
+        @stats = []
+      end
+    else
+      @stats = []
+    end
+
+    @report_generation_path = "/village_outcomes?run=true"
+    render :layout => false
+  end
+
   def village_population
     
     @report_title = 'Village people list'
@@ -21,6 +44,7 @@ class ReportController < ApplicationController
       else
         @people = []
       end
+      @report_generation_path = "/village_population?run=true"
     else
       @report_generation_path = "/village_population?run=true"
       @people = []
