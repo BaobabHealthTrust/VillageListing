@@ -3,9 +3,10 @@ class UserController < ApplicationController
     if request.post?
       server_address = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
       uri = "http://#{server_address}/remote_login.json/"
-      user = RestClient.post(uri,params)
+      user = JSON.parse(RestClient.post(uri,params))
+
       unless user.blank?
-        session[:user] = JSON.parse(user)
+        session[:user] = user
         redirect_to '/' and return
       end
     end

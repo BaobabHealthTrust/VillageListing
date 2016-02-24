@@ -99,7 +99,7 @@ img {
         <div class='second-table-row'>
          
            <div class='second-table-cell' style="padding-right: 5px;">
-            <div class="divbtn" style="background-color: #f0f0f0; border: 1px solid #2e6da4; width: 295px; float: right;" onclick="document.location='<%=@new_app_path%>'" >
+            <div class="divbtn" style="background-color: #f0f0f0; border: 1px solid #2e6da4; width: 295px; float: right;" onclick="document.location='/login'" >
               <%=image_tag("icons/family.png", class: 'xicons')%>
               <p>Kalembera</p>
             </div>
@@ -107,7 +107,7 @@ img {
 
            <div class='second-table-cell' style="padding-left: 5px;">
             <div class="divbtn" style="background-color: #ffff75; border: 1px solid #2e6da4; 
-                width: 295px; float: left;" onclick="document.location='/logout'" >
+                width: 295px; float: left;" onclick="document.location='<%=@new_app_path%>'" >
               <%=image_tag("icons/news.png", class: 'xicons')%>
               <p>Nkhani</p>
             </div>
