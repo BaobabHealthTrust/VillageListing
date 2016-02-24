@@ -8,7 +8,7 @@ class ReportController < ApplicationController
     @report_title = 'Village outcome stats'
 
     if params[:run] == 'true'
-      server_address = '127.0.0.1:3002' #YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
+      server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
       uri = "http://#{server_address}/population_stats.json/"
       paramz = {district: session[:user]['district'], ta: session[:user]['ta'], 
                 stat: 'current_village_outcomes', village: session[:user]['village']}
@@ -32,7 +32,7 @@ class ReportController < ApplicationController
     @report_title = 'Village people list'
 
     if params[:run] == 'true'
-      server_address = '127.0.0.1:3002' #YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
+      server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
       uri = "http://#{server_address}/population_stats.json/"
       #paramz = {district: 'Lilongwe',ta: 'Mtema', village: 'Kanyoza', stat: 'current_district_ta_village'}
       paramz = {district: session[:user]['district'], ta: session[:user]['ta'], 
@@ -62,7 +62,7 @@ class ReportController < ApplicationController
     @report_title = 'TA villages (citizen counts)'
     @report_generation_path = []
 
-    server_address = '127.0.0.1:3002' #YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
+    server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
     uri = "http://#{server_address}/population_stats.json/"
     paramz = {district: session[:user]['district'], ta: session[:user]['ta'], stat: 'ta_population_tabulation'}
     data = RestClient.post(uri,paramz)
@@ -90,7 +90,7 @@ class ReportController < ApplicationController
     @report_title = 'TA counts'
 
     if params[:run] == 'true'
-      server_address = '127.0.0.1:3002' #YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
+      server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
       uri = "http://#{server_address}/population_stats.json/"
       paramz = {district: session[:user]['district'], stat: 'ta_population'}
       data = RestClient.post(uri,paramz)
@@ -118,7 +118,7 @@ class ReportController < ApplicationController
     @report_title = 'Village people count/break-down by Gender and Age groups'
 
     if params[:run] == 'true'
-      server_address = '127.0.0.1:3002' #YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
+      server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
       uri = "http://#{server_address}/population_stats.json/"
       paramz = {district: session[:user]['district'], ta: session[:user]['ta'], 
                 stat: 'current_district_ta_village', village: session[:user]['village']}
@@ -145,7 +145,7 @@ class ReportController < ApplicationController
 
   def village_selection
     paramz = {ta_name: session[:user]['ta'], user: session[:user] }
-    server_address = '127.0.0.1:3001'
+    server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
     uri = "http://#{server_address}/demographics/villages.json/"
     data = RestClient.post(uri,paramz)
  
