@@ -34,6 +34,18 @@
   window.setTimeout("focusForBarcodeInput()", 350);
 
   function changeDefultSettings() {
+    tstInputTargetClone = tstInputTarget.cloneNode(true);
+    tstInputTarget.parentNode.replaceChild(tstInputTargetClone, tstInputTarget); //Remove all event listeners
+    tstInputTarget = document.getElementById("touchscreenInput0");
+    tstInputTarget.addEventListener("keypress", function(event) {
+      if (event.keyCode == 13){ //13 is Enter Key
+        if (tstInputTarget.value.length > 0){
+          npid = tstInputTarget.value.toUpperCase();
+          ajaxRequesti(npid);
+        }
+      }
+    })
+
     usertext = document.getElementById("touchscreenInput0");
     if (usertext && usertext.value.match(/.+\$$/i) != null) {
       usertext.value = usertext.value.substring(0, usertext.value.length - 1);
@@ -49,7 +61,6 @@
 
   }
 
-  //window.setTimeout("changeDefultSettings();", 350);
 
   function ajaxRequesti(id){
 
@@ -82,13 +93,6 @@
     }
   }
 
-  function upcaseValue(){
-    alert("ddd")
-   value = document.getElementById("touchscreenInput0").value
-   document.getElementById("touchscreenInput0").value = value.toUpperCase()
-   alert(document.getElementById("touchscreenInput0").value)
-  }
-  
 </script>
 
 <style type="text/css">
@@ -116,7 +120,6 @@
 
   <%= text_field_tag :national_id, '', {
     :tt_onLoad => "formatBarcodeSpace(); changeDefultSettings();",
-    :tt_onUnLoad => "upcaseValue()",
     :id => 'national_id',
     :class => 'touchscreenTextInput',
     :tt_pageStyleClass => "azButton",
@@ -125,4 +128,4 @@
   } %>
 
   <textarea id="person" name="person" style="display: none;" condition="false"></textarea>
-</form
+</form>
