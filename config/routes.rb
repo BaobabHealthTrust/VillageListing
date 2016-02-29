@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
   
-
   ##################### people ######################
   get 'people/new'
   get 'people/search_results'
@@ -28,6 +27,11 @@ Rails.application.routes.draw do
   get 'user/first_name' 
   get 'user/last_name' 
   get '/portal' => 'user#portal'
+
+  get 'user/edit/:username' => 'user#edit'
+  get 'change_password/:username' => 'user#change_password'
+  post 'user/change_password'
+  post 'user/update' 
   ##################### user end ######################
 
   ##################### report ######################

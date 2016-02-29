@@ -6,7 +6,7 @@
 
 
 
-<%= form_tag("/user/create", id: "create-form", method: 'post', enctype: 'multipart/form-data') do %>
+<%= form_tag("/user/update", id: "create-form", method: 'post', enctype: 'multipart/form-data') do %>
  
  <%= text_field_tag "user[username]", params[:username],
                      {:id => 'username', :field_type => 'alpha',
@@ -35,22 +35,12 @@
       :allowFreeText => false)
   %>
 
- <%= password_field_tag "user[password]", params[:password],
-                     {:id => 'password', :field_type => 'alpha',
-                      :helpText => 'Password',
-                      :textCase => "lower",
-                      :allowFreeText => true }%>
-
-  <%= password_field_tag "user[confirm password]", params[:confirm_password],
-                     {:id => 'confirm_password', :field_type => 'alpha',
-                      :helpText => 'Confirm Password',
-                      :textCase => "lower",
-                      :allowFreeText => true }%>
-
+<%if session[:user]['role'] == "admin"%>
 <%= @roles = ['Administrator', 'Provider'] %> 
   <%= select_tag("user[role]", options_for_select(@roles ,params[:role]),
       :helpText =>"Role",
       :id => "role",
+      :tt_onLoad => "$('nextButton').style.display = '';",
       :allowFreeText => false)
   %>
 
@@ -83,13 +73,14 @@
     :ajaxURL => "",
     :tt_onLoad => "$('nextButton').style.display = ''; set_ajaxURL_for_suggestions('/dde/village?filter_value=', __$('ancestral_traditional_authority').value);",
     :helptext => "Village"} %>
-
+<%end%>
   <!-- ....................... User's location ........................... -->
 	<label for='summary'>Summary</label>
 	<%= text_field_tag :summary, nil, { :tt_onLoad => "summary();__$('keyboard').style.display = 'none';", 
       :optional => "true", 
       :tt_pageStyleClass => "NoControls" } %>
 
+  <input type="hidden" name="username" value="<%=params[:username]%>" />
 <%end%>
 
 <script>
@@ -100,20 +91,23 @@ function summary() {
   var first_name = document.getElementById('given_name').value;
   var last_name = document.getElementById('family_name').value;
   var gender = document.getElementById('gender').value;
-  var role = document.getElementById('role').value;
-  var district = document.getElementById('district_of_origin').value;
-  var ta = document.getElementById('ancestral_traditional_authority').value;
-  var village = document.getElementById('home_village').value;
-
+  <%if session[:user]['role'] == "admin"%>
+    var role = document.getElementById('role').value;
+    var district = document.getElementById('district_of_origin').value;
+    var ta = document.getElementById('ancestral_traditional_authority').value;
+    var village = document.getElementById('home_village').value;
+  <%end%>
   var display = "<div><span class='title'>Username:</span><span class='data'> " + username + "</span></div>";
   display += "<div><span class='title'>First Name:</span><span class='data'> " + first_name + "</span></div>";
   display += "<div><span class='title'>Last Name:</span><span class='data'> " + last_name + "</span></div>";
   display += "<div><span class='title'>Gender:</span><span class='data'> " + gender + "</span></div>";
-  display += "<div><span class='title'>Role:</span><span class='data'> " + role + "</span></div>";
-
-  display += "<div><span class='title'>District:</span><span class='data'> " + district + "</span></div>";
-  display += "<div><span class='title'>TA:</span><span class='data'> " + ta + "</span></div>";
-  display += "<div><span class='title'>Village:</span><span class='data'> " + village + "</span></div>";
+  
+  <%if session[:user]['role'] == "admin"%>
+    display += "<div><span class='title'>Role:</span><span class='data'> " + role + "</span></div>";
+    display += "<div><span class='title'>District:</span><span class='data'> " + district + "</span></div>";
+    display += "<div><span class='title'>TA:</span><span class='data'> " + ta + "</span></div>";
+    display += "<div><span class='title'>Village:</span><span class='data'> " + village + "</span></div>";
+  <%end%>
 
 	$('inputFrame'+tstCurrentPage).innerHTML = '<div id="summary">' + display + '</div>' ;
 	$("clearButton").style.display = "none";

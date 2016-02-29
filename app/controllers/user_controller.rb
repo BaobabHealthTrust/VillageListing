@@ -26,6 +26,18 @@ class UserController < ApplicationController
     render :layout => false
   end
 
+  def list
+    @users = []
+    paramz = {user: session[:user]}
+    server_address = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
+    uri = "http://#{server_address}/user_list.json/"
+    users = RestClient.post(uri,paramz)
+    unless users.blank?
+      @users = JSON.parse(users)
+    end
+    render :layout => false
+  end
+
   def username
     param = {user: session[:user], search_string: params[:search_string]}
     search("username", param)
@@ -42,12 +54,34 @@ class UserController < ApplicationController
   end
 
   def create
-    param = {user: session[:user], new_user: params[:user]}
+    paramz = {user: session[:user], new_user: params[:user], location: params[:person]}
     server_address = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
     uri = "http://#{server_address}/remote_create_user.json/"
-    user = RestClient.post(uri,param)
+    user = RestClient.post(uri,paramz)
     if user.blank?
       redirect_to '/user/new' and return
+    else
+      redirect_to '/user/list' and return
+    end
+  end
+
+  def change_password
+    if request.post?
+      paramz = {user: session[:user], new_password: params[:user]['password'], username: params[:username]}
+      server_address = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
+      uri = "http://#{server_address}/remote_change_password.json/"
+      user = RestClient.post(uri,paramz)
+      redirect_to '/admin' and return
+    end
+  end
+
+  def update
+    paramz = {user: session[:user], new_user: params[:user], location: params[:person], username: params[:username]}
+    server_address = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
+    uri = "http://#{server_address}/remote_update_user.json/"
+    user = RestClient.post(uri,paramz)
+    if user.blank?
+      redirect_to "/user/edit/#{params[:username]}" and return
     else
       redirect_to '/user/list' and return
     end

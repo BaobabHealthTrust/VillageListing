@@ -89,9 +89,21 @@ img {
 <div class="main-page-container">
 
 <div class="main-page-container-rows">
+    <!-- loop -->
+  <div class="cells btncells">
+    <div class="divbtn" style="background-color:teal;border: 1px solid #2e6da4; width: 99%;" onclick="document.location='/user/list'" >
+        <span class="icons">
+          <%=image_tag("icons/cloud-users-128.png", class: 'icons')%>
+          <p>All users</p>
+        </span>
+    </div>
+  </div>
+  <!-- endloop -->
+
   <!-- loop -->
   <div class="cells btncells">
-    <div class="divbtn" style="background-color:#ffffb3;border: 1px solid #2e6da4; width: 99%;" onclick="document.location='/user/change_password'" >
+    <%username = session[:user]['username']%>
+    <div class="divbtn" style="background-color:slategrey;border: 1px solid #2e6da4; width: 99%;" onclick="document.location='/change_password/<%=username%>'" >
         <span class="icons">
           <%=image_tag("icons/change-password.png", class: 'icons')%>
           <p style="color: black;">Change Password</p>
@@ -116,15 +128,32 @@ img {
   <!-- loop -->
   <div class="cells btncells">
     <%if session[:user]['role'] == 'admin'%>
-      <div class="divbtn" style="background-color:#d24dff;border: 1px solid #2e6da4; width: 99%;" onclick="document.location='/'" >
+      <div class="divbtn" style="background-color:#d24dff;border: 1px solid #2e6da4; width: 99%;" onclick="document.location='/user/list'" >
     <%else%>
-      <div class="divbtn" style="background-color:#d24dff;border: 1px solid #2e6da4; width: 99%;" onclick="document.location='/'" >
+      <div class="divbtn" style="background-color:#d24dff;border: 1px solid #2e6da4; width: 99%;" onclick="document.location='/user/edit/<%=username%>'" >
     <%end%>
         <span class="icons">
           <%=image_tag("icons/demographic.png", class: 'icons')%>
           <p>Edit User</p>
         </span>
     </div>
+  </div>
+  <!-- endloop -->
+</div>
+
+<div class="main-page-container-rows">
+  <!-- loop -->
+  <div class="cells btncells">
+  </div>
+  <!-- endloop -->
+
+  <!-- loop -->
+  <div class="cells btncells">
+  </div>
+  <!-- endloop -->
+
+  <!-- loop -->
+  <div class="cells btncells">
   </div>
   <!-- endloop -->
 
