@@ -102,9 +102,15 @@ P1)
     result = RestClient.post(url, outcome_paramz) rescue {}
     data = JSON.parse(result) rescue {}
 
-    session[:dde_object]['outcome'] = data['outcome'] rescue nil
-    session[:dde_object]['outcome_date'] = data['outcome_date'] rescue nil
+    session[:dde_object]['outcome'] = data['outcome_data']['outcome'] rescue nil
+    session[:dde_object]['outcome_date'] = data['outcome_data']['outcome_date'] rescue nil
     outcome_date = session[:dde_object]['outcome_date'] ; outcome = session[:dde_object]['outcome']
+
+    unless data['person'].blank?
+      current_district = data['person']['addresses']['current_district']
+      current_ta = data['person']['addresses']['current_ta']
+      current_village = data['person']['addresses']['current_village']
+    end unless data.blank?
     #################### Code to pull person outcome from the DDE (ends)############################
 
     patient_bean = {
