@@ -5,11 +5,11 @@
 </script>
 
 <style>
-  #inputFrame2 {
+#tt_page_outcome_month .inputFrameClass {
     height: 85%;
 }
 
-#inputFrame2 #viewport {
+#tt_page_outcome_month #viewport {
   height: 90%;
 }
 
@@ -29,9 +29,56 @@
   <%= select_tag("outcome[outcome]", options_for_select(outcomes ,''),
               :helpText =>"Select outcome",
               :id => "outcome",
+              :tt_onLoad => "$('nextButton').style.display = ''",
               :allowFreeText => false)
   %>
 
+  <!-- ..................   if transfer out ............................................. -->
+   <%#= text_field_tag "person[citizenship]", nil,
+    {:id => "nationality",
+    :ajaxURL => "",
+    :tt_requireNextClick => false,
+    :condition => '__$("outcome").value == "Transfer Out"',
+    :tt_onLoad => "$('nextButton').style.display = 'none'; set_ajaxURL_for_suggestions('/dde/nationality?filter_value=', __$('nationality').value);",
+    :helptext => "Country"} %>
+
+  <%#= text_field_tag "person[race]", nil,
+    {:id => "race",
+    :helptext => "Specify nationality",
+    :tt_onLoad => "$('nextButton').style.display = 'block';",
+    :condition => '__$("nationality") && __$("nationality").value == "Other"'} %>
+
+  <%= select_tag "REGION OF ORIGIN", options_for_select([["Northern Region", "Northern+Region"],
+      ["Central Region", "Central+Region"], ["Southern Region", "Southern+Region"], ["", ""]]),
+    {:id => "region_of_origin",
+    :tt_requireNextClick => false,
+    :condition => "__$('outcome').value == 'Transfer Out'",
+    :tt_onLoad => "$('nextButton').style.display = 'none';",
+    :helptext => "Region"} %>
+
+  <%= text_field_tag "person[addresses][address2]", nil,
+    {:id => "district_of_origin",
+    :tt_requireNextClick => false,
+    :ajaxURL => "",
+    :condition => "__$('outcome').value == 'Transfer Out'",
+    :tt_onLoad => "$('nextButton').style.display = 'none'; set_ajaxURL_for_suggestions('/dde/district?filter_value=', __$('region_of_origin').value); ",
+    :helptext => "District"} %>
+
+  <%= text_field_tag "person[addresses][county_district]", nil,
+    {:id => "ancestral_traditional_authority",
+    :tt_requireNextClick => false,
+    :ajaxURL => "",
+    :condition => "__$('outcome').value == 'Transfer Out'",
+    :tt_onLoad => "set_ajaxURL_for_suggestions('/dde/traditional_authority?filter_value=', __$('district_of_origin').value);",
+    :helptext => "Ancestral Traditional Authority"} %>
+
+  <%= text_field_tag "person[addresses][neighborhood_cell]", nil,
+    {:id => "home_village",
+    :ajaxURL => "",
+    :condition => "__$('outcome').value == 'Transfer Out'",
+    :tt_onLoad => "$('nextButton').style.display = ''; set_ajaxURL_for_suggestions('/dde/village?filter_value=', __$('ancestral_traditional_authority').value);",
+    :helptext => "Village"} %>
+  <!-- ..................   transfer out ends ............................................. -->
 
   <%= text_field_tag "outcome_year", nil, {:helpText => 'Outcome Year', 
       :field_type => 'number', 
@@ -127,4 +174,10 @@
       gotoNextPage();
     }
   }
+
+   function set_ajaxURL_for_suggestions(url, filter_value) {
+    $('touchscreenInput' + tstCurrentPage).setAttribute('ajaxURL', url + filter_value + "&search_string=");
+    listSuggestions(tstCurrentPage);
+  }
+
 </script>

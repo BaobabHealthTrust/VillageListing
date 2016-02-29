@@ -320,9 +320,18 @@ P1)
       dde_server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
       url = "http://#{dde_server_address}/population_stats"
       outcome_paramz = {}
+      if params[:outcome]['outcome'].match(/transf/i)
+        location_paramz = {district: params[:person]['addresses']['address2'],
+                           ta: params[:person]['addresses']['county_district'],
+                           village: params[:person]['addresses']['neighborhood_cell']
+                          }
+      else
+        location_paramz = nil
+      end
+
       outcome_paramz['outcome'] = {outcome: params[:outcome]['outcome'], 
                         year: params[:outcome_year],month: params[:outcome_month],
-                        day: params[:outcome_day]}
+                        day: params[:outcome_day], transfering_location: location_paramz }
                         
       outcome_paramz['stat'] = 'update_outcome' ; outcome_paramz['identifier'] = params[:person]['identifier'] 
       result = RestClient.post(url, outcome_paramz)
