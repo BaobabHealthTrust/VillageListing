@@ -8,14 +8,6 @@
 
 <%= form_tag("/user/update", id: "create-form", method: 'post', enctype: 'multipart/form-data') do %>
  
- <%= text_field_tag "user[username]", params[:username],
-                     {:id => 'username', :field_type => 'alpha',
-                      :helpText => 'Username',
-                      :textCase => "lower",
-                      :ajaxURL => '/user/username?search_string=',
-                      :allowFreeText => true }%>
-
-
   <%= text_field_tag "user[first_name]", params[:firstname],
                      {:id => 'given_name', :field_type => 'alpha',
                       :helpText => 'First name',
@@ -87,7 +79,6 @@
 
 function summary() {
 
-  var username = document.getElementById('username').value;
   var first_name = document.getElementById('given_name').value;
   var last_name = document.getElementById('family_name').value;
   var gender = document.getElementById('gender').value;
@@ -97,8 +88,7 @@ function summary() {
     var ta = document.getElementById('ancestral_traditional_authority').value;
     var village = document.getElementById('home_village').value;
   <%end%>
-  var display = "<div><span class='title'>Username:</span><span class='data'> " + username + "</span></div>";
-  display += "<div><span class='title'>First Name:</span><span class='data'> " + first_name + "</span></div>";
+  var display = "<div><span class='title'>First Name:</span><span class='data'> " + first_name + "</span></div>";
   display += "<div><span class='title'>Last Name:</span><span class='data'> " + last_name + "</span></div>";
   display += "<div><span class='title'>Gender:</span><span class='data'> " + gender + "</span></div>";
   
