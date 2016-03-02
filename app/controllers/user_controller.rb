@@ -54,6 +54,7 @@ class UserController < ApplicationController
   end
 
   def create
+    params[:user]['gender'] = params[:user]['gender'] == 'Mkazi' ? 'Female' : 'Male'
     paramz = {user: session[:user], new_user: params[:user], location: params[:person]}
     server_address = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
     uri = "http://#{server_address}/remote_create_user.json/"
@@ -76,6 +77,7 @@ class UserController < ApplicationController
   end
 
   def update
+    params[:user]['gender'] = params[:user]['gender'] == 'Mkazi' ? 'Female' : 'Male'
     paramz = {user: session[:user], new_user: params[:user], location: params[:person], username: params[:username]}
     server_address = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
     uri = "http://#{server_address}/remote_update_user.json/"

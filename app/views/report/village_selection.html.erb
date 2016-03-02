@@ -17,6 +17,6 @@
 <%=form_tag "/#{params[:report_path]}" do%>
   <%= select_tag 'ta[villages][]',
       options_for_select(@villages.sort, []),
-      :helpText => "Select villages under TA: #{session[:user]['ta']}" ,
+      :helpText => "Sakhani Mmidzi yamu TA: #{session[:user]['ta']}" ,
       :multiple =>  true %> 
 <%end%>

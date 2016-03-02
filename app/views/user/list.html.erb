@@ -141,13 +141,13 @@ tfoot tr {
 <table class="people" style="width:99%;" id="results">
   <thead>
     <tr>
-      <th>Username</th>
-      <th>First name</th>
-      <th>Last name</th>
-      <th>Gender</th>
-      <th>Home district</th>
-      <th>Home TA</th>
-      <th>Home Village</th>
+      <th>Dzina la chinsisi</th>
+      <th>Dzina loyamba</th>
+      <th>Dzina la bambo</th>
+      <th>Mkazi/Mwamuna</th>
+      <th>Boma la lakwawo</th>
+      <th>TA wakwawo</th>
+      <th>Mudzi wakwawo</th>
       <%if session[:user]['role'] == 'admin'%>
         <th>&nbsp;</th>
       <%end%>
@@ -166,8 +166,8 @@ tfoot tr {
     <td><%=person['village']%></td>
     <%if session[:user]['role'] == 'admin'%>
     <td style="text-align: center;">
-      <a href="/change_password/<%=person['username']%>" class="btn links">New password</a>&nbsp;|&nbsp;
-      <a href="/user/edit/<%=person['username']%>" class="btn links">Edit name</a>
+      <a href="/change_password/<%=person['username']%>" class="btn links">Sinthani Mawu a Chinsisi</a>&nbsp;|&nbsp;
+      <a href="/user/edit/<%=person['username']%>" class="btn links">Sinthani dzina</a>
     </td>
     <%end%>
   </tr>
@@ -176,7 +176,7 @@ tfoot tr {
   if @users.length > 0%>
   <tfoot>
     <tr>
-      <td style="border-right:0px;">Total people</td>
+      <td style="border-right:0px;">Athu Onse</td>
       <td style="border-width:1px 0px 1px 0px;"></td>
       <td style="border-width:1px 0px 1px 0px;"></td>
       <td style="border-width:1px 0px 1px 0px;"></td>

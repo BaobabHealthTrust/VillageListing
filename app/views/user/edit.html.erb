@@ -10,64 +10,64 @@
  
   <%= text_field_tag "user[first_name]", params[:firstname],
                      {:id => 'given_name', :field_type => 'alpha',
-                      :helpText => 'First name',
+                      :helpText => 'Dzina Loyamba',
                       :ajaxURL => '/user/first_name?search_string=',
                       :allowFreeText => true }%>
   
   <%= text_field_tag "user[last_name]", params[:lastname],
                      {:id => 'family_name',
                       :field_type => 'alpha',
-                      :helpText => 'Last name',
+                      :helpText => 'Dzina La Bambo',
                       :ajaxURL => '/user/last_name?search_string=',
                       :allowFreeText => true }%>
 
-  <%= select_tag("user[gender]", options_for_select(['','Male','Female'] ,params[:gender]),
-      :helpText =>"Gender",
+  <%= select_tag("user[gender]", options_for_select(['','Mwamuna','Mkazi'] ,params[:gender]),
+      :helpText =>"Mwamuna/Mkazi",
       :id => "gender",
       :allowFreeText => false)
   %>
 
 <%if session[:user]['role'] == "admin"%>
-<%= @roles = ['Administrator', 'Provider'] %> 
+<%= @roles = ['Administrator', 'Mfumu Yayikulu','Mufumu','Onthandizira'] %> 
   <%= select_tag("user[role]", options_for_select(@roles ,params[:role]),
-      :helpText =>"Role",
+      :helpText =>"Ndinu ndani",
       :id => "role",
-      :tt_onLoad => "$('nextButton').style.display = '';",
       :allowFreeText => false)
   %>
 
 
   <!-- ....................... User's location ........................... -->
 
-  <%= select_tag "REGION OF ORIGIN", options_for_select([["Northern Region", "Northern+Region"],
-      ["Central Region", "Central+Region"], ["Southern Region", "Southern+Region"], ["", ""]]),
+  <%= select_tag "REGION OF ORIGIN", options_for_select([["Chigawo Chakumpoto", "Northern+Region"],
+      ["Chigawo Chapakati", "Central+Region"], ["Chigawo Chakumwera", "Southern+Region"], ["", ""]]),
     {:id => "region_of_origin",
     :tt_requireNextClick => false,
     :tt_onLoad => "$('nextButton').style.display = 'none';",
-    :helptext => "Region"} %>
+    :helptext => "Chigawo"} %>
 
   <%= text_field_tag "person[addresses][address2]", nil,
     {:id => "district_of_origin",
     :tt_requireNextClick => false,
     :ajaxURL => "",
     :tt_onLoad => "$('nextButton').style.display = 'none'; set_ajaxURL_for_suggestions('/dde/district?filter_value=', __$('region_of_origin').value); ",
-    :helptext => "District"} %>
+    :helptext => "Boma"} %>
 
   <%= text_field_tag "person[addresses][county_district]", nil,
     {:id => "ancestral_traditional_authority",
     :tt_requireNextClick => false,
     :ajaxURL => "",
     :tt_onLoad => "set_ajaxURL_for_suggestions('/dde/traditional_authority?filter_value=', __$('district_of_origin').value);",
-    :helptext => "Ancestral Traditional Authority"} %>
+    :helptext => "Mfumu Yayikulu"} %>
 
   <%= text_field_tag "person[addresses][neighborhood_cell]", nil,
     {:id => "home_village",
     :ajaxURL => "",
     :tt_onLoad => "$('nextButton').style.display = ''; set_ajaxURL_for_suggestions('/dde/village?filter_value=', __$('ancestral_traditional_authority').value);",
-    :helptext => "Village"} %>
-<%end%>
+    :helptext => "Mudzi"} %>
+
+  <%end%>
   <!-- ....................... User's location ........................... -->
-	<label for='summary'>Summary</label>
+	<label for='summary'>Zotsatila mwachidule</label>
 	<%= text_field_tag :summary, nil, { :tt_onLoad => "summary();__$('keyboard').style.display = 'none';", 
       :optional => "true", 
       :tt_pageStyleClass => "NoControls" } %>
@@ -88,15 +88,15 @@ function summary() {
     var ta = document.getElementById('ancestral_traditional_authority').value;
     var village = document.getElementById('home_village').value;
   <%end%>
-  var display = "<div><span class='title'>First Name:</span><span class='data'> " + first_name + "</span></div>";
-  display += "<div><span class='title'>Last Name:</span><span class='data'> " + last_name + "</span></div>";
-  display += "<div><span class='title'>Gender:</span><span class='data'> " + gender + "</span></div>";
+  var display = "<div><span class='title'>Dzina Loyamba:</span><span class='data'> " + first_name + "</span></div>";
+  display += "<div><span class='title'>Dzina La Bambo:</span><span class='data'> " + last_name + "</span></div>";
+  display += "<div><span class='title'>Mkazi/Mwamuna:</span><span class='data'> " + gender + "</span></div>";
   
   <%if session[:user]['role'] == "admin"%>
-    display += "<div><span class='title'>Role:</span><span class='data'> " + role + "</span></div>";
-    display += "<div><span class='title'>District:</span><span class='data'> " + district + "</span></div>";
+    display += "<div><span class='title'>Ndinu:</span><span class='data'> " + role + "</span></div>";
+    display += "<div><span class='title'>Boma:</span><span class='data'> " + district + "</span></div>";
     display += "<div><span class='title'>TA:</span><span class='data'> " + ta + "</span></div>";
-    display += "<div><span class='title'>Village:</span><span class='data'> " + village + "</span></div>";
+    display += "<div><span class='title'>Mudzi:</span><span class='data'> " + village + "</span></div>";
   <%end%>
 
 	$('inputFrame'+tstCurrentPage).innerHTML = '<div id="summary">' + display + '</div>' ;
