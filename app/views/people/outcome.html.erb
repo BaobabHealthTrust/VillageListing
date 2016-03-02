@@ -5,11 +5,11 @@
 </script>
 
 <style>
-#tt_page_outcome_month .inputFrameClass {
+#tt_page_mwezi .inputFrameClass {
     height: 85%;
 }
 
-#tt_page_outcome_month #viewport {
+#tt_page_mwezi #viewport {
   height: 90%;
 }
 
@@ -23,11 +23,11 @@
 <%=form_tag '/outcomes' do%>
 	<%= hidden_field_tag "person[identifier]", @patient_bean.national_id %>
 
-  <%outcomes = ["", "Died","Transfer Out"]%>
+  <%outcomes = ["", "Adamwalira","Adasamuka"]%>
   <%months = Date::MONTHNAMES + ['Unknown']%>
 
   <%= select_tag("outcome[outcome]", options_for_select(outcomes ,''),
-              :helpText =>"Select outcome",
+              :helpText =>"Zotsatila",
               :id => "outcome",
               :tt_onLoad => "$('nextButton').style.display = ''",
               :allowFreeText => false)
@@ -48,50 +48,50 @@
     :tt_onLoad => "$('nextButton').style.display = 'block';",
     :condition => '__$("nationality") && __$("nationality").value == "Other"'} %>
 
-  <%= select_tag "REGION OF ORIGIN", options_for_select([["Northern Region", "Northern+Region"],
-      ["Central Region", "Central+Region"], ["Southern Region", "Southern+Region"], ["", ""]]),
+  <%= select_tag "REGION OF ORIGIN", options_for_select([["Chigawo Chakumpoto", "Northern+Region"],
+      ["Chigawo Chapakati", "Central+Region"], ["Chigawo Chakumwera", "Southern+Region"], ["", ""]]),
     {:id => "region_of_origin",
     :tt_requireNextClick => false,
-    :condition => "__$('outcome').value == 'Transfer Out'",
+    :condition => "__$('outcome').value == 'Adasamuka'",
     :tt_onLoad => "$('nextButton').style.display = 'none';",
-    :helptext => "Region"} %>
+    :helptext => "Chigawo"} %>
 
   <%= text_field_tag "person[addresses][address2]", nil,
     {:id => "district_of_origin",
     :tt_requireNextClick => false,
     :ajaxURL => "",
-    :condition => "__$('outcome').value == 'Transfer Out'",
+    :condition => "__$('outcome').value == 'Adasamuka'",
     :tt_onLoad => "$('nextButton').style.display = 'none'; set_ajaxURL_for_suggestions('/dde/district?filter_value=', __$('region_of_origin').value); ",
-    :helptext => "District"} %>
+    :helptext => "Boma"} %>
 
   <%= text_field_tag "person[addresses][county_district]", nil,
     {:id => "ancestral_traditional_authority",
     :tt_requireNextClick => false,
     :ajaxURL => "",
-    :condition => "__$('outcome').value == 'Transfer Out'",
+    :condition => "__$('outcome').value == 'Adasamuka'",
     :tt_onLoad => "set_ajaxURL_for_suggestions('/dde/traditional_authority?filter_value=', __$('district_of_origin').value);",
-    :helptext => "Ancestral Traditional Authority"} %>
+    :helptext => "Mfumu Yayikulu"} %>
 
   <%= text_field_tag "person[addresses][neighborhood_cell]", nil,
     {:id => "home_village",
     :ajaxURL => "",
-    :condition => "__$('outcome').value == 'Transfer Out'",
+    :condition => "__$('outcome').value == 'Adasamuka'",
     :tt_onLoad => "$('nextButton').style.display = ''; set_ajaxURL_for_suggestions('/dde/village?filter_value=', __$('ancestral_traditional_authority').value);",
-    :helptext => "Village"} %>
+    :helptext => "Mudzi"} %>
   <!-- ..................   transfer out ends ............................................. -->
 
-  <%= text_field_tag "outcome_year", nil, {:helpText => 'Outcome Year', 
+  <%= text_field_tag "outcome_year", nil, {:helpText => 'Chaka', 
       :field_type => 'number', 
       :absoluteMin => "1890", :min => "1940", 
       :absoluteMax => Date.today.year, 
       :tt_pageStyleClass => "Numeric NumbersOnly" }  %>
 
-  <%= select_tag "outcome_month",  options_for_select(months ,''), {:helpText => 'Outcome Month', 
+  <%= select_tag "outcome_month",  options_for_select(months ,''), {:helpText => 'Mwezi', 
       :condition => '$("outcome_year").value.toLowerCase() != "unknown";',
       :tt_onLoad =>"validateDate();__$('keyboard').style.display = 'none'"}%>
 
   <%= text_field_tag "outcome_day",  nil, :field_type => 'number', 
-      :helpText => 'Outcome Day', 
+      :helpText => 'Tsiku', 
       :condition => '($("outcome_year").value != "Unknown") && ($("outcome_month").value != "Unknown");', 
       :tt_onLoad => "changeFinishButton();getDayOfMonthPicker($('outcome_year').value, getMonth($('outcome_month').value))"  %>
 
@@ -169,7 +169,12 @@
   function validateDayOfMonth() {
     selected_day = parseInt($('touchscreenInput'+tstCurrentPage).value);
     if(selected_day > date.getDate()) {
-      return false;
+      selectedMonth = getMonth(document.getElementById('outcome_month').value);
+      if(selectedMonth >= (date.getMonth() + 1)){
+        return false;
+      }else{
+        gotoNextPage();
+      }
     }else{
       gotoNextPage();
     }

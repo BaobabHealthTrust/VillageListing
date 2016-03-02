@@ -436,7 +436,7 @@
         var cell1_1 = document.createElement("th");
         cell1_1.style.textAlign = "right";
         cell1_1.style.color = "#000";
-        cell1_1.innerHTML = "Patient Name:";
+        cell1_1.innerHTML = "Dzina:";
         cell1_1.style.borderRight = "1px dotted #000";
 
         tr1.appendChild(cell1_1);
@@ -454,7 +454,7 @@
         var cell2_1 = document.createElement("th");
         cell2_1.style.textAlign = "right";
         cell2_1.style.color = "#000";
-        cell2_1.innerHTML = "Age:";
+        cell2_1.innerHTML = "Dzaka:";
         cell2_1.style.borderRight = "1px dotted #000";
 
         tr2.appendChild(cell2_1);
@@ -472,7 +472,7 @@
         var cell3_1 = document.createElement("th");
         cell3_1.style.textAlign = "right";
         cell3_1.style.color = "#000";
-        cell3_1.innerHTML = "National ID:";
+        cell3_1.innerHTML = "Nambala:";
         cell3_1.style.borderRight = "1px dotted #000";
 
         tr3.appendChild(cell3_1);
@@ -515,7 +515,7 @@
         var cell4_1 = document.createElement("th");
         cell4_1.style.textAlign = "right";
         cell4_1.style.color = "#000";
-        cell4_1.innerHTML = "Gender:";
+        cell4_1.innerHTML = "Mwanuna/Mkazi:";
         cell4_1.style.borderRight = "1px dotted #000";
 
         tr4.appendChild(cell4_1);
@@ -539,7 +539,7 @@
         var cell5_1 = document.createElement("th");
         cell5_1.style.textAlign = "right";
         cell5_1.style.color = "#000";
-        cell5_1.innerHTML = "Residence:";
+        cell5_1.innerHTML = "Mfumu Yayikulu:";
         cell5_1.style.borderRight = "1px dotted #000";
 
         tr5.appendChild(cell5_1);
@@ -575,7 +575,7 @@
             First Name
           </td>
           <td>
-            <input type="text" id="given_name" name="given_name" value="" helpText="First Name"
+            <input type="text" id="given_name" name="given_name" value="" helpText="Dzina Loyamba"
                    ajaxURL='' allowFreeText=true 
                    tt_onLoad = "set_ajaxURL_for_suggestions('/people/get_names?name=','given_names')" />
           </td>
@@ -585,7 +585,7 @@
             Family Name
           </td>
           <td>
-            <input type="text" id="family_name" name="family_name" value="" helpText="Family Name"
+            <input type="text" id="family_name" name="family_name" value="" helpText="Dzina La Bambo"
                    ajaxURL='' allowFreeText=true 
                    tt_onLoad = "set_ajaxURL_for_suggestions('/people/get_names?name=','family_names')" />
           </td>
@@ -595,10 +595,10 @@
             Gender
           </td>
           <td>
-            <select id="gender" name="gender" value="" helpText="Gender" condition="<%= (!@globals["default_gender_female"].nil? and @globals["default_gender_female"] == true ? false : true) %>">
+            <select id="gender" name="gender" value="" helpText="Mwamuna/Mkazi" condition="<%= (!@globals["default_gender_female"].nil? and @globals["default_gender_female"] == true ? false : true) %>">
               <option></option>
-              <option value="F" <%= (!@globals["default_gender_female"].nil? and @globals["default_gender_female"] == true ? "selected" : "") %> >Female</option>
-              <option value="M">Male</option>
+              <option value="F" <%= (!@globals["default_gender_female"].nil? and @globals["default_gender_female"] == true ? "selected" : "") %> >Mkazi</option>
+              <option value="M">Mwamuna</option>
             </select>
           </td>
         </tr>
@@ -608,7 +608,7 @@
           </td>
           <td>
             <input type="text" id="selected_patient" name="selected_patient" value=""
-                   helpText="Select Patient or Create New Patient" tt_onLoad="loadNames(); hidekeyboard(); __$('nextButton').onmousedown = function(){};" optional="true"
+                   helpText="Mayina Ofanan Sanapezeke?" tt_onLoad="loadNames(); hidekeyboard(); __$('nextButton').onmousedown = function(){};" optional="true"
                    tt_pageStyleClass="NoControls NoKeyboard hidekeyboard" tt_onUnLoad="__$('nextButton').className = 'green navButton'; __$('nextButton').onmousedown = function(){gotoNextPage()}; if(__$('extras')) __$('buttons').removeChild(__$('extras'));"/>
           </td>
         </tr>
