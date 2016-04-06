@@ -38,7 +38,6 @@ class ReportController < ApplicationController
       paramz = {district: session[:user]['district'], ta: session[:user]['ta'], 
                 stat: 'current_district_ta_village', village: session[:user]['village']}
       data = RestClient.post(uri,paramz)
-
       unless data.blank?
         @people = JSON.parse(data)
       else
