@@ -5,7 +5,7 @@ class ReportController < ApplicationController
   end
 
   def village_outcome
-    @report_title = 'Village outcome stats'
+    @report_title = "Zotsatira"#'Village outcome stats'
 
     if params[:run] == 'true'
       server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
@@ -29,7 +29,7 @@ class ReportController < ApplicationController
 
   def village_population
     
-    @report_title = 'Village people list'
+    @report_title = "Chiwerengero cha m'mudzi"#'Village people list'
 
     if params[:run] == 'true'
       server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
@@ -59,7 +59,7 @@ class ReportController < ApplicationController
     params[:ta]['villages'].each do |village|
       @selected_villages << village.squish.capitalize
     end
-    @report_title = 'TA villages (citizen counts)'
+    @report_title = "Chiwerengero cha T/A"#'TA villages (citizen counts)'
     @report_generation_path = []
 
     server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
@@ -87,7 +87,7 @@ class ReportController < ApplicationController
 
   def ta_population
     
-    @report_title = 'TA counts'
+    @report_title = "Chiwerengero cha M'boma"#'TA counts'
 
     if params[:run] == 'true'
       server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
@@ -115,7 +115,7 @@ class ReportController < ApplicationController
 
   def village_age_groups
     
-    @report_title = 'Village people count/break-down by Gender and Age groups'
+    @report_title = "Chiwerengero cha m'mudzi (pa dzaka)" #Village people count/break-down by Gender and Age groups'
 
     if params[:run] == 'true'
       server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")

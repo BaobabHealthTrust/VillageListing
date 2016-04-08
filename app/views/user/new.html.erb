@@ -47,7 +47,7 @@
                       :textCase => "lower",
                       :allowFreeText => true }%>
 
-<%= @roles = ['Administrator', 'Mfumu Yayikulu','Mufumu','Onthandizira'] %> 
+<%= @roles = ['Administrator', 'Mfumu Yayikulu','Mfumu','Onthandizira'] %> 
   <%= select_tag("user[role]", options_for_select(@roles ,params[:role]),
       :helpText =>"Ndinu ndani",
       :id => "role",
