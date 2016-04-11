@@ -1,6 +1,7 @@
 class ReportController < ApplicationController
   
   def index
+    @role = session[:user]["role"]
     render :layout => false
   end
 
