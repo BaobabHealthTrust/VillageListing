@@ -28,6 +28,45 @@ class ReportController < ApplicationController
     render :layout => false
   end
 
+  def village_population_birth_year
+    @report_title = "Chiwerengero cha m'mudzi/midzi"#'Village people list'
+
+    server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
+
+    @selected_villages = []
+    params[:ta]['villages'].each do |village|
+      @selected_villages << village.squish.capitalize
+    end
+
+    uri = "http://#{server_address}/population_stats.json/"
+    paramz = {district: session[:user]['district'], ta: session[:user]['ta'], stat: 'ta_population_tabulation'}
+    data = RestClient.post(uri,paramz)
+
+    @start_birthdate = "#{params[:person]['birth_year_start']}-#{params[:person]['birth_month_start']}-01".to_date rescue nil
+    @end_birthdate = "#{params[:person]['birth_year_end']}-#{params[:person]['birth_month_end']}-01".to_date.end_of_month rescue nil
+
+    if @start_birthdate.blank? || @end_birthdate.blank?
+      redirect_to '/' and return
+    end
+
+    unless data.blank?
+      @people = []
+      data = JSON.parse(data)
+      (data).each do |person|
+        village_name = person['addresses']['current_village']
+        next unless @selected_villages.include?(village_name.squish.capitalize) 
+        birthdate = person['birthdate'].to_date rescue nil
+        next if birthdate.blank?
+        next unless (birthdate >= @start_birthdate and birthdate <= @end_birthdate)
+        @people << person
+      end
+    else
+      @people = []
+    end
+
+    render :layout => false
+  end
+
   def village_population
     
     @report_title = "Chiwerengero cha m'mudzi"#'Village people list'
