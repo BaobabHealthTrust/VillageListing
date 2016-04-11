@@ -98,11 +98,11 @@
     var page = 1;
 
     var helpLinks = {
-        "Find Patient": "<%= @settings["help_base_url"] rescue "" %>find_patient",
-        "Register Patient": "<%= @settings["help_base_url"] rescue "" %>new_patient",
-        "Cancel": "<%= @settings["help_base_url"] rescue "" %>cancel",
-        "New Person": "<%= @settings["help_base_url"] rescue "" %>add_patient",
-        "Select Person": "<%= @settings["help_base_url"] rescue "" %>select_patient"
+        "Fufuzani muthu": "<%= @settings["help_base_url"] rescue "" %>find_patient",
+        "Lowetsani munthu watsopano": "<%= @settings["help_base_url"] rescue "" %>new_patient",
+        "Lekani": "<%= @settings["help_base_url"] rescue "" %>cancel",
+        "Munthu watsopano": "<%= @settings["help_base_url"] rescue "" %>add_patient",
+        "Sakhani muthu": "<%= @settings["help_base_url"] rescue "" %>select_patient"
     };
 
     function hidekeyboard() {
@@ -232,7 +232,7 @@
         __$("buttons").appendChild(footer);
 
         var newPatient = document.createElement("button");
-        newPatient.innerHTML = "<span>New Patient</span>";
+        newPatient.innerHTML = "<span>Munthu watsopano</span>";
         newPatient.id = "newPatient";
         newPatient.style.cssFloat = "right";
 
@@ -375,7 +375,7 @@
                     __$("patient").value = this.id;
 
                     if (__$('nextButton')) {
-                        __$("nextButton").innerHTML = "<span>Select</span>"
+                        __$("nextButton").innerHTML = "<span>Sakhani</span>"
                         __$("nextButton").className = "green navButton";
 
                         __$('nextButton').onmousedown = function () {
