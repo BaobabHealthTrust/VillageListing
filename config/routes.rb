@@ -113,6 +113,8 @@ Rails.application.routes.draw do
   post'/dde_search_by_name' => 'dde#search_by_name'
 
   get '/dde/search'
+  get '/dde/search_relation'
+  get '/search_relation' => 'dde#search_relation'
   get '/dde/district'
   get '/dde/traditional_authority'
   get '/dde/district_villages'
