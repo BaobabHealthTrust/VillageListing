@@ -153,7 +153,10 @@ Rails.application.routes.draw do
   get '/dde/new_patient'
   get'/new_patient' => 'dde#new_patient'
   post'/new_patient' => 'dde#new_patient'
-
+ 
+  get'/new_relation' => 'dde#new_relation'
+  post'/new_relation' => 'dde#new_relation'
+  
   #map.ajax_process_data '/ajax_process_data', :controller => 'dde', :action => {'ajax_process_data' => [:post]}
   get'/ajax_process_data' => 'dde#ajax_process_data'
   post'/ajax_process_data' => 'dde#ajax_process_data'

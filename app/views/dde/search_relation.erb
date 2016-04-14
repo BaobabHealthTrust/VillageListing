@@ -237,7 +237,7 @@
         newPatient.style.cssFloat = "right";
 
         newPatient.onmousedown = function () {
-            window.location = "/new_patient?given_name=" + __$("given_name").value.trim() +
+            window.location = "/new_relation?given_name=" + __$("given_name").value.trim() +
                     "&family_name=" + __$("family_name").value.trim() + "&gender=" +
                     __$("gender").value.trim();
         }
@@ -381,11 +381,7 @@
                         __$('nextButton').onmousedown = function () {
                             // if(this.getAttribute("local") == true){
 
-                            document.forms[0].setAttribute("action", "/dde/process_scan_data");
-
-                            /*} else {
-                             document.forms[0].setAttribute("action", "/process_result");
-                             }*/
+                            document.forms[0].setAttribute("action", "/dde/create_new_relationship");
 
                             document.forms[0].submit();
                         }
@@ -564,7 +560,6 @@
 <div id='content'>
   <%= form_tag("/process_result", "method" => 'post', "enctype" => 'multipart/form-data', "id" => 'form', "style" => "display: none") do %>
       <%= hidden_field_tag "patient", nil %>
-      <%= hidden_field_tag "from_relation", true >
       <table width='100%' cellpadding=10 cellspacing=0>
         <tr>
           <th colspan=2>
