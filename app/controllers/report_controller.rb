@@ -152,7 +152,11 @@ class ReportController < ApplicationController
     end
     render :layout => false
   end
-
+  
+ def village_population_per_ta
+   
+ end
+ 
   def village_age_groups
     
     @report_title = "Chiwerengero cha m'mudzi (pa dzaka)" #Village people count/break-down by Gender and Age groups'
@@ -195,7 +199,24 @@ class ReportController < ApplicationController
       @villages = {}
     end
   end
-
+  
+  def village_selection_per_ta
+    paramz = {district_name: session[:user]['district'], user: session[:user] }
+    server_address = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
+    uri = "http://#{server_address}/demographics/traditional_authorities.json/"
+    traditional_authorities = RestClient.post(uri,paramz)
+    @traditiona_authorities = JSON.parse(traditional_authorities)
+  end
+  
+  def render_villages
+    paramz = {ta_name: params[:ta_name], user: session[:user] }
+    server_address = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
+    uri = "http://#{server_address}/demographics/villages.json/"
+    data = RestClient.post(uri,paramz)
+    villages = JSON.parse(data)
+    render :text => "<li>" + villages.join("</li><li>") + "</li>" and return
+  end
+  
   def get_age_group(person)
     birthdate = person['birthdate'].to_date rescue 'Unknown'
     return birthdate if birthdate == 'Unknown'

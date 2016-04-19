@@ -43,6 +43,12 @@ Rails.application.routes.draw do
   post '/ta_population_tabulation' => 'report#ta_population_tabulation'
   get '/village_outcomes' => 'report#village_outcome'
   post '/village_population_birth_year' => 'report#village_population_birth_year'
+  get '/report/village_population_per_ta'
+  post '/report/village_population_per_ta'
+  get '/report/village_selection_per_ta'
+  post '/report/village_selection_per_ta'
+  get '/report/render_villages'
+  post '/report/render_villages' 
   ##################### report end ######################
 
 
@@ -156,6 +162,8 @@ Rails.application.routes.draw do
  
   get'/new_relation' => 'dde#new_relation'
   post'/new_relation' => 'dde#new_relation'
+  get '/dde/create_new_relationship'
+  post '/dde/create_new_relationship'
   
   #map.ajax_process_data '/ajax_process_data', :controller => 'dde', :action => {'ajax_process_data' => [:post]}
   get'/ajax_process_data' => 'dde#ajax_process_data'

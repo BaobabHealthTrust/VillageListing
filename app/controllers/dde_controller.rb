@@ -793,7 +793,26 @@ class DdeController < ApplicationController
     redirect_to "/" and return if !params[:create].blank? and params[:create] == "false"
     
   end
+  def relation_search
+    pagesize = 3
+    page = (params[:page] || 1)
+    offset = ((page.to_i - 1) * pagesize)
+    offset = 0 if offset < 0
+    result = []
+    filter = {}
 
+    settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] # rescue {}
+
+    search_hash = {
+      "names" => {
+        "given_name" => (params["given_name"] rescue nil),
+        "family_name" => (params["family_name"] rescue nil)
+      },
+      "gender" => params["gender"]
+    }
+    
+  end
+  
   def ajax_search
 
     pagesize = 3

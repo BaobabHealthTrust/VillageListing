@@ -9,3 +9,4 @@ APP_VERSION = `git describe`.gsub("\n", "")
 require 'json'
 require 'csv'
 require 'rest_client'
+require "bantu_soundex"
