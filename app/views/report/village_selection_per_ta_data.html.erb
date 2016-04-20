@@ -1,0 +1,339 @@
+<style>
+
+body {
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  -moz-user-select: none;     /* Firefox all */
+  -ms-user-select: none;      /* IE 10+ */
+  user-select: none;          /* Likely future */ 
+}
+
+img {
+  user-drag: none; 
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  pointer-events: none;
+}
+
+.main-page-container  {
+  display: table;
+  width: 100%;
+  padding: 0px 1px 0px 1px;
+}
+
+.main-page-container-rows  {
+  display: table-row;
+}
+
+.cells {
+  display: table-cell;
+}
+
+
+/* ...................................... */
+.divbtn {
+  height: 265px;
+  display: table;
+  margin-top: 10px;
+  cursor:pointer;
+}
+
+.icons {
+  width: 160px;
+  height: 160px;
+  margin-top: 10%;
+  text-align: middle;
+}
+
+.divbtn p {
+  font-weight: bold;
+}
+
+.btncells {
+  width: 25%;
+  text-align: center;
+}
+
+.small-icons {
+  width: 100px;
+  height: 100px;
+}
+
+.header .cells {
+  vertical-align: middle; 
+  padding-right: 5px;
+}
+
+#scan {
+  background-color: lightgrey;
+  border-style: solid;
+  border-width: 1px;
+  font-size: 80px;
+  margin-bottom: 6px;
+  width: 44%;
+}
+
+.header .icons {
+  width: 100px;
+  height: 100px;
+}
+
+/* ...................................... */
+
+.people {
+  padding-top: 10px;
+}
+
+.people th {
+  border-style: solid;
+  border-width: 1px;
+  text-align: right;
+  padding-right: 10px;
+}
+
+.people td {
+  border-style: solid;
+  border-width: 1px;
+  text-align: right;
+  padding-right: 10px;
+}
+
+.table-container {
+  height: 75%;
+  overflow: auto;
+}
+
+.percentage {
+  background-color: gold;
+}
+
+/* datatable ....................... */
+#search_results_info, #search_results_paginate, #search_results_length, #search_results_filter {
+  display: none;
+}
+
+#percentage_length, #percentage_filter, #percentage_info, #percentage_paginate {
+  display: none;
+}
+
+#percentage {
+  width: 50%;
+  height: 50px;
+  float: left;
+  padding-left: 5px;
+}
+
+.dataTables_wrapper {
+  min-height: 230px !important;
+}
+
+.header .cells {
+  vertical-align: middle;
+  padding-right: 5px;
+}
+
+
+.header .icons {
+  width: 100px;
+  height: 100px;
+}
+.user-demo th {
+  width: 120px;
+}
+/* datatable ....................... */
+</style>
+
+<%=javascript_include_tag "DataTables/jquery" %>                          
+<%=javascript_include_tag "DataTables/prototype" %>                          
+<script>jQuery.noConflict();</script>
+<%=javascript_include_tag "DataTables/jquery.dataTables.min" %>
+
+<%= stylesheet_link_tag "DataTables/demo_table_jui" %>                                     
+<%= stylesheet_link_tag "DataTables/jquery.dataTables" %>                                     
+
+<%=javascript_include_tag "toCSV/jQueryTable2CSV" %>
+
+<div class="main-page-container" style="padding-top: 0px;">
+
+
+ <div class="main-page-container-rows header">
+  
+  <div class="cells" style="width:90%;">
+    <span class="icons small-icons" style=" border-right: 0px solid #ccc; color: #999;font-size: 1.5em; font-style: italic;">
+      <table style="width: 100%; text-align: left;" class="user-demo">
+        <tr id='title_tr'>
+          <th>Title:</th>
+          <td style="font-weight: bold;"><%=@report_title%></td>
+        </tr>
+        <tr id='boma_tr'>
+          <th>Boma:</th>
+          <td><%=session[:user]['district']%></td>
+        </tr>
+        <tr id='ta_tr'>
+          <th>TA:</th>
+          <td><%=@ta_name%></td>
+        </tr>
+        <tr id='mudzi_tr'>
+          <th>Mudzi:</th>
+            <td><%= @village_name %></td>
+        </tr>
+      </table>
+    </span>
+  </div>
+  
+  <div class="cells" style="border-style: solid; text-align: center; border-width: 1px; width: 10%;">
+    <span class="icons small-icons">
+      <%=image_tag("icons/village.png", class: 'icons')%>
+    </span>
+  </div>
+
+</div>
+
+
+</div>
+
+
+<div class="table-container">
+
+<table class="people" style="width: 99%; height: 90px;" id="search_results">
+  <thead>
+    <tr>
+      <th style="text-align: left;">Gulu La Dzaka</th>
+      <th>Akazi</th>
+      <th>Amuna</th>
+      <th>Onse pamodzi</th>
+    </tr>
+  </thead>
+  <tbody>
+     <tr>
+     	<td style="text-align : left; padding-left: 10px; font-weight: bold;">0 - 4</td>
+     	<td><%= (@stats["0-4"]["F"] rescue 0) %></td>
+     	<td><%= (@stats["0-4"]["M"] rescue 0) %></td>
+     	<td><%= (@stats["0-4"]["F"]).to_i rescue 0 + (@stats["0-4"]["M"]).to_i rescue 0%></td>
+     </tr>
+     <tr>
+     	<td style="text-align : left; padding-left: 10px; font-weight: bold;">5 - 14</td>
+     	<td><%= (@stats["5-14"]["F"] rescue 0) %></td>
+     	<td><%= (@stats["5-14"]["M"] rescue 0) %></td>
+     	<td><%= (@stats["5-14"]["F"]).to_i rescue 0 + (@stats["5-14"]["M"]).to_i rescue 0 %></td>
+     </tr>
+     <tr>
+     	<td style="text-align : left; padding-left: 10px; font-weight: bold;">15 - 44</td>
+     	<td><%= (@stats["15-44"]["F"] rescue 0) %></td>
+     	<td><%= (@stats["15-44"]["M"] rescue 0) %></td>
+     	<td><%= (@stats["15-44"]["F"]).to_i rescue 0 + (@stats["15-44"]["M"]).to_i rescue 0%></td>
+     </tr>
+     <tr>
+     	<td style="text-align : left; padding-left: 10px; font-weight: bold;">45 - 64</td>
+     	<td><%= (@stats["45-64"]["F"] rescue 0) %></td>
+     	<td><%= (@stats["45-64"]["M"] rescue 0) %></td>
+     	<td><%= (@stats["45-64"]["F"]).to_i rescue 0 + (@stats["45-64"]["M"]).to_i rescue 0 %></td>
+     </tr>
+     <tr>
+     	<td style="text-align : left; padding-left: 10px; font-weight: bold;">Odusa 65</td>
+     	<td><%= (@stats[">=65"]["F"] rescue 0) %></td>
+     	<td><%= (@stats[">=65"]["M"] rescue 0) %></td>
+     	<td><%= (@stats[">=65"]["F"]).to_i rescue 0 + (@stats[">=65"]["M"]).to_i rescue 0 %></td>
+     </tr>
+     <%
+      males_count = (@stats["0-4"]["M"] rescue 0 ).to_i + (@stats["5-14"]["M"] rescue 0).to_i + (@stats["15-44"]["M"] rescue 0).to_i + (@stats["45-64"]["M"] rescue 0) + (@stats[">=65"]["M"] rescue 0).to_i
+      females_count = (@stats["0-4"]["F"] rescue 0).to_i + (@stats["5-14"]["F"] rescue 0).to_i + (@stats["15-44"]["F"] rescue 0).to_i + (@stats["45-64"]["F"] rescue 0) + (@stats[">=65"]["F"] rescue 0).to_i
+     %>
+     <tr>
+     	<td style="text-align : left; padding-left: 10px; font-weight: bold;">Onse Pamodzi</td>
+     	<td><%= females_count %></td>
+     	<td><%= males_count %></td>
+     	<td><%= females_count + males_count %></td>
+     </tr>
+  </tbody>
+</table>
+
+</div>
+
+
+
+<table class="people" style="width: 99%; top: -9999px;left: -9999px;  height: 90px;" id="search_results_hidden">
+  <thead>
+    <tr>
+      <th style="text-align: left;">Gulu La Dzaka</th>
+      <th>Akazi</th>
+      <th>Amuna</th>
+      <th>Onse pamodzi</th>
+    </tr>
+  </thead>
+  <tbody>
+     <tr>
+     	<td style="text-align : left; padding-left: 10px; font-weight: bold;">0 - 4</td>
+     	<td><%= (@stats["0-4"]["F"] rescue 0) %></td>
+     	<td><%= (@stats["0-4"]["M"] rescue 0) %></td>
+     	<td><%= (@stats["0-4"]["F"]).to_i rescue 0 + (@stats["0-4"]["M"]).to_i rescue 0%></td>
+     </tr>
+     <tr>
+     	<td style="text-align : left; padding-left: 10px; font-weight: bold;">5 - 14</td>
+     	<td><%= (@stats["5-14"]["F"] rescue 0) %></td>
+     	<td><%= (@stats["5-14"]["M"] rescue 0) %></td>
+     	<td><%= (@stats["5-14"]["F"]).to_i rescue 0 + (@stats["5-14"]["M"]).to_i rescue 0 %></td>
+     </tr>
+     <tr>
+     	<td style="text-align : left; padding-left: 10px; font-weight: bold;">15 - 44</td>
+     	<td><%= (@stats["15-44"]["F"] rescue 0) %></td>
+     	<td><%= (@stats["15-44"]["M"] rescue 0) %></td>
+     	<td><%= (@stats["15-44"]["F"]).to_i rescue 0 + (@stats["15-44"]["M"]).to_i rescue 0%></td>
+     </tr>
+     <tr>
+     	<td style="text-align : left; padding-left: 10px; font-weight: bold;">45 - 64</td>
+     	<td><%= (@stats["45-64"]["F"] rescue 0) %></td>
+     	<td><%= (@stats["45-64"]["M"] rescue 0) %></td>
+     	<td><%= (@stats["45-64"]["F"]).to_i rescue 0 + (@stats["45-64"]["M"]).to_i rescue 0 %></td>
+     </tr>
+     <tr>
+     	<td style="text-align : left; padding-left: 10px; font-weight: bold;">Odusa 65</td>
+     	<td><%= (@stats[">=65"]["F"] rescue 0) %></td>
+     	<td><%= (@stats[">=65"]["M"] rescue 0) %></td>
+     	<td><%= (@stats[">=65"]["F"]).to_i rescue 0 + (@stats[">=65"]["M"]).to_i rescue 0 %></td>
+     </tr>
+     <%
+      males_count = (@stats["0-4"]["M"] rescue 0 ).to_i + (@stats["5-14"]["M"] rescue 0).to_i + (@stats["15-44"]["M"] rescue 0).to_i + (@stats["45-64"]["M"] rescue 0) + (@stats[">=65"]["M"] rescue 0).to_i
+      females_count = (@stats["0-4"]["F"] rescue 0).to_i + (@stats["5-14"]["F"] rescue 0).to_i + (@stats["15-44"]["F"] rescue 0).to_i + (@stats["45-64"]["F"] rescue 0) + (@stats[">=65"]["F"] rescue 0).to_i
+     %>
+     <tr>
+     	<td style="text-align : left; padding-left: 10px; font-weight: bold;">Onse Pamodzi</td>
+     	<td><%= females_count %></td>
+     	<td><%= males_count %></td>
+     	<td><%= females_count + males_count %></td>
+     </tr>
+  </tbody>
+</table>
+<%= render :partial => 'footer' %>
+
+<script>                                                                        
+  dataT();                   
+  function dataT(){          
+    //table = jQuery('#search_results').dataTable();                                                                                                   
+  }
+
+  function tableToCSV() {
+    var csv =  jQuery('#search_results_hidden').table2CSV({delivery:'value'});
+    window.location.href = 'data:text/csv;charset=UTF-8,' + encodeURIComponent(csv);
+  }
+  
+  function createExportbutton(){
+  	buttonsDiv = document.getElementById("buttons");
+  	button = document.createElement("button");
+  	button.className = 'green';
+  	button.style.margin = '5px 0px 0px';
+  	button.style.minWidth = '190px';
+  	button.style.float = 'right';
+  	button.innerHTML = '<span>Export to CSV</span>';
+  	button.onclick = function(){
+  		tableToCSV();
+  	}
+  	buttonsDiv.appendChild(button);
+  	
+  }
+  
+  createExportbutton();
+</script>
+  

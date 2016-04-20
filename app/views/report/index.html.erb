@@ -38,6 +38,7 @@ img {
   display: table;
   margin-top: 10px;
   cursor:pointer;
+  box-shadow: 10px 10px 5px #888888;
 }
 
 .icons {
@@ -91,10 +92,10 @@ img {
 <div class="main-page-container-rows">
   <!-- loop -->
   <div class="cells btncells">
-    <div class="divbtn" style="background-color:#b363ff;border: 1px solid #2e6da4; width: 99%;" onclick="document.location='/village_population'" >
+    <div class="divbtn" style="background-color:#b363ff;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/village_population'" >
         <span class="icons">
           <%=image_tag("icons/village_population.png", class: 'icons')%>
-          <p style="color: black;">Chiwelengero Cah Mmudzi</p>
+          <p style="color: black;">Chiwelengero Cha Mmudzi</p>
         </span>
     </div>
   </div>
@@ -102,35 +103,57 @@ img {
   
   <!-- loop -->
   <div class="cells btncells">
-    <div class="divbtn" style="background-color: darkslategray; border: 1px solid #2e6da4; width: 99%;" onclick="document.location='/village_age_groups'" >
+    <div class="divbtn" style="background-color: darkslategray; border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/village_age_groups'" >
         <span class="icons">
           <%=image_tag("icons/Group.png", class: 'icons')%>
-          <p style="color: white;">Chiwelengero Cah Mmudzi (pa dzaka)</p>
+          <p style="color: white;">Chiwelengero Cha Mmudzi (pa dzaka)</p>
         </span>
     </div>
   </div>
   <!-- endloop -->
   
   <!-- loop -->
+  <% if @role.match(/MFUMU YAYIKULU/i) %>
   <div class="cells btncells">
-    <div class="divbtn" style="background-color:lightgreen;border: 1px solid #2e6da4; width: 99%;" onclick="document.location='/ta_population'" >
+    <div class="divbtn" style="background-color:lightgreen;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/ta_population'" >
         <span class="icons">
           <%=image_tag("icons/ta_population.png", class: 'icons')%>
-          <p>Chiwelengero Cah M'boma</p>
+          <p>Chiwelengero Cha M'boma</p>
         </span>
     </div>
   </div>
+  <% else %>
+  	<div class="cells btncells">
+    <div class="divbtn" style="background-color:gainsboro; border: 1px solid #2e6da4; width: 95%; color: darkgrey;">
+        <span class="icons">
+          <%=image_tag("icons/ta_population.png", class: 'icons')%>
+          <p>Chiwelengero Cha M'boma</p>
+        </span>
+    </div>
+  </div>
+  <% end %>
   <!-- endloop -->
 
   <!-- loop -->
+  <% if @role.match(/MFUMU YAYIKULU/i) %>
   <div class="cells btncells">
-      <div class="divbtn" style="background-color:#ff8f1b ;border: 1px solid #2e6da4; width: 99%;" onclick="document.location='/village_selection/ta_population_tabulation'" >
+      <div class="divbtn" style="background-color:#ff8f1b ;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/village_selection/ta_population_tabulation'" >
         <span class="icons">
           <%=image_tag("icons/ta_population-tabulation.png", class: 'icons')%>
-          <p>Chiwelengero Cah TA</p>
+          <p>Chiwelengero Cha TA</p>
         </span>
     </div>
   </div>
+  <% else %>
+  	<div class="cells btncells">
+      <div class="divbtn" style="background-color:gainsboro ;border: 1px solid #2e6da4; width: 95%; color: darkgrey;" >
+        <span class="icons">
+          <%=image_tag("icons/ta_population-tabulation.png", class: 'icons')%>
+          <p>Chiwelengero Cha TA</p>
+        </span>
+    </div>
+  </div>
+  <% end %>
   <!-- endloop -->
 
 </div>
@@ -140,7 +163,7 @@ img {
 
   <!-- loop -->
   <div class="cells btncells">
-    <div class="divbtn" style="background-color: gainsboro;border: 1px solid #2e6da4; width: 99%;" onclick="document.location='/village_outcomes'" >
+    <div class="divbtn" style="background-color: gainsboro;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/village_outcomes'" >
         <span class="icons">
           <%=image_tag("icons/Directory.png", class: 'icons')%>
           <p style="color: black;">Zotsatila</p>
@@ -151,17 +174,55 @@ img {
 
   <!-- loop -->
   <div class="cells btncells">
+  <% if @role.match(/MFUMU YAYIKULU/i) %>
+    <div class="divbtn" style="background-color: #d2ff4d;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/village_selection/village_population_birth_year'" >
+        <span class="icons">
+          <%=image_tag("icons/Directory.png", class: 'icons')%>
+          <p style="color: black;">Chiwelengero Cha TA:Chaka chobadwa</p>
+        </span>
+    </div>
+   <% else %>
+  	<div class="cells btncells">
+      <div class="divbtn" style="background-color:gainsboro ;border: 1px solid #2e6da4; width: 95%; color: darkgrey;" >
+        <span class="icons">
+          <%=image_tag("icons/ta_population-tabulation.png", class: 'icons')%>
+          <p>Chiwelengero Cha TA:Chaka chobadwa</p>
+        </span>
+    </div>
   </div>
+  <%end%>
+  </div>
+  
+  <div class="cells btncells">
+  <% if @role.match(/MFUMU YAYIKULU/i) %>
+    <div class="divbtn" style="background-color: #d2ff4d;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/report/village_selection_per_ta'" >
+        <span class="icons">
+          <%=image_tag("icons/Directory.png", class: 'icons')%>
+          <p style="color: black;">Chiwelengero Cha M'mudzi: Pa T/A</p>
+        </span>
+    </div>
+   <% else %>
+  	<div class="cells btncells">
+      <div class="divbtn" style="background-color:gainsboro ;border: 1px solid #2e6da4; width: 95%; color: darkgrey;" >
+        <span class="icons">
+          <%=image_tag("icons/ta_population-tabulation.png", class: 'icons')%>
+          <p>Chiwelengero Cha M'mudzi: Pa T/A</p>
+        </span>
+    </div>
+  </div>
+  <%end%>
+  </div>
+  
+  <!-- endloop -->
+
+  <!-- loop -->
+  <!--div class="cells btncells">
+  </div-->
   <!-- endloop -->
 
   <!-- loop -->
   <div class="cells btncells">
-  </div>
-  <!-- endloop -->
-
-  <!-- loop -->
-  <div class="cells btncells">
-    <div class="divbtn" style="background-color: #4682b4;border: 1px solid #2e6da4; width: 99%;" onclick="document.location='/'" >
+    <div class="divbtn" style="background-color: #4682b4;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/'" >
         <span class="icons">
           <%=image_tag("icons/gohome.png", class: 'icons')%>
           <p>Bwelerani</p>

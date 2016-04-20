@@ -39,7 +39,11 @@
         </tr>
         <tr id='mudzi_tr'>
           <th>Mudzi:</th>
-          <td><%=session[:user]['village']%></td>
+          <%if @selected_villages %>
+            <td><%=@selected_villages.join(', ')%></td>
+          <%else%>
+            <td><%=session[:user]['village']%></td>
+          <%end%>
         </tr>
       </table>
     </span>
