@@ -163,7 +163,7 @@ img {
 
   <!-- loop -->
   <div class="cells btncells">
-    <div class="divbtn" style="background-color: gainsboro;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/village_outcomes'" >
+    <div class="divbtn" style="background-color: white; border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/village_outcomes'" >
         <span class="icons">
           <%=image_tag("icons/Directory.png", class: 'icons')%>
           <p style="color: black;">Zotsatila</p>
@@ -177,7 +177,7 @@ img {
   <% if @role.match(/MFUMU YAYIKULU/i) %>
     <div class="divbtn" style="background-color: #d2ff4d;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/village_selection/village_population_birth_year'" >
         <span class="icons">
-          <%=image_tag("icons/Directory.png", class: 'icons')%>
+          <%=image_tag("icons/calendar-date-month-planner-512.png", class: 'icons')%>
           <p style="color: black;">Chiwelengero Cha TA:Chaka chobadwa</p>
         </span>
     </div>
@@ -185,7 +185,7 @@ img {
   	<div class="cells btncells">
       <div class="divbtn" style="background-color:gainsboro ;border: 1px solid #2e6da4; width: 95%; color: darkgrey;" >
         <span class="icons">
-          <%=image_tag("icons/ta_population-tabulation.png", class: 'icons')%>
+          <%=image_tag("icons/calendar-date-month-planner-512.png", class: 'icons')%>
           <p>Chiwelengero Cha TA:Chaka chobadwa</p>
         </span>
     </div>
@@ -195,9 +195,9 @@ img {
   
   <div class="cells btncells">
   <% if @role.match(/MFUMU YAYIKULU/i) %>
-    <div class="divbtn" style="background-color: #d2ff4d;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/report/village_selection_per_ta'" >
+    <div class="divbtn" style="background-color: yellowgreen; border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/report/village_selection_per_ta'" >
         <span class="icons">
-          <%=image_tag("icons/Directory.png", class: 'icons')%>
+          <%=image_tag("icons/date_time.png", class: 'icons')%>
           <p style="color: black;">Chiwelengero Cha M'mudzi: Pa T/A</p>
         </span>
     </div>
@@ -205,7 +205,7 @@ img {
   	<div class="cells btncells">
       <div class="divbtn" style="background-color:gainsboro ;border: 1px solid #2e6da4; width: 95%; color: darkgrey;" >
         <span class="icons">
-          <%=image_tag("icons/ta_population-tabulation.png", class: 'icons')%>
+          <%=image_tag("icons/date_time.png", class: 'icons')%>
           <p>Chiwelengero Cha M'mudzi: Pa T/A</p>
         </span>
     </div>
