@@ -152,7 +152,7 @@ tfoot tr {
     <td><%=person['names']['given_name']%></td>
     <td><%=person['names']['family_name']%></td>
     <td><%=person['gender']%></td>
-    <td><%=person['birthdate']%></td>
+    <td><%=(person['birthdate'].to_date.strftime('%d/%b/%Y') rescue 'N/A')%></td>
     <td><%=person['addresses']['home_district']%></td>
     <td><%=person['addresses']['home_ta']%></td>
     <td><%=person['addresses']['home_village']%></td>
