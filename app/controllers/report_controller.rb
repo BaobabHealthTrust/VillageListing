@@ -209,8 +209,26 @@ class ReportController < ApplicationController
   end
   
   def village_selection_per_ta_data
+    @report_title = "Chiwelengero Cha M'mudzi: Pa T/A"
     @ta_name = params[:ta_name]
     @village_name = params[:village_name]
+    server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
+    uri = "http://#{server_address}/population_stats.json/"
+    paramz = {district: session[:user]['district'], ta: @ta_name, 
+                stat: 'current_district_ta_village', village: @village_name}
+    data = RestClient.post(uri,paramz)
+    
+    @stats = {}
+    unless data.blank?
+      (JSON.parse(data) || []).each do |person|
+        age_group = get_age_group_modified(person)
+        gender = person['gender'].blank? ? 'Unknown' : person['gender']
+        @stats[age_group] = {} if @stats[age_group].blank?
+        @stats[age_group][gender] = 0 if @stats[age_group][gender].blank?
+        @stats[age_group][gender] += 1
+      end
+    end
+
     render :layout => false
   end
   
@@ -220,7 +238,7 @@ class ReportController < ApplicationController
     uri = "http://#{server_address}/demographics/villages.json/"
     data = RestClient.post(uri,paramz)
     villages = JSON.parse(data)
-    render :text => "<li>" + villages.join("</li><li>") + "</li>" and return
+    render :text => "<li>" + villages.sort.join("</li><li>") + "</li>" and return
   end
   
   def get_age_group(person)
@@ -237,7 +255,26 @@ class ReportController < ApplicationController
     end
     raise "#{age} #{ (age >= 5 && age < 15) }"
   end
-
+  
+  def get_age_group_modified(person)
+    birthdate = person['birthdate'].to_date rescue 'Unknown'
+    return birthdate if birthdate == 'Unknown'
+    age = get_age(person)
+    return 'Unknown' if age == 'Unknown'
+    if age < 5
+      return '0-4'
+    elsif (age >= 5 && age < 15)
+      return '5-14'
+    elsif (age >= 15 && age < 45)
+      return '15-44'
+    elsif (age >= 45 && age < 65)
+      return '45-64'
+    elsif (age >= 65)
+      return '>=65'
+    end
+    raise "#{age} #{ (age >= 5 && age < 15) }"
+  end
+  
   def get_age(person, today = Date.today)
     birthdate = person['birthdate'].to_date rescue nil
     return 'Unknown' if birthdate.blank?
