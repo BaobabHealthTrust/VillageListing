@@ -208,6 +208,12 @@ class ReportController < ApplicationController
     @traditiona_authorities = JSON.parse(traditional_authorities)
   end
   
+  def village_selection_per_ta_data
+    @ta_name = params[:ta_name]
+    @village_name = params[:village_name]
+    render :layout => false
+  end
+  
   def render_villages
     paramz = {ta_name: params[:ta_name], user: session[:user] }
     server_address = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
