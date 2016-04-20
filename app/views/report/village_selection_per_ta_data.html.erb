@@ -207,35 +207,36 @@ img {
     </tr>
   </thead>
   <tbody>
+
      <tr>
      	<td style="text-align : left; padding-left: 10px; font-weight: bold;">0 - 4</td>
      	<td><%= (@stats["0-4"]["F"] rescue 0) %></td>
      	<td><%= (@stats["0-4"]["M"] rescue 0) %></td>
-     	<td><%= (@stats["0-4"]["F"]).to_i rescue 0 + (@stats["0-4"]["M"]).to_i rescue 0%></td>
+     	<td><%= (@stats["0-4"]["F"] rescue 0).to_i + (@stats["0-4"]["M"] rescue 0).to_i %></td>
      </tr>
      <tr>
      	<td style="text-align : left; padding-left: 10px; font-weight: bold;">5 - 14</td>
      	<td><%= (@stats["5-14"]["F"] rescue 0) %></td>
      	<td><%= (@stats["5-14"]["M"] rescue 0) %></td>
-     	<td><%= (@stats["5-14"]["F"]).to_i rescue 0 + (@stats["5-14"]["M"]).to_i rescue 0 %></td>
+     	<td><%= (@stats["5-14"]["F"] rescue 0).to_i + (@stats["5-14"]["M"] rescue 0).to_i %></td>
      </tr>
      <tr>
      	<td style="text-align : left; padding-left: 10px; font-weight: bold;">15 - 44</td>
      	<td><%= (@stats["15-44"]["F"] rescue 0) %></td>
      	<td><%= (@stats["15-44"]["M"] rescue 0) %></td>
-     	<td><%= (@stats["15-44"]["F"]).to_i rescue 0 + (@stats["15-44"]["M"]).to_i rescue 0%></td>
+     	<td><%= (@stats["15-44"]["F"] rescue 0).to_i + (@stats["15-44"]["M"] rescue 0).to_i%></td>
      </tr>
      <tr>
      	<td style="text-align : left; padding-left: 10px; font-weight: bold;">45 - 64</td>
      	<td><%= (@stats["45-64"]["F"] rescue 0) %></td>
      	<td><%= (@stats["45-64"]["M"] rescue 0) %></td>
-     	<td><%= (@stats["45-64"]["F"]).to_i rescue 0 + (@stats["45-64"]["M"]).to_i rescue 0 %></td>
+     	<td><%= (@stats["45-64"]["F"] rescue 0).to_i + (@stats["45-64"]["M"] rescue 0).to_i %></td>
      </tr>
      <tr>
      	<td style="text-align : left; padding-left: 10px; font-weight: bold;">Odusa 65</td>
      	<td><%= (@stats[">=65"]["F"] rescue 0) %></td>
      	<td><%= (@stats[">=65"]["M"] rescue 0) %></td>
-     	<td><%= (@stats[">=65"]["F"]).to_i rescue 0 + (@stats[">=65"]["M"]).to_i rescue 0 %></td>
+     	<td><%= (@stats[">=65"]["F"] rescue 0).to_i + (@stats[">=65"]["M"] rescue 0).to_i %></td>
      </tr>
      <%
       males_count = (@stats["0-4"]["M"] rescue 0 ).to_i + (@stats["5-14"]["M"] rescue 0).to_i + (@stats["15-44"]["M"] rescue 0).to_i + (@stats["45-64"]["M"] rescue 0) + (@stats[">=65"]["M"] rescue 0).to_i
@@ -252,60 +253,6 @@ img {
 
 </div>
 
-
-
-<table class="people" style="width: 99%; top: -9999px;left: -9999px;  height: 90px;" id="search_results_hidden">
-  <thead>
-    <tr>
-      <th style="text-align: left;">Gulu La Dzaka</th>
-      <th>Akazi</th>
-      <th>Amuna</th>
-      <th>Onse pamodzi</th>
-    </tr>
-  </thead>
-  <tbody>
-     <tr>
-     	<td style="text-align : left; padding-left: 10px; font-weight: bold;">0 - 4</td>
-     	<td><%= (@stats["0-4"]["F"] rescue 0) %></td>
-     	<td><%= (@stats["0-4"]["M"] rescue 0) %></td>
-     	<td><%= (@stats["0-4"]["F"]).to_i rescue 0 + (@stats["0-4"]["M"]).to_i rescue 0%></td>
-     </tr>
-     <tr>
-     	<td style="text-align : left; padding-left: 10px; font-weight: bold;">5 - 14</td>
-     	<td><%= (@stats["5-14"]["F"] rescue 0) %></td>
-     	<td><%= (@stats["5-14"]["M"] rescue 0) %></td>
-     	<td><%= (@stats["5-14"]["F"]).to_i rescue 0 + (@stats["5-14"]["M"]).to_i rescue 0 %></td>
-     </tr>
-     <tr>
-     	<td style="text-align : left; padding-left: 10px; font-weight: bold;">15 - 44</td>
-     	<td><%= (@stats["15-44"]["F"] rescue 0) %></td>
-     	<td><%= (@stats["15-44"]["M"] rescue 0) %></td>
-     	<td><%= (@stats["15-44"]["F"]).to_i rescue 0 + (@stats["15-44"]["M"]).to_i rescue 0%></td>
-     </tr>
-     <tr>
-     	<td style="text-align : left; padding-left: 10px; font-weight: bold;">45 - 64</td>
-     	<td><%= (@stats["45-64"]["F"] rescue 0) %></td>
-     	<td><%= (@stats["45-64"]["M"] rescue 0) %></td>
-     	<td><%= (@stats["45-64"]["F"]).to_i rescue 0 + (@stats["45-64"]["M"]).to_i rescue 0 %></td>
-     </tr>
-     <tr>
-     	<td style="text-align : left; padding-left: 10px; font-weight: bold;">Odusa 65</td>
-     	<td><%= (@stats[">=65"]["F"] rescue 0) %></td>
-     	<td><%= (@stats[">=65"]["M"] rescue 0) %></td>
-     	<td><%= (@stats[">=65"]["F"]).to_i rescue 0 + (@stats[">=65"]["M"]).to_i rescue 0 %></td>
-     </tr>
-     <%
-      males_count = (@stats["0-4"]["M"] rescue 0 ).to_i + (@stats["5-14"]["M"] rescue 0).to_i + (@stats["15-44"]["M"] rescue 0).to_i + (@stats["45-64"]["M"] rescue 0) + (@stats[">=65"]["M"] rescue 0).to_i
-      females_count = (@stats["0-4"]["F"] rescue 0).to_i + (@stats["5-14"]["F"] rescue 0).to_i + (@stats["15-44"]["F"] rescue 0).to_i + (@stats["45-64"]["F"] rescue 0) + (@stats[">=65"]["F"] rescue 0).to_i
-     %>
-     <tr>
-     	<td style="text-align : left; padding-left: 10px; font-weight: bold;">Onse Pamodzi</td>
-     	<td><%= females_count %></td>
-     	<td><%= males_count %></td>
-     	<td><%= females_count + males_count %></td>
-     </tr>
-  </tbody>
-</table>
 <%= render :partial => 'footer' %>
 
 <script>                                                                        
@@ -315,7 +262,7 @@ img {
   }
 
   function tableToCSV() {
-    var csv =  jQuery('#search_results_hidden').table2CSV({delivery:'value'});
+    var csv =  jQuery('#search_results').table2CSV({delivery:'value'});
     window.location.href = 'data:text/csv;charset=UTF-8,' + encodeURIComponent(csv);
   }
   
