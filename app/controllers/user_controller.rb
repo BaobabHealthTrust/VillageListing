@@ -13,7 +13,7 @@ class UserController < ApplicationController
   end
 
   def portal
-    @new_app_path = 'http://192.168.21.254:4010'
+    @new_app_path = 'http://192.168.21.254:3004'
     render :layout => false
   end
 
