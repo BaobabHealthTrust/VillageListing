@@ -40,12 +40,19 @@ class DdeController < ApplicationController
     render :layout => false
   end
 
+  def search_relation
+    @settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] rescue {}
+
+    @globals = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env] rescue {}
+
+    render :layout => false
+  end
+  
   def new
     @settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] rescue {}
   end
 
   def process_result
-  
     json = JSON.parse(params["person"]) rescue {}
 
     session[:dde_object] = json
@@ -228,7 +235,65 @@ class DdeController < ApplicationController
     @current_region_value = GlobalProperty.find_by_property("current_region").property_value rescue ''
     
   end
+  
+  def new_relation
+    settings = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env] rescue {}
 
+    @settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] rescue {}
+
+    @show_middle_name = (settings["show_middle_name"] == true ? true : false) rescue false
+
+    @show_maiden_name = (settings["show_maiden_name"] == true ? true : false) rescue false
+
+    @show_birthyear = (settings["show_birthyear"] == true ? true : false) rescue false
+
+    @show_birthmonth = (settings["show_birthmonth"] == true ? true : false) rescue false
+
+    @show_birthdate = (settings["show_birthdate"] == true ? true : false) rescue false
+
+    @show_age = (settings["show_age"] == true ? true : false) rescue false
+
+    @show_region_of_origin = (settings["show_region_of_origin"] == true ? true : false) rescue false
+
+    @show_district_of_origin = (settings["show_district_of_origin"] == true ? true : false) rescue false
+
+    @show_t_a_of_origin = (settings["show_t_a_of_origin"] == true ? true : false) rescue false
+
+    @show_home_village = (settings["show_home_village"] == true ? true : false) rescue false
+
+    @show_current_region = (settings["show_current_region"] == true ? true : false) rescue false
+
+    @show_current_district = (settings["show_current_district"] == true ? true : false) rescue false
+
+    @show_current_t_a = (settings["show_current_t_a"] == true ? true : false) rescue false
+
+    @show_current_village = (settings["show_current_village"] == true ? true : false) rescue false
+
+    @show_current_landmark = (settings["show_current_landmark"] == true ? true : false) rescue false
+
+    @show_cell_phone_number = (settings["show_cell_phone_number"] == true ? true : false) rescue false
+
+    @show_office_phone_number = (settings["show_office_phone_number"] == true ? true : false) rescue false
+
+    @show_home_phone_number = (settings["show_home_phone_number"] == true ? true : false) rescue false
+
+    @show_occupation = (settings["show_occupation"] == true ? true : false) rescue false
+
+    @show_nationality = (settings["show_nationality"] == true ? true : false) rescue false
+    
+    @show_country_of_residence = (settings["show_country_of_residence"] == true ? true : false) rescue false
+    
+    @occupations = ['','Driver','Housewife','Messenger','Business','Farmer','Salesperson','Teacher',
+      'Student','Security guard','Domestic worker', 'Police','Office worker',
+      'Preschool child','Mechanic','Prisoner','Craftsman','Healthcare Worker','Soldier'].sort.concat(["Other","Unknown"])
+
+    @destination = request.referrer
+    @state_province_value = GlobalProperty.find_by_property("state_province").property_value rescue ''
+    @city_village_value = GlobalProperty.find_by_property("city_village").property_value rescue ''
+    @current_ta_value = GlobalProperty.find_by_property("current_ta").property_value rescue ''
+    @current_region_value = GlobalProperty.find_by_property("current_region").property_value rescue ''
+  end
+  
   def edit_patient
     if params[:id].blank?
       person_id = params[:patient_id]
@@ -560,6 +625,10 @@ class DdeController < ApplicationController
     render :layout => "ts"
   end
 
+  def create_new_relationship
+    
+  end
+  
   def ajax_process_data
 
     settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] rescue {}
@@ -724,7 +793,26 @@ class DdeController < ApplicationController
     redirect_to "/" and return if !params[:create].blank? and params[:create] == "false"
     
   end
+  def relation_search
+    pagesize = 3
+    page = (params[:page] || 1)
+    offset = ((page.to_i - 1) * pagesize)
+    offset = 0 if offset < 0
+    result = []
+    filter = {}
 
+    settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] # rescue {}
+
+    search_hash = {
+      "names" => {
+        "given_name" => (params["given_name"] rescue nil),
+        "family_name" => (params["family_name"] rescue nil)
+      },
+      "gender" => params["gender"]
+    }
+    
+  end
+  
   def ajax_search
 
     pagesize = 3

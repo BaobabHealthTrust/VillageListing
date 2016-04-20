@@ -181,8 +181,38 @@ img {
           <p style="color: black;">Chiwelengero Cha TA:Chaka chobadwa</p>
         </span>
     </div>
+   <% else %>
+  	<div class="cells btncells">
+      <div class="divbtn" style="background-color:gainsboro ;border: 1px solid #2e6da4; width: 95%; color: darkgrey;" >
+        <span class="icons">
+          <%=image_tag("icons/ta_population-tabulation.png", class: 'icons')%>
+          <p>Chiwelengero Cha TA:Chaka chobadwa</p>
+        </span>
+    </div>
+  </div>
   <%end%>
   </div>
+  
+  <div class="cells btncells">
+  <% if @role.match(/MFUMU YAYIKULU/i) %>
+    <div class="divbtn" style="background-color: #d2ff4d;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/report/village_selection_per_ta'" >
+        <span class="icons">
+          <%=image_tag("icons/Directory.png", class: 'icons')%>
+          <p style="color: black;">Chiwelengero Cha M'mudzi: Pa T/A</p>
+        </span>
+    </div>
+   <% else %>
+  	<div class="cells btncells">
+      <div class="divbtn" style="background-color:gainsboro ;border: 1px solid #2e6da4; width: 95%; color: darkgrey;" >
+        <span class="icons">
+          <%=image_tag("icons/ta_population-tabulation.png", class: 'icons')%>
+          <p>Chiwelengero Cha M'mudzi: Pa T/A</p>
+        </span>
+    </div>
+  </div>
+  <%end%>
+  </div>
+  
   <!-- endloop -->
 
   <!-- loop -->
