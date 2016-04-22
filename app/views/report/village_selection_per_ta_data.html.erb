@@ -198,55 +198,147 @@ img {
 <div class="table-container">
 
 <table class="people" style="width: 99%; height: 90px;" id="search_results">
-  <thead>
-    <tr>
-      <th style="text-align: left;">Gulu La Dzaka</th>
-      <th>Akazi</th>
-      <th>Amuna</th>
-      <th>Onse pamodzi</th>
-    </tr>
-  </thead>
   <tbody>
+  	<%
+  		total_females_count = 0
+  		total_males_count = 0
+  		
+  		zero_to_four_count_males = 0
+  		zero_to_four_count_females = 0
+  		
+  		five_to_fourteen_count_males = 0
+  		five_to_fourteen_count_females = 0
+  		
+  		fifteen_to_fourty_four_count_males = 0
+  		fifteen_to_fourty_four_count_females = 0
+  		
+  		fourty_five_to_sixty_four_count_males = 0
+  		fourty_five_to_sixty_four_count_females = 0
+  		
+  		sixty_five_and_above_males = 0
+  		sixty_five_and_above_females = 0
+  	%>
+  	
+    <% @stats.each do |village_name, data| %>
+		<tr>
+			<td colspan ="4" style="background-color: lightgray; font-weight: bold; text-align: left; font-size: 14pt; padding-left: 8px;"><%= village_name %></td>
+		</tr>
+		    <tr>
+		      <th style="text-align: left;">Gulu La Dzaka</th>
+		      <th>Akazi</th>
+		      <th>Amuna</th>
+		      <th>Onse pamodzi</th>
+		    </tr> 		
+	 <tr>
+		<td style="text-align : left; padding-left: 10px; font-weight: bold;">0 - 4</td>
+		<td><%= (data["0-4"]["F"].to_i rescue 0) %></td>
+		<td><%= (data["0-4"]["M"].to_i rescue 0) %></td>
+		<td><%= (data["0-4"]["F"].to_i rescue 0).to_i + (data["0-4"]["M"].to_i rescue 0).to_i %></td>
+		<% 
+			total_females_count = total_females_count + (data["0-4"]["F"].to_i rescue 0).to_i
+			total_males_count = total_males_count + (data["0-4"]["M"].to_i rescue 0).to_i
+			zero_to_four_count_females = zero_to_four_count_females + (data["0-4"]["F"].to_i rescue 0).to_i
+			zero_to_four_count_males = zero_to_four_count_males + (data["0-4"]["M"].to_i rescue 0).to_i
+		%>
+	 </tr>
+	 <tr>
+		<td style="text-align : left; padding-left: 10px; font-weight: bold;">5 - 14</td>
+		<td><%= (data["5-14"]["F"].to_i rescue 0) %></td>
+		<td><%= (data["5-14"]["M"].to_i rescue 0) %></td>
+		<td><%= (data["5-14"]["F"].to_i rescue 0).to_i + (data["5-14"]["M"].to_i rescue 0).to_i %></td>
+		<% 
+			total_females_count = total_females_count + (data["5-14"]["F"].to_i rescue 0).to_i
+			total_males_count = total_males_count + (data["5-14"]["M"].to_i rescue 0).to_i
+			five_to_fourteen_count_females = five_to_fourteen_count_females + (data["5-14"]["F"].to_i rescue 0).to_i
+			five_to_fourteen_count_males = five_to_fourteen_count_males + (data["5-14"]["M"].to_i rescue 0).to_i
+		%>
+	 </tr>
+	 <tr>
+		<td style="text-align : left; padding-left: 10px; font-weight: bold;">15 - 44</td>
+		<td><%= (data["15-44"]["F"].to_i rescue 0) %></td>
+		<td><%= (data["15-44"]["M"].to_i rescue 0) %></td>
+		<td><%= (data["15-44"]["F"].to_i rescue 0).to_i + (data["15-44"]["M"].to_i rescue 0).to_i %></td>
+		<% 
+			total_females_count = total_females_count + (data["15-44"]["F"].to_i rescue 0).to_i
+			total_males_count = total_males_count + (data["15-44"]["M"].to_i rescue 0).to_i
+			fifteen_to_fourty_four_count_females = fifteen_to_fourty_four_count_females + (data["15-44"]["F"].to_i rescue 0).to_i
+			fifteen_to_fourty_four_count_males = fifteen_to_fourty_four_count_males + (data["15-44"]["M"].to_i rescue 0).to_i
+		%>
+	 </tr>
+	 <tr>
+		<td style="text-align : left; padding-left: 10px; font-weight: bold;">45 - 64</td>
+		<td><%= (data["45-64"]["F"].to_i rescue 0) %></td>
+		<td><%= (data["45-64"]["M"].to_i rescue 0) %></td>
+		<td><%= (data["45-64"]["F"].to_i rescue 0).to_i + (data["45-64"]["M"].to_i rescue 0).to_i %></td>
+		<% 
+			total_females_count = total_females_count + (data["45-64"]["F"].to_i rescue 0).to_i
+			total_males_count = total_males_count + (data["45-64"]["M"].to_i rescue 0).to_i
+			fourty_five_to_sixty_four_count_females = fourty_five_to_sixty_four_count_females + (data["45-64"]["F"].to_i rescue 0).to_i
+			fourty_five_to_sixty_four_count_males = fourty_five_to_sixty_four_count_males + (data["45-64"]["M"].to_i rescue 0).to_i
+		%>
+	 </tr>
+	 <tr>
+		<td style="text-align : left; padding-left: 10px; font-weight: bold;">Odusa 65</td>
+		<td><%= (data[">=65"]["F"].to_i rescue 0) %></td>
+		<td><%= (data[">=65"]["M"].to_i rescue 0) %></td>
+		<td><%= (data[">=65"]["F"].to_i rescue 0).to_i + (data[">=65"]["M"].to_i rescue 0).to_i %></td>
+		<% 
+			total_females_count = total_females_count + (data[">=65"]["F"].to_i rescue 0).to_i
+			total_males_count = total_males_count + (data[">=65"]["M"].to_i rescue 0).to_i
+			sixty_five_and_above_females = sixty_five_and_above_females + (data[">=65"]["F"].to_i rescue 0).to_i
+			sixty_five_and_above_males = sixty_five_and_above_males + (data[">=65"]["M"].to_i rescue 0).to_i
+		%>
+	 </tr>
 
-     <tr>
-     	<td style="text-align : left; padding-left: 10px; font-weight: bold;">0 - 4</td>
-     	<td><%= (@stats["0-4"]["F"].to_i rescue 0) %></td>
-     	<td><%= (@stats["0-4"]["M"].to_i rescue 0) %></td>
-     	<td><%= (@stats["0-4"]["F"].to_i rescue 0).to_i + (@stats["0-4"]["M"].to_i rescue 0).to_i %></td>
-     </tr>
-     <tr>
-     	<td style="text-align : left; padding-left: 10px; font-weight: bold;">5 - 14</td>
-     	<td><%= (@stats["5-14"]["F"].to_i rescue 0) %></td>
-     	<td><%= (@stats["5-14"]["M"].to_i rescue 0) %></td>
-     	<td><%= (@stats["5-14"]["F"].to_i rescue 0).to_i + (@stats["5-14"]["M"].to_i rescue 0).to_i %></td>
-     </tr>
-     <tr>
-     	<td style="text-align : left; padding-left: 10px; font-weight: bold;">15 - 44</td>
-     	<td><%= (@stats["15-44"]["F"].to_i rescue 0) %></td>
-     	<td><%= (@stats["15-44"]["M"].to_i rescue 0) %></td>
-     	<td><%= (@stats["15-44"]["F"].to_i rescue 0).to_i + (@stats["15-44"]["M"].to_i rescue 0).to_i%></td>
-     </tr>
-     <tr>
-     	<td style="text-align : left; padding-left: 10px; font-weight: bold;">45 - 64</td>
-     	<td><%= (@stats["45-64"]["F"].to_i rescue 0) %></td>
-     	<td><%= (@stats["45-64"]["M"].to_i rescue 0) %></td>
-     	<td><%= (@stats["45-64"]["F"].to_i rescue 0).to_i + (@stats["45-64"]["M"].to_i rescue 0).to_i %></td>
-     </tr>
-     <tr>
-     	<td style="text-align : left; padding-left: 10px; font-weight: bold;">Odusa 65</td>
-     	<td><%= (@stats[">=65"]["F"].to_i rescue 0) %></td>
-     	<td><%= (@stats[">=65"]["M"].to_i rescue 0) %></td>
-     	<td><%= (@stats[">=65"]["F"].to_i rescue 0).to_i + (@stats[">=65"]["M"].to_i rescue 0).to_i %></td>
-     </tr>
-     <%
-      males_count = (@stats["0-4"]["M"].to_i rescue 0 ).to_i + (@stats["5-14"]["M"].to_i rescue 0).to_i + (@stats["15-44"]["M"].to_i rescue 0).to_i + (@stats["45-64"]["M"].to_i rescue 0) + (@stats[">=65"]["M"].to_i rescue 0).to_i
-      females_count = (@stats["0-4"]["F"].to_i rescue 0).to_i + (@stats["5-14"]["F"].to_i rescue 0).to_i + (@stats["15-44"]["F"].to_i rescue 0).to_i + (@stats["45-64"]["F"].to_i rescue 0) + (@stats[">=65"]["F"].to_i rescue 0).to_i
+	 <%
+      males_count = (data["0-4"]["M"].to_i rescue 0 ).to_i + (data["5-14"]["M"].to_i rescue 0).to_i + (data["15-44"]["M"].to_i rescue 0).to_i + (data["45-64"]["M"].to_i rescue 0) + (data[">=65"]["M"].to_i rescue 0).to_i
+      females_count = (data["0-4"]["F"].to_i rescue 0).to_i + (data["5-14"]["F"].to_i rescue 0).to_i + (data["15-44"]["F"].to_i rescue 0).to_i + (data["45-64"]["F"].to_i rescue 0) + (data[">=65"]["F"].to_i rescue 0).to_i
      %>
-     <tr>
+	 <tr>
      	<td style="text-align : left; padding-left: 10px; font-weight: bold;">Onse Pamodzi</td>
      	<td><%= females_count %></td>
      	<td><%= males_count %></td>
      	<td><%= females_count + males_count %></td>
+     </tr>
+    <% end%>
+	<tr>
+     	<td colspan="4" style="background-color: lightgray">&nbsp;</td>
+     </tr>
+     <tr>
+     	<td style="text-align : left; padding-left: 10px; font-weight: bold;">Anthu Onse</td>
+     	<td style="color: green; font-weight: bold;"><%= total_females_count %></td>
+     	<td style="color: green; font-weight: bold;"><%= total_males_count %></td>
+     	<td style="color: green; font-weight: bold;"><%= total_females_count + total_males_count %></td>
+     </tr>
+     <tr>
+     	<td style="text-align : left; padding-left: 10px; font-weight: bold;">0-4</td>
+     	<td><%= zero_to_four_count_females %></td>
+     	<td><%= zero_to_four_count_males%></td>
+     	<td><%= zero_to_four_count_females + zero_to_four_count_males %></td>
+     </tr>
+     <tr>
+     	<td style="text-align : left; padding-left: 10px; font-weight: bold;">5-14</td>
+     	<td><%= five_to_fourteen_count_females %></td>
+     	<td><%= five_to_fourteen_count_males %></td>
+     	<td><%= five_to_fourteen_count_females + five_to_fourteen_count_males %></td>
+     </tr>
+     <tr>
+     	<td style="text-align : left; padding-left: 10px; font-weight: bold;">15-44</td>
+     	<td><%= fifteen_to_fourty_four_count_females %></td>
+     	<td><%= fifteen_to_fourty_four_count_males %></td>
+     	<td><%= fifteen_to_fourty_four_count_males + fifteen_to_fourty_four_count_females %></td>
+     </tr>
+     <tr>
+     	<td style="text-align : left; padding-left: 10px; font-weight: bold;">45-64</td>
+     	<td><%= fourty_five_to_sixty_four_count_females %></td>
+     	<td><%= fourty_five_to_sixty_four_count_males %></td>
+     	<td><%= fourty_five_to_sixty_four_count_females + fourty_five_to_sixty_four_count_males %></td>
+     </tr>
+     <tr>
+     	<td style="text-align : left; padding-left: 10px; font-weight: bold;">Odusa 65</td>
+     	<td><%= sixty_five_and_above_females %></td>
+     	<td><%= sixty_five_and_above_males%></td>
+     	<td><%= sixty_five_and_above_females + sixty_five_and_above_males %></td>
      </tr>
   </tbody>
 </table>

@@ -1,0 +1,132 @@
+<script>
+  var tt_cancel_destination = "/report/village_selection_per_ta";
+</script>
+
+<script>
+selectAll = true;
+  function addSelectAllButton(){
+    var holder = document.createElement("div");
+    holder.id = "holder";
+    holder.style.margin = "5px";
+    holder.style.display = "table";
+    holder.style.cursor = "pointer";
+
+    document.appendChild(holder);
+    
+    var row = document.createElement("div");
+    row.style.display = "table-row";
+    
+    holder.appendChild(row);  
+    
+    var cell1 = document.createElement("div");
+    cell1.style.display = "table-cell";
+    cell1.style.verticalAlign = "middle";
+    
+    row.appendChild(cell1);  
+    
+    var cell2 = document.createElement("div");
+    cell2.style.display = "table-cell";
+    cell2.id = "lblSelectAlls";
+    cell2.innerHTML = "Select All";
+    cell2.style.verticalAlign = "middle";
+    cell2.style.fontSize = "36px";
+    cell2.style.paddingLeft = "10px";
+    cell2.onclick = function(){
+      __$("chkSelectAll").click();
+    }
+    
+    row.appendChild(cell2);  
+    
+    var checkbox = document.createElement("img");
+    checkbox.src = "/touchscreentoolkit/lib/images/unticked.jpg";
+    checkbox.id = "chkSelectAll";
+    checkbox.setAttribute("checked", "false")
+    
+    checkbox.onclick = function(){
+      if(this.getAttribute("checked") == "false"){
+        toggleState("uncheck");
+        this.setAttribute("checked", "true");
+        this.src = "/touchscreentoolkit/lib/images/ticked.jpg";
+        __$("lblSelectAll").innerHTML = "Chotsani Midzi Yonse";
+      } else {
+        toggleState("check");
+        this.setAttribute("checked", "false");
+        this.src = "/touchscreentoolkit/lib/images/unticked.jpg";
+        __$("lblSelectAll").innerHTML = "Sankhani Midzi Yonse";
+      }
+    }
+    
+    cell1.appendChild(checkbox);  
+    
+  }
+     
+  function toggleState(state){
+    switch(state.toLowerCase()){
+      case "check":
+        checkAll();
+        break;
+      case "uncheck":
+        unCheckAll()
+        break;
+    }
+  }
+ 
+</script>
+<style>
+.inputFrameClass {
+  height: 85%;
+}
+
+.options {
+  height: 88%;
+}
+
+
+/* .......................................................... */
+
+
+.tt_controls_chaka_chobadwa_choyamba .inputFrameClass {
+  display: none;
+}
+
+.tt_controls_chaka_chobadwa_choyamba #Unknown, #backspace {
+  display: none;
+}
+
+
+.tt_controls_mwezi_wobadwa_woyamba .keyboard {
+  display: none !important;
+}
+
+#tt_page_mwezi_wobadwa_choyamba .options {
+  height: 515px;
+}
+
+#tt_page_mwezi_wobadwa_woyamba .options li {
+  font-size: 30px;
+}
+
+
+.tt_controls_mwezi_wobadwa_womaliza .keyboard {
+  display: none !important;
+}
+
+#tt_page_mwezi_wobadwa_womaliza .options {
+  height: 515px;
+}
+
+#tt_page_mwezi_wobadwa_womaliza .options li {
+  font-size: 30px;
+}
+
+</style>
+
+<%=form_tag "/report/village_selection_per_ta_data" do %>
+  <%= select_tag 'village_names[]', options_for_select(@villages),
+      :id => "village_name", 
+      :multiple => "true",
+      :tt_onLoad => "",
+      :helpText => "Sankhani Mudzi" 
+  %> 
+  <%= hidden_field_tag("ta_name", params[:ta_name])%>
+<%end%>

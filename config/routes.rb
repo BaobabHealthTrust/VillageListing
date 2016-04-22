@@ -51,6 +51,8 @@ Rails.application.routes.draw do
   post '/report/render_villages' 
   get '/report/village_selection_per_ta_data'
   post '/report/village_selection_per_ta_data'
+  get '/report/village_selector'
+  post '/report/village_selector'
   ##################### report end ######################
 
 

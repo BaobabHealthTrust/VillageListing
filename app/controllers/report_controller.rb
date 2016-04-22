@@ -93,7 +93,6 @@ class ReportController < ApplicationController
   end
 
   def ta_population_tabulation
-    
     @selected_villages = []
     params[:ta]['villages'].each do |village|
       @selected_villages << village.squish.capitalize
@@ -208,27 +207,44 @@ class ReportController < ApplicationController
   end
   
   def village_selection_per_ta_data
-    @report_title = "Chiwelengero Cha M'mudzi: Pa T/A"
-    @ta_name = params[:ta_name]
-    @village_name = params[:village_name]
-    server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
-    uri = "http://#{server_address}/population_stats.json/"
-    paramz = {district: session[:user]['district'], ta: @ta_name, 
-                stat: 'current_district_ta_village', village: @village_name}
-    data = RestClient.post(uri,paramz)
-    
-    @stats = {}
-    unless data.blank?
-      (JSON.parse(data) || []).each do |person|
-        age_group = get_age_group_modified(person)
-        gender = person['gender'].blank? ? 'Unknown' : person['gender']
-        @stats[age_group] = {} if @stats[age_group].blank?
-        @stats[age_group][gender] = 0 if @stats[age_group][gender].blank?
-        @stats[age_group][gender] += 1
+   server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
+   uri = "http://#{server_address}/population_stats.json/"
+
+   @report_title = "Chiwelengero Cha M'mudzi: Pa T/A"
+   @ta_name = params[:ta_name]
+   @selected_villages = params[:village_names]
+   @stats = {}
+   @selected_villages.each do |village|
+      @stats[village] = {} if @stats[village].blank?
+      paramz = {district: session[:user]['district'], ta: params[:ta_name], stat: 'current_district_ta_village', village: village}
+      data = RestClient.post(uri,paramz)
+      
+      unless data.blank?
+        (JSON.parse(data) || []).each do |person|
+          age_group = get_age_group_modified(person)
+          gender = person['gender'].blank? ? 'Unknown' : person['gender']
+          @stats[village][age_group] = {} if @stats[village][age_group].blank?
+          @stats[village][age_group][gender] = 0 if @stats[village][age_group][gender].blank?
+          @stats[village][age_group][gender] += 1
+        end
       end
+      
     end
+  
+    @village_name = @selected_villages.join(', ')
+    
 
     render :layout => false
+  end
+  
+  def village_selector
+    ta_name = params[:ta_name]
+    paramz = {ta_name: params[:ta_name], user: session[:user] }
+    server_address = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
+    uri = "http://#{server_address}/demographics/villages.json/"
+    data = RestClient.post(uri,paramz)
+    villages = JSON.parse(data)
+    @villages = villages.sort
   end
   
   def render_villages
