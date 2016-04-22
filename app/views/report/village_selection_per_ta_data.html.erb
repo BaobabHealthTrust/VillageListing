@@ -285,7 +285,7 @@ img {
 		<% 
 			total_females_count = total_females_count + (data[">=65"]["F"].to_i rescue 0).to_i
 			total_males_count = total_males_count + (data[">=65"]["M"].to_i rescue 0).to_i
-			sixty_five_and_above_females = sixty_five_and_above_males + (data[">=65"]["F"].to_i rescue 0).to_i
+			sixty_five_and_above_females = sixty_five_and_above_females + (data[">=65"]["F"].to_i rescue 0).to_i
 			sixty_five_and_above_males = sixty_five_and_above_males + (data[">=65"]["M"].to_i rescue 0).to_i
 		%>
 	 </tr>
