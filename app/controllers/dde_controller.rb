@@ -664,9 +664,24 @@ class DdeController < ApplicationController
     end
     people = {:primary => session[:dde_object], :secondary => JSON.parse(session[:secondary_person]), :relationship_type => relation, :site_code => site_code}
     relation_results = RestClient.post(relation_url, {:people => people}, {:accept => :json})
-    raise relation_results.inspect
+    redirect_to("/people") and return
   end
-  
+
+  def retrieve_relations
+    settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] rescue {}
+    if secure?
+      retrieve_relation_url = "https://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/retrieve_relations"
+    else
+      retrieve_relation_url = "http://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/retrieve_relations"
+    end
+    
+    @relatives = JSON.parse(RestClient.post(retrieve_relation_url, {:person => session[:dde_object]}, {:accept => :json}))
+  end
+
+  def relationships
+
+  end
+
   def ajax_process_data
 
     settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] rescue {}

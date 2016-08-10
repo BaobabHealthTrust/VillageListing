@@ -214,6 +214,7 @@ Rails.application.routes.draw do
 
   get '/dde/select_relationship_type'
   post '/dde/select_relationship_type'
+  get'/retrieve_relations' => 'dde#retrieve_relations'
   # ------------------------------- END OF INSTALLATION GENERATED ----------------------------------------------
   root 'home#index'
 end
