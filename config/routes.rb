@@ -207,6 +207,13 @@ Rails.application.routes.draw do
   get'/demographics' => 'people#demographics'
 
   post '/dde/send_to_dde_relation'
+  post '/dde/process_result_relation'
+
+  get '/dde/create_relation'
+  post '/dde/create_relation'
+
+  get '/dde/select_relationship_type'
+  post '/dde/select_relationship_type'
   # ------------------------------- END OF INSTALLATION GENERATED ----------------------------------------------
   root 'home#index'
 end

@@ -641,7 +641,19 @@ class DdeController < ApplicationController
   end
 
   def create_new_relationship
-    
+    secondary_person = params["person"]
+    session[:secondary_person] = secondary_person
+    #people = {:primary => session[:dde_object], :secondary => @json}
+    #@relation_results = RestClient.post(relation_url, {:people => people, :target => target}, {:accept => :json})
+    redirect_to("/dde/select_relationship_type")
+  end
+
+  def select_relationship_type
+    @relations = [["Mayi", "Mother"], ["Bambo", "Father"], ["Mwana", "Child"]]
+  end
+
+  def create_relation
+
   end
   
   def ajax_process_data
@@ -738,6 +750,35 @@ class DdeController < ApplicationController
         url = "http://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/process_confirmation"
       end
       @results = RestClient.post(url, {:person => @json, :target => target}, {:accept => :json})
+    end
+
+    render :text => @results
+  end
+
+  def process_confirmation_relation
+
+    @json = params[:person] rescue {}
+
+    @results = []
+
+    settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] rescue {}
+
+    target = params[:target]
+
+    target = "update" if target.blank?
+
+    if !@json.blank?
+      if secure?
+        url = "https://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/process_confirmation"
+        relation_url = "https://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/create_relation"
+      else
+        url = "http://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/process_confirmation"
+        relation_url = "http://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/create_relation"
+      end
+
+      people = {:primary => session[:dde_object], :secondary => @json}
+      #@results = RestClient.post(url, {:person => @json, :target => target}, {:accept => :json})
+      @relation_results = RestClient.post(relation_url, {:people => people, :target => target}, {:accept => :json})
     end
 
     render :text => @results

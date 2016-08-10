@@ -353,13 +353,13 @@
     </button-->
 
     <button id="btnAdd" class='button_blue' style='float: right;' onclick="showSpinner(); ajaxProcessRequest('create')">
-      Lembani Muthu Watsopano
+      Lembani M'bale Watsopano
     </button>
 
   <% elsif !params[:person].blank? %>
 
     <button id="btnAdd" class='button_blue' style='float: right; margin-right: 20px;' onclick="showSpinner(); ajaxProcessRequest('create')">
-      Lembani Muthu Watsopano
+      Lembani M'bale Watsopano
     </button>
 
   <% end %>
@@ -430,7 +430,7 @@ json = JSON.parse(JSON.stringify(eval("(" + json + ")")))
   }
 
   function ajaxProcessRequest(target) {
-    var url = "/dde/process_confirmation";
+    var url = "/dde/process_confirmation_relation";
 
     var httpRequest = new XMLHttpRequest();
     httpRequest.onreadystatechange = function () {
