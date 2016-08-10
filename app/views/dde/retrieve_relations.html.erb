@@ -212,11 +212,11 @@
           <% @relatives.each do |relative| %>
             <% #raise relative.inspect %>
             <tr>
-              <td style="border-right: 1px dotted #415772; padding: 10px; font-size: 24px; "><%=  relative["_id"] %></td>
-              <td style="border-right: 1px dotted #415772; padding: 10px; font-size: 24px; "><%=  relative["names"]["given_name"] %></td>
-              <td style="border-right: 1px dotted #415772; padding: 10px; font-size: 24px; "><%=  relative["names"]["family_name"] %></td>
-              <td style="border-right: 1px dotted #415772; padding: 10px; font-size: 24px; "><%=  relative["addresses"]["current_village"] %></td>
-              <td>&nbsp;</td>
+              <td style="border-left: 1px dotted #415772; border-right: 1px dotted #415772; padding: 10px; font-size: 24px; border-bottom: 1px solid; "><%=  relative["_id"] %></td>
+              <td style="border-right: 1px dotted #415772; padding: 10px; font-size: 24px; border-bottom: 1px solid; "><%=  relative["names"]["given_name"] %></td>
+              <td style="border-right: 1px dotted #415772; padding: 10px; font-size: 24px; border-bottom: 1px solid; "><%=  relative["names"]["family_name"] %></td>
+              <td style="border-right: 1px dotted #415772; padding: 10px; font-size: 24px; border-bottom: 1px solid; "><%=  relative["addresses"]["current_village"] %></td>
+              <td style="border-right: 1px dotted #415772; padding: 10px; font-size: 24px; border-bottom: 1px solid; "><%= relative["relationship_type"] %></td>
             </tr>
           <% end %>
         </table>
@@ -226,7 +226,7 @@
 
     <div id="footer" style="background-color: #333; height: 90px; margin-top: 10px; position: absolute; bottom: -1px; width: 100%;">
       <button class="button button_green" style="float: right; margin-right: 20px; height: 70px; width: 150px; border-radius: 8px; margin-top: 10px;" onclick="window.location = '/people'">
-        Maliza
+        Malizani
       </button>
     </div>
 
