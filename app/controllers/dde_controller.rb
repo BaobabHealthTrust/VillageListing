@@ -65,6 +65,19 @@ class DdeController < ApplicationController
 
   end
 
+  def process_result_relation
+    json = JSON.parse(params["person"]) rescue {}
+
+    session[:dde_object_relation] = json
+
+    print_and_redirect("/people/national_id_label_relation", "/people") and return if (json["print_barcode"] rescue false)
+
+    redirect_to "/people"
+
+    redirect_to "/clinic" and return
+
+  end
+
   def process_data
     @settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] rescue {}
 
@@ -287,6 +300,8 @@ class DdeController < ApplicationController
       'Student','Security guard','Domestic worker', 'Police','Office worker',
       'Preschool child','Mechanic','Prisoner','Craftsman','Healthcare Worker','Soldier'].sort.concat(["Other","Unknown"])
 
+    @relations = [["Mayi", "Mother"], ["Bambo", "Father"], ["Mwana", "Child"]]
+    
     @destination = request.referrer
     @state_province_value = GlobalProperty.find_by_property("state_province").property_value rescue ''
     @city_village_value = GlobalProperty.find_by_property("city_village").property_value rescue ''
@@ -946,7 +961,7 @@ class DdeController < ApplicationController
   end
 
   def send_to_dde
-
+    @relationship_type = JSON.parse(params["person"])["relation"] rescue nil
     @json = JSON.parse(params[:person]) rescue {}
 
     @settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] # rescue {}
@@ -981,7 +996,32 @@ class DdeController < ApplicationController
     end
     
   end
-  
+
+  def send_to_dde_relation
+    @relationship_type = JSON.parse(params["person"])["relation"] rescue nil
+    @json = JSON.parse(params[:person]) rescue {}
+
+    @settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] # rescue {}
+
+    if secure?
+      url = "https://#{(@settings["dde_username"])}:#{(@settings["dde_password"])}@#{(@settings["dde_server"])}/ajax_process_data"
+    else
+      url = "http://#{(@settings["dde_username"])}:#{(@settings["dde_password"])}@#{(@settings["dde_server"])}/ajax_process_data"
+    end
+    @results = RestClient.post(url, {"person" => params["person"]})
+    if params["notfound"]
+
+      json = JSON.parse(JSON.parse(@results)[0])
+
+      session[:dde_object_relation] = json
+
+      redirect_to "/" and return
+    else
+      render :layout => "ts"
+    end
+
+  end
+
   def secure?
     @settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]
     secure = @settings["secure_connection"] rescue false

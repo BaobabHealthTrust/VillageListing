@@ -205,6 +205,8 @@ Rails.application.routes.draw do
   get'/national_id_label' => 'people#national_id_label'
   get'/people' => 'people#show'
   get'/demographics' => 'people#demographics'
+
+  post '/dde/send_to_dde_relation'
   # ------------------------------- END OF INSTALLATION GENERATED ----------------------------------------------
   root 'home#index'
 end
