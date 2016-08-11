@@ -206,6 +206,7 @@
               <th>Dzina Labambo</th>
               <th>Mudzi Okhala</th>
               <th>Ubale</th>
+              <th style="background-color: white;">&nbsp;</th>
             </tr>
           </thead>
 
@@ -217,6 +218,11 @@
               <td style="border-right: 1px dotted #415772; padding: 10px; font-size: 24px; border-bottom: 1px solid; "><%=  relative["names"]["family_name"] %></td>
               <td style="border-right: 1px dotted #415772; padding: 10px; font-size: 24px; border-bottom: 1px solid; "><%=  relative["addresses"]["current_village"] %></td>
               <td style="border-right: 1px dotted #415772; padding: 10px; font-size: 24px; border-bottom: 1px solid; "><%= relative["relationship_type"] %></td>
+              <td style="border-bottom: 1px solid;">
+                <button onclick="window.location='/national_id_label_relation'" class="button button_green" style="float: right;  height: 60px; width: 100%; border-radius: 8px;" onclick="window.location = '#'">
+                  Dindani Chiphaso
+                </button>
+              </td>
             </tr>
           <% end %>
         </table>
