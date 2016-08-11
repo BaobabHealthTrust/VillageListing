@@ -214,6 +214,7 @@ Rails.application.routes.draw do
 
   get '/dde/select_relationship_type'
   post '/dde/select_relationship_type'
+  get '/select_relationship_type' => 'dde#select_relationship_type'
   get'/retrieve_relations' => 'dde#retrieve_relations'
 
   #national_id_label_relation
@@ -238,6 +239,10 @@ Rails.application.routes.draw do
   #search_relation_by_national_id
   get '/search_relation_by_national_id' => 'dde#search_relation_by_national_id'
   post '/search_relation_by_national_id' => 'dde#search_relation_by_national_id'
+
+  #process_scan_data_relation
+  get '/dde/process_scan_data_relation'
+  post '/dde/process_scan_data_relation'
   # ------------------------------- END OF INSTALLATION GENERATED ----------------------------------------------
   root 'home#index'
 end

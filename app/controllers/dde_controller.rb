@@ -603,7 +603,6 @@ class DdeController < ApplicationController
   end
 
   def process_scan_data
-
     @settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] rescue {}
 
     @json = JSON.parse(params[:person]) rescue {}
@@ -640,6 +639,73 @@ class DdeController < ApplicationController
     render :layout => "ts"
   end
 
+  def process_scan_data_relation
+    national_id = params[:national_id].strip.gsub(/\s/, "").gsub(/\-/, "") rescue params[:national_id]
+    @settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] rescue {}
+    @json = {
+      "national_id" => national_id,
+      "application" => "#{@settings["application_name"]}",
+      "site_code" => "#{@settings["site_code"]}",
+      "return_path" => "http://#{request.host_with_port}/process_result",
+      "patient_id" => "",
+      "names" =>
+        {
+        "family_name" => "",
+        "given_name" => "",
+        "middle_name" => "",
+        "maiden_name" => ""
+      },
+      "gender" => (""),
+      "person_attributes" => {
+        "occupation" => "",
+        "cell_phone_number" => "",
+        "home_phone_number" => "",
+        "office_phone_number" => "",
+        "race" => "",
+        "country_of_residence" => "",
+        "citizenship" => ""
+      },
+      "birthdate" => "",
+      "patient" => {
+        "identifiers" => ""
+      },
+      "birthdate_estimated" => "",
+      "addresses" => {
+        "current_residence" => "",
+        "current_village" => "",
+        "current_ta" => "",
+        "current_district" => "",
+        "home_village" => "",
+        "home_ta" => "",
+        "home_district" => ""
+      }
+    }
+
+    @results = []
+
+    if !@json.blank?
+
+      if secure?
+        url = "https://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/ajax_process_data"
+      else
+        url = "http://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/ajax_process_data"
+      end
+
+      @results = RestClient.post(url, {:person => @json, :page => params[:page]}, {:accept => :json})
+
+    end
+
+    if JSON.parse(@results).length == 1
+      result = JSON.parse(JSON.parse(@results)[0])
+      session[:secondary_person] = result.to_json
+      redirect_to("/select_relationship_type") and return
+    else
+      flash[:notice] = "Pepani. Palibe wapezeka ndi chiphaso ichi #{national_id}"
+      redirect_to("/search_relation_by_national_id") and return
+    end
+
+  end
+
   def create_new_relationship
     secondary_person = params["person"]
     session[:secondary_person] = secondary_person
@@ -662,6 +728,7 @@ class DdeController < ApplicationController
     else
       relation_url = "http://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/create_relation"
     end
+
     people = {:primary => session[:dde_object], :secondary => JSON.parse(session[:secondary_person]), :relationship_type => relation, :site_code => site_code}
     relation_results = RestClient.post(relation_url, {:people => people}, {:accept => :json})
     redirect_to("/people") and return
@@ -707,8 +774,8 @@ ZT
 B35,170,0,1,5,15,100,N,"#{patient_bean.national_id}"
 A35,30,0,2,2,2,N,"#{patient_bean.name}"
 A35,76,0,2,2,2,N,"#{patient_bean.national_id} #{patient_bean.birthdate}(#{patient_bean.sex})"
-A35,122,0,2,2,2,N,"#{patient_bean.home_ta}, #{patient_bean.home_village}"
-P1)
+    A35,122,0,2,2,2,N,"#{patient_bean.home_ta}, #{patient_bean.home_village}"
+    P1)
   return print_string
 
 end

@@ -45,7 +45,8 @@
   window.addEventListener("load", loadBarcodePage, false);
 
   window.setInterval("moveNext();", 350);
-  
+
+
 </script>
 <style type="text/css">
   .national_id{
@@ -66,7 +67,7 @@
   }
 </style>
 
-<form action="/dde/search_relation_by_national_id" method='post'>
+<form action="/dde/process_scan_data_relation" method='post'>
   <%= text_field_tag "national_id", '', {
     :tt_onLoad => "formatBarcodeSpace();",
     :id => 'barcode',
@@ -78,4 +79,8 @@
   } %>
 
 </form
-
+<script type="text/javascript">
+<% if flash[:notice] %>
+    showMessage("<%= flash[:notice]%> ")
+<% end %>
+</script>
