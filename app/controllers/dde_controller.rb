@@ -1695,5 +1695,23 @@ end
 def find_by_national_id
   @settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] rescue {}
 end
+
+def search_relation_menu
+
+end
+
+def select_relation_search_type
+  if params[:search_relation_type] == 'national_id'
+    redirect_to("/search_relation_by_national_id")
+  end
+
+  if params[:search_relation_type] == 'name'
+    redirect_to("/search_relation") and return
+  end
+end
+
+def search_relation_by_national_id
   
+end
+
 end

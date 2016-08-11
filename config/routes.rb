@@ -226,6 +226,18 @@ Rails.application.routes.draw do
   get '/dde/process_confirmation_relation'
   post '/process_confirmation_relation' => 'dde#process_confirmation_relation'
   post '/dde/process_confirmation_relation'
+
+  #search_relation_menu
+  get '/search_relation_menu' => 'dde#search_relation_menu'
+  post '/search_relation_menu' => 'dde#search_relation_menu'
+
+  #select_relation_search_type
+  get '/dde/select_relation_search_type'
+  post '/dde/select_relation_search_type'
+
+  #search_relation_by_national_id
+  get '/search_relation_by_national_id' => 'dde#search_relation_by_national_id'
+  post '/search_relation_by_national_id' => 'dde#search_relation_by_national_id'
   # ------------------------------- END OF INSTALLATION GENERATED ----------------------------------------------
   root 'home#index'
 end
