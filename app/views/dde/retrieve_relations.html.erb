@@ -1,5 +1,34 @@
 <html>
   <head>
+    <script type="text/javascript">
+      var nationalIDHash = JSON.parse('<%= raw @national_id_hash.to_json %>');
+      function printNationalID(obj){
+        nationalID = obj.getAttribute("national_id");
+        data = nationalIDHash[nationalID];
+
+        relationForm = document.getElementById("relationForm");
+        if (relationForm){
+          relationForm.parentNode.removeChild(relationForm);
+        }
+
+        body = document.getElementsByTagName('body')[0];
+        form = document.createElement("form");
+        form.action = "/national_id_label_relation";
+        form.id = "relationForm";
+        form.style.display = 'none';
+        form.method = "POST";
+        body.appendChild(form);
+
+        textArea = document.createElement('textArea');
+        textArea.name = "person"
+        textArea.innerHTML = JSON.stringify(data);
+        form.appendChild(textArea);
+
+        form.submit();
+      }
+
+    </script>
+
     <style type="text/css">
 
       table {
@@ -219,7 +248,7 @@
               <td style="border-right: 1px dotted #415772; padding: 10px; font-size: 24px; border-bottom: 1px solid; "><%=  relative["addresses"]["current_village"] %></td>
               <td style="border-right: 1px dotted #415772; padding: 10px; font-size: 24px; border-bottom: 1px solid; "><%= relative["relationship_type"] %></td>
               <td style="border-bottom: 1px solid;">
-                <button onclick="window.location='/national_id_label_relation'" class="button button_green" style="float: right;  height: 60px; width: 100%; border-radius: 8px;" onclick="window.location = '#'">
+                <button national_id="<%= relative["_id"] %>" onclick="printNationalID(this)" class="button button_green" style="float: right;  height: 60px; width: 100%; border-radius: 8px;" onclick="window.location = '#'">
                   Dindani Chiphaso
                 </button>
               </td>

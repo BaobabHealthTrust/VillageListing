@@ -681,6 +681,7 @@ class DdeController < ApplicationController
       national_id = relative["_id"]
       @national_id_hash[national_id] = relative
     end
+    
   end
 
   def relationships
@@ -688,7 +689,7 @@ class DdeController < ApplicationController
   end
 
   def national_id_label_relation
-    patient_bean = formatted_dde_object
+    patient_bean = formatted_dde_object_relation(JSON.parse(params[:person]))
     national_id = patient_bean.national_id.downcase.gsub("-", "_")
     print_string = patient_national_id_label_relation(patient_bean)
     send_data(print_string,:type=>"application/label; charset=utf-8", :stream=> false,
@@ -712,8 +713,8 @@ P1)
 
 end
 
-def formatted_dde_object
-  dde_object = session[:dde_object]
+def formatted_dde_object_relation(person_obj)
+  dde_object = person_obj
 
   national_id = dde_object["_id"]
   national_id = dde_object["national_id"] if national_id.blank?
@@ -748,7 +749,7 @@ def formatted_dde_object
   occupation = dde_object["person_attributes"]["occupation"]
   citizenship = dde_object["person_attributes"]["citizenship"]
   country_of_residence = dde_object["person_attributes"]["country_of_residence"]
-
+=begin
   #################### Code to pull person outcome from the DDE ############################
   dde_server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue "raise dde_server_address not set in dde_connection.yml"
   url = "http://#{dde_server_address}/population_stats"
@@ -770,6 +771,7 @@ def formatted_dde_object
   unless outcome.blank?
     outcome = outcome == 'Transfer Out' ? 'Adasamuka' : 'Died'
   end
+=end
   patient_bean = {
     :national_id => national_id,
       :first_name => given_name,
@@ -795,7 +797,7 @@ def formatted_dde_object
       :occupation => occupation,
       :citizenship => citizenship,
       :country_of_residence => country_of_residence,
-      :outcome => outcome, :outcome_date => outcome_date
+      :outcome => (outcome rescue ''), :outcome_date => (outcome_date rescue '')
   }
 
   patient_bean = OpenStruct.new patient_bean #Making the keys accessible by a dot operator
