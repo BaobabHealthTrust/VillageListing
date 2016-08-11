@@ -219,6 +219,13 @@ Rails.application.routes.draw do
   #national_id_label_relation
   get '/national_id_label_relation' => 'dde#national_id_label_relation'
   post '/national_id_label_relation' => 'dde#national_id_label_relation'
+
+
+  #process_confirmation_relation
+  get '/process_confirmation_relation' => 'dde#process_confirmation_relation'
+  get '/dde/process_confirmation_relation'
+  post '/process_confirmation_relation' => 'dde#process_confirmation_relation'
+  post '/dde/process_confirmation_relation'
   # ------------------------------- END OF INSTALLATION GENERATED ----------------------------------------------
   root 'home#index'
 end

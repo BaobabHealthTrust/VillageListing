@@ -908,7 +908,6 @@ end
 def process_confirmation_relation
 
   @json = params[:person] rescue {}
-
   @results = []
 
   settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] rescue {}
@@ -916,6 +915,10 @@ def process_confirmation_relation
   target = params[:target]
 
   target = "update" if target.blank?
+
+
+  relation = @json["relation"]
+  site_code = settings["site_code"] rescue ''
 
   if !@json.blank?
     if secure?
@@ -926,9 +929,9 @@ def process_confirmation_relation
       relation_url = "http://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/create_relation"
     end
 
-    people = {:primary => session[:dde_object], :secondary => @json}
-    #@results = RestClient.post(url, {:person => @json, :target => target}, {:accept => :json})
-    @relation_results = RestClient.post(relation_url, {:people => people, :target => target}, {:accept => :json})
+    @results = RestClient.post(url, {:person => @json, :target => target}, {:accept => :json})
+    people = {:primary => session[:dde_object], :secondary => JSON.parse(@results), :relationship_type => relation, :site_code => site_code}
+    relation_results = RestClient.post(relation_url, {:people => people}, {:accept => :json})
   end
 
   render :text => @results
