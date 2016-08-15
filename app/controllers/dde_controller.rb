@@ -1795,15 +1795,17 @@ def retrieve_parents_details
 
   person_relation_results = RestClient.post(person_relation_url, {:national_id => national_id}, {:accept => :json})
   print_string = parents_details_label(person_relation_results)
-
   send_data(print_string,:type=>"application/label; charset=utf-8", :stream=> false,
       :filename=>"#{national_id}.lbl", :disposition => "inline")
-  raise person_relation_results.inspect
+  
   #redirect_to("/people") and return
 end
 
 def parents_details_label(data)
-  patient_bean = PeopleController.new.formatted_dde_object
+  data = JSON.parse(data)
+  patient_bean = formatted_dde_object
+  mother_name = data["mother"]["name"]
+  place_of_birth = "Hospital"
   print_string = %Q(
 N
 q812
@@ -1812,10 +1814,104 @@ ZT
 A35,30,0,2,2,2,N,"Name: #{patient_bean.name}"
 A35,76,0,2,2,2,N,"Gender: #{patient_bean.sex}"
 A35,122,0,2,2,2,N,"Date Of Birth: #{patient_bean.birthdate}"
-A35,198,0,2,2,2,N,"Place Of Birth: #{place_of_birth}"
-A35,122,0,2,2,2,N,"#{patient_bean.home_ta}, #{patient_bean.home_village}"
+A35,160,0,2,2,2,N,"Place Of Birth: #{place_of_birth}"
+A35,214,0,2,2,2,N,"Mother Name: #{mother_name}"
 P1)
   return print_string
 end
+
+
+
+
+def formatted_dde_object
+    dde_object = session[:dde_object]
+
+    national_id = dde_object["_id"]
+    national_id = dde_object["national_id"] if national_id.blank?
+
+    given_name = dde_object["names"]["given_name"]
+    middle_name = dde_object["names"]["middle_name"]
+    maiden_name = dde_object["names"]["maiden_name"]
+    family_name = dde_object["names"]["family_name"]
+    person_name = given_name.to_s + ' ' + family_name.to_s
+    birthdate_estimated = dde_object["birthdate_estimated"]
+    birthdate = dde_object["birthdate"]
+    formatted_birthdate = birthdate.to_date.strftime("%d/%b/%Y") rescue birthdate
+
+    current_residence = dde_object["addresses"]["current_residence"]
+    current_village = dde_object["addresses"]["current_village"]
+    current_ta = dde_object["addresses"]["current_ta"]
+    current_district = dde_object["addresses"]["current_district"]
+
+    home_village = dde_object["addresses"]["home_village"]
+    home_ta = dde_object["addresses"]["home_ta"]
+    home_district = dde_object["addresses"]["home_district"]
+
+    gender = dde_object["gender"]
+    identifiers = []
+    identifiers = dde_object["patient"]["identifiers"] unless dde_object["patient"].blank?
+
+    home_phone_number = dde_object["person_attributes"]["home_phone_number"]
+    cell_phone_number = dde_object["person_attributes"]["cell_phone_number"]
+    office_phone_number = dde_object["person_attributes"]["office_phone_number"]
+
+    race = dde_object["person_attributes"]["race"]
+    occupation = dde_object["person_attributes"]["occupation"]
+    citizenship = dde_object["person_attributes"]["citizenship"]
+    country_of_residence = dde_object["person_attributes"]["country_of_residence"]
+
+    #################### Code to pull person outcome from the DDE ############################
+    dde_server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue "raise dde_server_address not set in dde_connection.yml"
+    url = "http://#{dde_server_address}/population_stats"
+    outcome_paramz = {}
+    outcome_paramz['stat'] = 'fetch_outcome' ; outcome_paramz['identifier'] = national_id
+    result = RestClient.post(url, outcome_paramz) rescue {}
+    data = JSON.parse(result) rescue {}
+
+    session[:dde_object]['outcome'] = data['outcome_data']['outcome'] rescue nil
+    session[:dde_object]['outcome_date'] = data['outcome_data']['outcome_date'] rescue nil
+    outcome_date = session[:dde_object]['outcome_date'] ; outcome = session[:dde_object]['outcome']
+
+    unless data['person'].blank?
+      current_district = data['person']['addresses']['current_district']
+      current_ta = data['person']['addresses']['current_ta']
+      current_village = data['person']['addresses']['current_village']
+    end unless data.blank?
+    #################### Code to pull person outcome from the DDE (ends)############################
+    unless outcome.blank?
+      outcome = outcome == 'Transfer Out' ? 'Adasamuka' : 'Died'
+    end
+    patient_bean = {
+      :national_id => national_id,
+        :first_name => given_name,
+        :middle_name => middle_name,
+        :maiden_name => maiden_name,
+        :last_name => family_name,
+        :name => person_name,
+        :birthdate_estimated => birthdate_estimated,
+        :birthdate => formatted_birthdate,
+        :current_residence => current_residence,
+        :current_village => current_village,
+        :current_ta => current_ta,
+        :current_district => current_district,
+        :home_ta => home_ta,
+        :home_village => home_village,
+        :home_district => home_district,
+        :sex => gender,
+        :identifiers => identifiers,
+        :home_phone_number => home_phone_number,
+        :cell_phone_number => cell_phone_number,
+        :office_phone_number => office_phone_number,
+        :race => race,
+        :occupation => occupation,
+        :citizenship => citizenship,
+        :country_of_residence => country_of_residence,
+        :outcome => outcome, :outcome_date => outcome_date
+    }
+
+    patient_bean = OpenStruct.new patient_bean #Making the keys accessible by a dot operator
+    return patient_bean
+  end
+
 
 end
