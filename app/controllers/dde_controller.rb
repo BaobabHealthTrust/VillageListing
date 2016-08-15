@@ -1781,4 +1781,41 @@ def search_relation_by_national_id
   
 end
 
+def retrieve_parents_details
+  dde_object = session[:dde_object]
+  national_id = dde_object["_id"]
+  national_id = dde_object["national_id"] if national_id.blank?
+  settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] rescue {}
+
+  if secure?
+    person_relation_url = "https://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/person_relations"
+  else
+    person_relation_url = "http://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/person_relations"
+  end
+
+  person_relation_results = RestClient.post(person_relation_url, {:national_id => national_id}, {:accept => :json})
+  print_string = parents_details_label(person_relation_results)
+
+  send_data(print_string,:type=>"application/label; charset=utf-8", :stream=> false,
+      :filename=>"#{national_id}.lbl", :disposition => "inline")
+  raise person_relation_results.inspect
+  #redirect_to("/people") and return
+end
+
+def parents_details_label(data)
+  patient_bean = PeopleController.new.formatted_dde_object
+  print_string = %Q(
+N
+q812
+Q305,026
+ZT
+A35,30,0,2,2,2,N,"Name: #{patient_bean.name}"
+A35,76,0,2,2,2,N,"Gender: #{patient_bean.sex}"
+A35,122,0,2,2,2,N,"Date Of Birth: #{patient_bean.birthdate}"
+A35,198,0,2,2,2,N,"Place Of Birth: #{place_of_birth}"
+A35,122,0,2,2,2,N,"#{patient_bean.home_ta}, #{patient_bean.home_village}"
+P1)
+  return print_string
+end
+
 end

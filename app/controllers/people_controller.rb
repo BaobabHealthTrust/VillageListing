@@ -5,7 +5,7 @@ class PeopleController < ApplicationController
   end
 
   def show
-
+    session.delete(:secondary_person)
     redirect_to ("/") and return if session[:dde_object].blank?
 
     @patient_bean = formatted_dde_object

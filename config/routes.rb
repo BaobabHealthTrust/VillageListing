@@ -243,6 +243,10 @@ Rails.application.routes.draw do
   #process_scan_data_relation
   get '/dde/process_scan_data_relation'
   post '/dde/process_scan_data_relation'
+
+  #retrieve_parents_details
+  get '/retrieve_parents_details' => 'dde#retrieve_parents_details'
+  post '/retrieve_parents_details' => 'dde#retrieve_parents_details'
   # ------------------------------- END OF INSTALLATION GENERATED ----------------------------------------------
   root 'home#index'
 end
