@@ -1801,23 +1801,26 @@ def retrieve_parents_details
 
   if secure?
     person_relation_url = "https://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/person_relations"
+    retrieve_place_of_birth_url = "https://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/retrieve_place_of_birth"
   else
     person_relation_url = "http://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/person_relations"
+    retrieve_place_of_birth_url = "http://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/retrieve_place_of_birth"
   end
 
   person_relation_results = RestClient.post(person_relation_url, {:national_id => national_id}, {:accept => :json})
-  print_string = parents_details_label(person_relation_results)
+  place_of_birth = RestClient.post(retrieve_place_of_birth_url, {:national_id => national_id}, {:accept => :json})
+
+  print_string = parents_details_label(person_relation_results, place_of_birth)
   send_data(print_string,:type=>"application/label; charset=utf-8", :stream=> false,
       :filename=>"#{national_id}.lbl", :disposition => "inline")
   
   #redirect_to("/people") and return
 end
 
-def parents_details_label(data)
+def parents_details_label(data, place_of_birth = "")
   data = JSON.parse(data)
   patient_bean = formatted_dde_object
   mother_name = data["mother"]["name"]
-  place_of_birth = "Hospital"
   print_string = %Q(
 N
 q812
