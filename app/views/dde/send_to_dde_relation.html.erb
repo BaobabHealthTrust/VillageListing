@@ -399,9 +399,9 @@
 <%#  raise JSON.parse(params[:person]).inspect %>
   //var json = "<%= (params[:person]).to_json rescue "{}" %>;"
   var people = [];
-  <% params[:person] = JSON.parse(params[:person]) %>
+<% params[:person] = JSON.parse(params[:person]) %>
 
-  var json = "{national_id: '<%= params[:person][:national_id] %>', relation: '<%= params[:person][:relation] %>', application: '<%= params[:person][:application] %>', \n\
+  var json = "{national_id: '<%= params[:person][:national_id] %>', relation: '<%= params[:person][:relation] %>', place_of_birth: '<%= params[:person][:place_of_birth] %>', application: '<%= params[:person][:application] %>', \n\
 site_code: '<%= params[:person][:site_code] %>', return_path: '<%= params[:person][:return_path] %>', \n\
 names: {family_name: '<%= params[:person][:names][:family_name] %>', given_name: '<%= params[:person][:names][:given_name] %>',\n\
  middle_name: '<%= params[:person][:names][:middle_name] %>', maiden_name: '<%= params[:person][:names][:maiden_name] %>' },\n\
@@ -420,7 +420,7 @@ home_ta: '<%=  params[:person][:addresses][:home_ta] %>', home_district: '<%=  p
 landmark: '<%=  params[:person][:addresses][:landmark] %>'}, print_barcode: '<%=  params[:person][:print_barcode] %>'}"
 
 
-json = JSON.parse(JSON.stringify(eval("(" + json + ")")))
+  json = JSON.parse(JSON.stringify(eval("(" + json + ")")))
 
 
   function make_base_auth(user, password) {
