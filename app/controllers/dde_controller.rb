@@ -612,10 +612,8 @@ class DdeController < ApplicationController
     
       if secure?
         url = "https://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/ajax_process_data"
-        outcome_url = "https://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/add_place_of_birth"
       else
         url = "http://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/ajax_process_data"
-        outcome_url = "http://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/add_place_of_birth"
       end
       
       @results = RestClient.post(url, {:person => @json, :page => params[:page]}, {:accept => :json})
@@ -628,9 +626,7 @@ class DdeController < ApplicationController
       result = JSON.parse(JSON.parse(@results)[0])
 
       session[:dde_object] = result
-      dde_obj = formatted_dde_object
-      data = {:national_id => dde_obj.national_id, :place_of_birth => @json.place_of_birth}
-      RestClient.post(outcome_url, {:person => data}, {:accept => :json})
+
       redirect_to ("/people") and return
 
     elsif JSON.parse(@results).length == 0
