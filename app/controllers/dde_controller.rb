@@ -604,7 +604,6 @@ class DdeController < ApplicationController
 
   def process_scan_data
     @settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] rescue {}
-
     @json = JSON.parse(params[:person]) rescue {}
 
     @results = []
@@ -613,12 +612,13 @@ class DdeController < ApplicationController
     
       if secure?
         url = "https://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/ajax_process_data"
+        outcome_url = "https://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/add_place_of_birth"
       else
         url = "http://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/ajax_process_data"
+        outcome_url = "http://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/add_place_of_birth"
       end
       
       @results = RestClient.post(url, {:person => @json, :page => params[:page]}, {:accept => :json})
-     
     end
 
     @dontstop = false
@@ -628,7 +628,9 @@ class DdeController < ApplicationController
       result = JSON.parse(JSON.parse(@results)[0])
 
       session[:dde_object] = result
-
+      dde_obj = formatted_dde_object
+      data = {:national_id => dde_obj.national_id, :place_of_birth => @json.place_of_birth}
+      RestClient.post(outcome_url, {:person => data}, {:accept => :json})
       redirect_to ("/people") and return
 
     elsif JSON.parse(@results).length == 0
@@ -951,7 +953,6 @@ end
 def process_confirmation
 
   @json = params[:person] rescue {}
-
   @results = []
 
   settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] rescue {}
@@ -963,10 +964,15 @@ def process_confirmation
   if !@json.blank?
     if secure?
       url = "https://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/process_confirmation"
+      outcome_url = "https://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/add_place_of_birth"
     else
       url = "http://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/process_confirmation"
+      outcome_url = "http://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/add_place_of_birth"
     end
     @results = RestClient.post(url, {:person => @json, :target => target}, {:accept => :json})
+    json = JSON.parse(@results)
+    data = {:national_id => json["national_id"], :place_of_birth => @json["place_of_birth"]}
+    outcome_status = RestClient.post(outcome_url, {:person => data}, {:accept => :json})
   end
 
   render :text => @results
@@ -991,14 +997,20 @@ def process_confirmation_relation
     if secure?
       url = "https://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/process_confirmation"
       relation_url = "https://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/create_relation"
+      outcome_url = "https://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/add_place_of_birth"
     else
       url = "http://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/process_confirmation"
       relation_url = "http://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/create_relation"
+      outcome_url = "http://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/add_place_of_birth"
     end
 
     @results = RestClient.post(url, {:person => @json, :target => target}, {:accept => :json})
     people = {:primary => session[:dde_object], :secondary => JSON.parse(@results), :relationship_type => relation, :site_code => site_code}
     relation_results = RestClient.post(relation_url, {:people => people}, {:accept => :json})
+
+    json = JSON.parse(@results)
+    data = {:national_id => json["national_id"], :place_of_birth => @json["place_of_birth"]}
+    outcome_status = RestClient.post(outcome_url, {:person => data}, {:accept => :json})
   end
 
   render :text => @results
@@ -1224,7 +1236,6 @@ end
 def send_to_dde
   @relationship_type = JSON.parse(params["person"])["relation"] rescue nil
   @json = JSON.parse(params[:person]) rescue {}
-
   @settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] # rescue {}
     
   if secure?
@@ -1233,12 +1244,13 @@ def send_to_dde
     url = "http://#{(@settings["dde_username"])}:#{(@settings["dde_password"])}@#{(@settings["dde_server"])}/ajax_process_data"
   end
   @results = RestClient.post(url, {"person" => params["person"]})
+  
   if params["notfound"]
 
     json = JSON.parse(JSON.parse(@results)[0])
 
     session[:dde_object] = json
-      
+
     redirect_to "/" and return
 =begin     
       patient_id = DDE.search_and_or_create(json.to_json)  rescue nil 
