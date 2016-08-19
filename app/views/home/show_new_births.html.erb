@@ -210,6 +210,17 @@
               <th>Mudzi Okhala</th>
             </tr>
           </thead>
+          <tbody style="font-size: 14pt; font-weight: bold;">
+
+            <% @new_births.each do |record| %>
+            <tr>
+              <td><%= record["_id"] %></td>
+              <td><%= record["names"]["given_name"] %></td>
+              <td><%= record["names"]["family_name"] %></td>
+              <td><%= record["addresses"]["current_village"] %></td>
+            </tr>
+            <% end %>
+          </tbody>
         </table>
       </div>
 

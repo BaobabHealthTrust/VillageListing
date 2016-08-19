@@ -12,12 +12,12 @@ class HomeController < ApplicationController
 
     birthdate = "19/Mar/2014".to_date
     @new_births = JSON.parse(RestClient.post(url, {"date" => birthdate}))
-
+    session[:new_births] = @new_births
     render :layout => false
   end
 
   def show_new_births
-
+    @new_births = session[:new_births]
   end
   
   def secure?
