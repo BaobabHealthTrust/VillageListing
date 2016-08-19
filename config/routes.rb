@@ -247,6 +247,10 @@ Rails.application.routes.draw do
   #retrieve_parents_details
   get '/retrieve_parents_details' => 'dde#retrieve_parents_details'
   post '/retrieve_parents_details' => 'dde#retrieve_parents_details'
+
+  #show_new_births
+  get '/show_new_births' => 'home#show_new_births'
+  post '/show_new_births' => 'home#show_new_births'
   # ------------------------------- END OF INSTALLATION GENERATED ----------------------------------------------
   root 'home#index'
 end

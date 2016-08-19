@@ -77,7 +77,9 @@
     border-radius: 50%;
     width: 75px;
     font-size: 14pt;
+    cursor: pointer;
   }
+  
   .w3-badge, .w3-tag, .w3-sign {
     background-color: #000;
     color: #fff;
@@ -126,7 +128,7 @@
     </div>
 
     <div class="cells" style="padding-left: 20px; ">
-      <p style="font-weight: bold;">New Births <span class="w3-badge w3-green bounce">6</span></p>
+      <p style="font-weight: bold;">New Births <span onclick="window.location='/show_new_births'" class="w3-badge w3-green bounce"><%= @new_births.length %></span></p>
     </div>
 
     <div class="cells" style="border-style: none; text-align: center; border-width: 1px; width: 10%; float: right; padding-right: 100px;">
