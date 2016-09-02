@@ -252,5 +252,13 @@ Rails.application.routes.draw do
   get '/show_new_births' => 'home#show_new_births'
   post '/show_new_births' => 'home#show_new_births'
   # ------------------------------- END OF INSTALLATION GENERATED ----------------------------------------------
+
+
+	#APIs 
+
+  get "/api/ping"
+  get "/api/dashboard"
+
+	#End of APIs
   root 'home#index'
 end
