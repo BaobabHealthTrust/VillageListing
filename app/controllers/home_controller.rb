@@ -10,7 +10,7 @@ class HomeController < ApplicationController
       url = "http://#{(@settings["dde_username"])}:#{(@settings["dde_password"])}@#{(@settings["dde_server"])}/retrieve_births"
     end
 
-    birthdate = "19/Mar/2014".to_date
+    birthdate = Date.today
     @new_births = JSON.parse(RestClient.post(url, {"date" => birthdate}))
     session[:new_births] = @new_births
     render :layout => false
