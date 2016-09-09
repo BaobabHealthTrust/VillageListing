@@ -965,10 +965,10 @@ def process_confirmation
       url = "http://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/process_confirmation"
       outcome_url = "http://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/add_place_of_birth"
     end
-    @results = RestClient.post(url, {:person => @json, :target => target}, {:accept => :json})
+    @results = RestClient.post(url, :person => @json, :content_type => 'application/json', :target => target, :accept => :json)
     json = JSON.parse(@results)
     data = {:national_id => json["national_id"], :place_of_birth => @json["place_of_birth"]}
-    outcome_status = RestClient.post(outcome_url, {:person => data}, {:accept => :json})
+    outcome_status = RestClient.post(outcome_url, :person => data.to_json, :content_type => "application/json")
   end
 
   render :text => @results

@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   before_filter :check_if_logged_in, :except => ['login','portal', 'ping', 'dashboard']
+  after_filter :user_activity, :except => ['dashboard']
 
   protected
 
@@ -23,5 +24,20 @@ class ApplicationController < ActionController::Base
     @patient_id = patient_id
     render :template => 'print/print', :layout => nil
   end
-  
+
+  def user_activity
+    if !session[:user].blank? && session[:user]['username']
+
+      if !File.exist?("#{Rails.root}/log/lastseen")
+        Dir.mkdir "#{Rails.root}/log/lastseen"
+      end
+
+      district = session[:user]['district'].downcase.gsub(/\s+/, '_').downcase
+      ta = session[:user]['ta'].downcase.gsub(/\s+/, '_').downcase
+      village = session[:user]['village'].downcase.gsub(/\s+/, '_').downcase
+      site = "#{district}__#{ta}__#{village}"
+      FileUtils.touch "#{Rails.root}/log/lastseen/#{site}"
+    end
+  end
+
 end
