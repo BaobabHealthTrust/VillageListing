@@ -11,11 +11,20 @@ class ApiController < ApplicationController
     results['deaths'] = {}
 
     connected = {}
+    news_app_connected = {}
     Dir.entries("log/lastseen").select {|f| !File.directory? f}.each do |site|
       connected[site] = File.mtime("log/lastseen/#{site}").to_s(:db)
     end
-
     results["online"] = connected
+
+    Dir.entries("../lastseennews").select {|f| !File.directory? f}.each do |site|
+      s = site.split(/\@/).last rescue nil
+      next if s.blank?
+      date = File.read("../lastseennews/#{site}") rescue nil
+      next if date.blank?
+      news_app_connected[s] = date
+    end
+    results["news_online"] = news_app_connected
 
     @settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] rescue {}
 		

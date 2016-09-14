@@ -32,12 +32,31 @@ class ApplicationController < ActionController::Base
         Dir.mkdir "#{Rails.root}/log/lastseen"
       end
 
+      if !File.exist?("../lastseennews")
+        Dir.mkdir "../lastseennews"
+      end
+
       district = session[:user]['district'].downcase.gsub(/\s+/, '_').downcase
       ta = session[:user]['ta'].downcase.gsub(/\s+/, '_').downcase
       village = session[:user]['village'].downcase.gsub(/\s+/, '_').downcase
       site = "#{district}__#{ta}__#{village}"
       FileUtils.touch "#{Rails.root}/log/lastseen/#{site}"
+
+      #Hack to get remote mac address
+      arptable = `arp -a`
+      entries = arptable.split("\n")
+      ipmap = {}
+      entries.each do |e|
+        ent = e.split(" ")
+        ipmap["#{ent[1].gsub(/\(|\)/, "")}"] = ent[3]
+      end
+
+      mac_adr = ipmap["#{request.ip}"]
+      if mac_adr.present?
+        FileUtils.touch "../lastseennews/#{mac_adr}@#{site}"
+      end
     end
+
   end
 
 end
