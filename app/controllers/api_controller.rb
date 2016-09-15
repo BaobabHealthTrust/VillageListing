@@ -9,6 +9,8 @@ class ApiController < ApplicationController
 		results = {}
     results['births'] = {}
     results['deaths'] = {}
+    results['counts'] = {}
+
 
     connected = {}
     news_app_connected = {}
@@ -30,14 +32,16 @@ class ApiController < ApplicationController
 		
 		#######################  Pull new births #######################
     if secure?
-      url = "https://#{(@settings["dde_username"])}:#{(@settings["dde_password"])}@#{(@settings["dde_server"])}/retrieve_births"
+      url = "https://#{(@settings["dde_username"])}:#{(@settings["dde_password"])}@#{(@settings["dde_server"])}/retrieve_births_month"
     else
-      url = "http://#{(@settings["dde_username"])}:#{(@settings["dde_password"])}@#{(@settings["dde_server"])}/retrieve_births"
+      url = "http://#{(@settings["dde_username"])}:#{(@settings["dde_password"])}@#{(@settings["dde_server"])}/retrieve_births_month"
     end
 
-		new_births = JSON.parse(RestClient.post(url, {"date" => Date.today}))
+		new_births = JSON.parse(RestClient.post(url, {"start_date" => (Date.today - 1.month),
+                                                  "end_date" => Date.today}))
 
     new_births.each do |birth|
+      next if birth['created_at'].to_date != Date.today
       district = birth['addresses']['current_district'].downcase.gsub(/\s+/, '_').downcase
       ta = birth['addresses']['current_ta'].downcase.gsub(/\s+/, '_').downcase
       village = birth['addresses']['current_village'].downcase.gsub(/\s+/, '_').downcase
@@ -46,7 +50,51 @@ class ApiController < ApplicationController
       results['births']["#{site}"] = 0 if results['births']["#{site}"].blank?
       results['births']["#{site}"] += 1
     end
-		####################### End puling new births ###################
+		####################### End puling new deaths ###################
+
+    #######################  Pull new deaths #######################
+    if secure?
+      url = "https://#{(@settings["dde_username"])}:#{(@settings["dde_password"])}@#{(@settings["dde_server"])}/retrieve_deaths"
+    else
+      url = "http://#{(@settings["dde_username"])}:#{(@settings["dde_password"])}@#{(@settings["dde_server"])}/retrieve_deaths"
+    end
+
+    new_deaths = JSON.parse(RestClient.post(url, {"start_date" => (Date.today - 1.month),
+                                                  "end_date" => Date.today}))
+    new_deaths.each do |death|
+      district = death['addresses']['current_district'].downcase.gsub(/\s+/, '_').downcase
+      ta = death['addresses']['current_ta'].downcase.gsub(/\s+/, '_').downcase
+      village = death['addresses']['current_village'].downcase.gsub(/\s+/, '_').downcase
+
+      site = "#{district}__#{ta}__#{village}"
+      results['deaths']["#{site}"] = 0 if results['deaths']["#{site}"].blank?
+      results['deaths']["#{site}"] += 1
+    end
+    ####################### End puling new deaths ###################
+
+    #######################  Pull Village Counts #######################
+    if secure?
+      url = "https://#{(@settings["dde_username"])}:#{(@settings["dde_password"])}@#{(@settings["dde_server"])}/village_counts"
+    else
+      url = "http://#{(@settings["dde_username"])}:#{(@settings["dde_password"])}@#{(@settings["dde_server"])}/village_counts"
+    end
+
+    counts = JSON.parse(RestClient.post(url, {"village" => Date.today}))
+
+    counts.each do |district, location|
+      location.each do |ta, village|
+        village.each do |vg, total|
+          district = district.downcase.gsub(/\s+/, '_').downcase
+          ta = ta.downcase.gsub(/\s+/, '_').downcase
+          vg = vg.downcase.gsub(/\s+/, '_').downcase
+          site = "#{district}__#{ta}__#{vg}"
+          results['counts']["#{site}"] = {} if results['counts']["#{site}"].blank?
+          results['counts']["#{site}"] = total
+        end
+      end
+    end
+    ####################### End Counts ##################
+
   	render :text => results.to_json
 
 	end
