@@ -37,9 +37,8 @@ class ApiController < ApplicationController
       url = "http://#{(@settings["dde_username"])}:#{(@settings["dde_password"])}@#{(@settings["dde_server"])}/retrieve_births_month"
     end
 
-		new_births = JSON.parse(RestClient.post(url, {"start_date" => (Date.today - 1.month),
-                                                  "end_date" => Date.today}))
-
+		new_births = JSON.parse(RestClient.post(url, {"start_date" => (Date.today - 1.month).to_s,
+                                                  "end_date" => Date.today.to_s}))
     new_births.each do |birth|
       next if birth['created_at'].to_date != Date.today
       district = birth['addresses']['current_district'].downcase.gsub(/\s+/, '_').downcase
@@ -59,8 +58,8 @@ class ApiController < ApplicationController
       url = "http://#{(@settings["dde_username"])}:#{(@settings["dde_password"])}@#{(@settings["dde_server"])}/retrieve_deaths"
     end
 
-    new_deaths = JSON.parse(RestClient.post(url, {"start_date" => (Date.today - 1.month),
-                                                  "end_date" => Date.today}))
+    new_deaths = JSON.parse(RestClient.post(url, {"start_date" => (Date.today - 1.month).to_s,
+                                                  "end_date" => Date.today.to_s}))
     new_deaths.each do |death|
       district = death['addresses']['current_district'].downcase.gsub(/\s+/, '_').downcase
       ta = death['addresses']['current_ta'].downcase.gsub(/\s+/, '_').downcase
