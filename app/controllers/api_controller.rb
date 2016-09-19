@@ -78,19 +78,11 @@ class ApiController < ApplicationController
       url = "http://#{(@settings["dde_username"])}:#{(@settings["dde_password"])}@#{(@settings["dde_server"])}/village_counts"
     end
 
-    counts = JSON.parse(RestClient.post(url, {"village" => Date.today}))
+    villages = Dir.entries("log/lastseen").select {|f| !File.directory? f}
 
-    counts.each do |district, location|
-      location.each do |ta, village|
-        village.each do |vg, total|
-          district = district.downcase.gsub(/\s+/, '_').downcase
-          ta = ta.downcase.gsub(/\s+/, '_').downcase
-          vg = vg.downcase.gsub(/\s+/, '_').downcase
-          site = "#{district}__#{ta}__#{vg}"
-          results['counts']["#{site}"] = {} if results['counts']["#{site}"].blank?
-          results['counts']["#{site}"] = total
-        end
-      end
+    counts = JSON.parse(RestClient.post(url, {"villages" => villages})) rescue {}
+    counts.each do |site, count|
+      results['counts']["#{site}"] = count
     end
     ####################### End Counts ##################
 
