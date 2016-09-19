@@ -43,15 +43,15 @@ class ApplicationController < ActionController::Base
       FileUtils.touch "#{Rails.root}/log/lastseen/#{site}"
 
       #Hack to get remote mac address
-      arptable = `arp -a`
-      entries = arptable.split("\n")
-      ipmap = {}
-      entries.each do |e|
-        ent = e.split(" ")
-        ipmap["#{ent[1].gsub(/\(|\)/, "")}"] = ent[3]
-      end
+      #arptable = `arp -a`
+      #entries = arptable.split("\n")
+      #ipmap = {}
+      #entries.each do |e|
+        #ent = e.split(" ")
+        #ipmap["#{ent[1].gsub(/\(|\)/, "")}"] = ent[3]
+     # end
 
-      mac_adr = ipmap["#{request.ip}"]
+      mac_adr = request.remote_ip #ipmap["#{request.ip}"]
       if mac_adr.present?
         FileUtils.touch "../lastseennews/#{mac_adr}@#{site}"
       end
