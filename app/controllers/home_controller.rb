@@ -6,26 +6,29 @@ class HomeController < ApplicationController
     @settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] rescue {}
 
     if secure?
-      url = "https://#{(@settings["dde_username"])}:#{(@settings["dde_password"])}@#{(@settings["dde_server"])}/retrieve_births"
+      url = "https://#{(@settings["dde_username"])}:#{(@settings["dde_password"])}@#{(@settings["dde_server"])}/retrieve_births_month"
     else
-      url = "http://#{(@settings["dde_username"])}:#{(@settings["dde_password"])}@#{(@settings["dde_server"])}/retrieve_births"
+      url = "http://#{(@settings["dde_username"])}:#{(@settings["dde_password"])}@#{(@settings["dde_server"])}/retrieve_births_month"
     end
 
-    birthdate = Date.today
-    @new_births = JSON.parse(RestClient.post(url, {"date" => birthdate}))
-    session[:new_births] = @new_births.collect{|r| r['_id']}
+    @new_births = JSON.parse(RestClient.post(url, {"start_date" => (Date.today - 30.days).to_s,
+                                                   "end_date" => Date.today.to_s})).collect{|r|
+      r['_id'] if r['created_at'].to_date == Date.today
+    }.compact
+
+    session[:new_births] = @new_births.count
     render :layout => false
   end
 
   def show_new_births
     if secure?
-      url = "https://#{(@settings["dde_username"])}:#{(@settings["dde_password"])}@#{(@settings["dde_server"])}/retrieve_births"
+      url = "https://#{(@settings["dde_username"])}:#{(@settings["dde_password"])}@#{(@settings["dde_server"])}/retrieve_births_month"
     else
-      url = "http://#{(@settings["dde_username"])}:#{(@settings["dde_password"])}@#{(@settings["dde_server"])}/retrieve_births"
+      url = "http://#{(@settings["dde_username"])}:#{(@settings["dde_password"])}@#{(@settings["dde_server"])}/retrieve_births_month"
     end
 
-    birthdate = Date.today
-    @new_births = JSON.parse(RestClient.post(url, {"date" => birthdate}))
+    @new_births = JSON.parse(RestClient.post(url, {"start_date" => (Date.today - 30.days).to_s,
+                                                   "end_date" => Date.today.to_s}))
   end
   
   def secure?
