@@ -80,7 +80,8 @@ class ApiController < ApplicationController
 
     villages = Dir.entries("log/lastseen").select {|f| !File.directory? f}
 
-    counts = JSON.parse(RestClient.post(url, {"villages" => villages})) rescue {}
+    counts = JSON.parse(RestClient.post(url, {"villages" => villages}))
+
     counts.each do |site, count|
       results['counts']["#{site}"] = count
     end
