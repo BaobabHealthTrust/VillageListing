@@ -9,6 +9,7 @@ require "rails/test_unit/railtie"
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
+Pushpad.auth_token = '5374d7dfeffa2eb49965624ba7596a09'
 
 module VillageListing
   class Application < Rails::Application
