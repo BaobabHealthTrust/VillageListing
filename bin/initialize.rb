@@ -23,7 +23,8 @@ def start
     Dir.mkdir "../lastseennews"
   end
 
-  villages.each do |village|
+  villages.each_with_index do |village, i|
+    next if i > 45
     district = district.downcase.gsub(/\s+/, '_').downcase
     ta = ta.downcase.gsub(/\s+/, '_').downcase
     village = village.downcase.gsub(/\s+/, '_').downcase
