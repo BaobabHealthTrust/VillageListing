@@ -5,7 +5,7 @@ class PeopleController < ApplicationController
   end
 
   def show
-
+    session.delete(:secondary_person)
     redirect_to ("/") and return if session[:dde_object].blank?
 
     @patient_bean = formatted_dde_object
@@ -18,6 +18,14 @@ class PeopleController < ApplicationController
     patient_bean = formatted_dde_object
     national_id = patient_bean.national_id.downcase.gsub("-", "_")
     print_string = patient_national_id_label(patient_bean)
+    send_data(print_string,:type=>"application/label; charset=utf-8", :stream=> false,
+      :filename=>"#{national_id}.lbl", :disposition => "inline")
+  end
+
+  def national_id_label_relation
+    patient_bean = formatted_dde_object
+    national_id = patient_bean.national_id.downcase.gsub("-", "_")
+    print_string = patient_national_id_label_relation(patient_bean)
     send_data(print_string,:type=>"application/label; charset=utf-8", :stream=> false,
       :filename=>"#{national_id}.lbl", :disposition => "inline")
   end
@@ -55,6 +63,21 @@ A35,122,0,2,2,2,N,"#{patient_bean.home_ta}, #{patient_bean.home_village}"
 P1)
   return print_string
     
+  end
+
+def patient_national_id_label_relation(patient_bean)
+    print_string = %Q(
+N
+q812
+Q305,026
+ZT
+B35,170,0,1,5,15,100,N,"#{patient_bean.national_id}"
+A35,30,0,2,2,2,N,"#{patient_bean.name}"
+A35,76,0,2,2,2,N,"#{patient_bean.national_id} #{patient_bean.birthdate}(#{patient_bean.sex})"
+A35,122,0,2,2,2,N,"#{patient_bean.home_ta}, #{patient_bean.home_village}"
+P1)
+  return print_string
+
   end
 
   def formatted_dde_object

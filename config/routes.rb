@@ -205,6 +205,60 @@ Rails.application.routes.draw do
   get'/national_id_label' => 'people#national_id_label'
   get'/people' => 'people#show'
   get'/demographics' => 'people#demographics'
+
+  post '/dde/send_to_dde_relation'
+  post '/dde/process_result_relation'
+
+  get '/dde/create_relation'
+  post '/dde/create_relation'
+
+  get '/dde/select_relationship_type'
+  post '/dde/select_relationship_type'
+  get '/select_relationship_type' => 'dde#select_relationship_type'
+  get'/retrieve_relations' => 'dde#retrieve_relations'
+
+  #national_id_label_relation
+  get '/national_id_label_relation' => 'dde#national_id_label_relation'
+  post '/national_id_label_relation' => 'dde#national_id_label_relation'
+
+
+  #process_confirmation_relation
+  get '/process_confirmation_relation' => 'dde#process_confirmation_relation'
+  get '/dde/process_confirmation_relation'
+  post '/process_confirmation_relation' => 'dde#process_confirmation_relation'
+  post '/dde/process_confirmation_relation'
+
+  #search_relation_menu
+  get '/search_relation_menu' => 'dde#search_relation_menu'
+  post '/search_relation_menu' => 'dde#search_relation_menu'
+
+  #select_relation_search_type
+  get '/dde/select_relation_search_type'
+  post '/dde/select_relation_search_type'
+
+  #search_relation_by_national_id
+  get '/search_relation_by_national_id' => 'dde#search_relation_by_national_id'
+  post '/search_relation_by_national_id' => 'dde#search_relation_by_national_id'
+
+  #process_scan_data_relation
+  get '/dde/process_scan_data_relation'
+  post '/dde/process_scan_data_relation'
+
+  #retrieve_parents_details
+  get '/retrieve_parents_details' => 'dde#retrieve_parents_details'
+  post '/retrieve_parents_details' => 'dde#retrieve_parents_details'
+
+  #show_new_births
+  get '/show_new_births' => 'home#show_new_births'
+  post '/show_new_births' => 'home#show_new_births'
   # ------------------------------- END OF INSTALLATION GENERATED ----------------------------------------------
+
+
+	#APIs 
+
+  get "/api/ping"
+  get "/api/dashboard"
+
+	#End of APIs
   root 'home#index'
 end

@@ -2,55 +2,97 @@
 
 <style>
 
-body {
-  -webkit-user-select: none;  /* Chrome all / Safari all */
-  -moz-user-select: none;     /* Firefox all */
-  -ms-user-select: none;      /* IE 10+ */
-  user-select: none;          /* Likely future */
-}
+  body {
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;          /* Likely future */
+  }
 
-img {
-  user-drag: none;
-  user-select: none;
-  -moz-user-select: none;
-  -webkit-user-drag: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  pointer-events: none;
-}
+  img {
+    user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    pointer-events: none;
+  }
 
-.main-page-container  {
-  display: table;
-  width: 99.7%;
-  padding: 5px 1px 0px 1px;
-}
+  .main-page-container  {
+    display: table;
+    width: 99.7%;
+    padding: 5px 1px 0px 1px;
+  }
 
-.main-page-container-rows  {
-  display: table-row;
-}
+  .main-page-container-rows  {
+    display: table-row;
+  }
 
-.header .cells {
-  display: table-cell;
-}
+  .header .cells {
+    display: table-cell;
+  }
 
 
-/* ...................................... */
+  /* ...................................... */
 
-#scan {
-  background-color: white;
-  border-style: solid;
-  border-width: 1px;
-  font-size: 80px;
-  margin-bottom: 6px;
-  width: 44%;
-}
+  #scan {
+    background-color: white;
+    border-style: solid;
+    border-width: 1px;
+    font-size: 80px;
+    margin-bottom: 6px;
+    width: 82%;
+  }
 
-.header .icons {
-  width: 100px;
-  height: 100px;
-}
+  .header .icons {
+    width: 100px;
+    height: 100px;
+  }
 
-/* ...................................... */
+  /* ...................................... */
+
+  .baby_count{
+    color: orange;
+    font-weight: bold;
+    font-size: 14pt;
+    font-style: italic;
+    text-align: center;
+    border-radius: 50%;
+    width: 231px;
+    height: 70px;
+    background: black;
+  }
+
+  .baby_count span{
+    top: 9px;
+    position: relative;
+  }
+
+  .w3-green, .w3-hover-green:hover {
+    background-color: #4caf50 !important;
+    color: #fff !important;
+  }
+  .w3-badge {
+    border-radius: 50%;
+    width: 75px;
+    font-size: 14pt;
+    cursor: pointer;
+  }
+  
+  .w3-badge, .w3-tag, .w3-sign {
+    background-color: #000;
+    color: #fff;
+    display: inline-block;
+    padding-left: 8px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-right: 8px;
+    text-align: center;
+  }
+
+  table {border-collapse: collapse;}
+  td    {padding: 0px;}
 </style>
 
 
@@ -59,70 +101,105 @@ img {
   <div class="cells" style="width:5.5%;">
     <span class="icons small-icons">
       <%=image_tag("icons/barcode.png", class: 'icons')%>
-    </span>
-  </div>
-  <div class="cells" style="width:50%; border-style: solid; border-width: 0px;">
-    <input type="text" name="barcode" id="scan" />
-  </div>
-  <div class="cells" style="width:29.5%; border-style: solid; border-width: 0px;">
-    <table style="width: 100%;">
-      <tr>
-        <th>Dzina:</th>
-        <td><%=session[:user]['first_name']%>&nbsp;<%=session[:user]['last_name']%></td>
-      </tr>
-      <tr>
-        <th>Boma:</th>
-        <td><%=session[:user]['district']%></td>
-      </tr>
-      <tr>
-        <th>TA:</th>
-        <td><%=session[:user]['ta']%></td>
-      </tr>
-      <tr>
-        <th>Mudzi:</th>
-        <td><%=session[:user]['village']%></td>
-      </tr>
-    </table>
-  </div>
-  <div class="cells" style="border-style: solid; text-align: center; border-width: 1px; width: 10%;">
-    <span class="icons small-icons">
-      <%=image_tag("icons/village.png", class: 'icons')%>
-    </span>
-  </div>
-</div>
+      </span>
+    </div>
+    <div class="cells" style="width:28%; border-style: solid; border-width: 0px;">
+      <input type="text" name="barcode" id="scan" />
+    </div>
+    <div class="cells" style="width:29.5%; border: 1px solid lightgray; border-width: 1px; border-spacing: 0px; border-radius: 3%;">
+      <table style="width: 101%;">
+        <tr>
+          <th >Dzina:</th>
+          <td ><%=session[:user]['first_name']%>&nbsp;<%=session[:user]['last_name']%></td>
+        </tr>
+        <tr>
+          <th>Boma:</th>
+          <td><%=session[:user]['district']%></td>
+        </tr>
+        <tr>
+          <th>TA:</th>
+          <td><%=session[:user]['ta']%></td>
+        </tr>
+        <tr>
+          <th style="border: none;">Mudzi:</th>
+          <td style="border: none;"><%=session[:user]['village']%></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="cells" style="padding-left: 20px; ">
+      <p style="font-weight: bold;">New Births <span onclick="window.location='/show_new_births'" class="w3-badge w3-green bounce"><%= @new_births.length %></span></p>
+    </div>
+
+    <div class="cells" style="border-style: none; text-align: center; border-width: 1px; width: 10%; float: right; padding-right: 100px;">
+      <span class="icons small-icons">
+        <%=image_tag("icons/village.png", class: 'icons')%>
+        </span>
+      </div>
+    </div>
 
 
 
 
-<script language="javascript">
-    doListSuggestions = false; //speeds up keyboard response
+    <script language="javascript">
+      doListSuggestions = false; //speeds up keyboard response
 
-    var setFocusTimeout = 1000;
-    var checkForBarcodeTimeout = 1500;
+      var setFocusTimeout = 1000;
+      var checkForBarcodeTimeout = 1500;
    
-    function loadBarcodePage() {
-       focusForBarcodeInput();
-       moveNext();
-    }
-
-    function focusForBarcodeInput(){
-      var barcode = document.getElementById("scan");
-      if (barcode) {
-         barcode.focus();
-         window.setTimeout("focusForBarcodeInput()", setFocusTimeout);
+      function loadBarcodePage() {
+        focusForBarcodeInput();
+        moveNext();
       }
-    }
+
+      function focusForBarcodeInput(){
+        var barcode = document.getElementById("scan");
+        if (barcode) {
+          barcode.focus();
+          window.setTimeout("focusForBarcodeInput()", setFocusTimeout);
+        }
+      }
     
    
-    function moveNext(){
-      usertext=document.getElementById("scan");
-      if (usertext.value.match(/.+\$$/i) != null){
-        usertext.value=usertext.value.substring(0,usertext.value.length -1);
-        ajaxRequest(usertext.value)
+      function moveNext(){
+        usertext=document.getElementById("scan");
+        if (usertext.value.match(/.+\$$/i) != null){
+          usertext.value=usertext.value.substring(0,usertext.value.length -1);
+          ajaxRequest(usertext.value)
+        }
+        window.setTimeout("moveNext()", checkForBarcodeTimeout);
       }
-       window.setTimeout("moveNext()", checkForBarcodeTimeout);
-    }   
  
-    window.addEventListener("load", loadBarcodePage, false);
-  </script>
+      window.addEventListener("load", loadBarcodePage, false);
+
+      var currentopacity = 1;
+      var min_opacity_reached = false
+      var max_opacity_reached = true;
+
+      function changeOpacity(){
+        badge = document.getElementsByClassName("w3-badge")[0];
+        if (min_opacity_reached){
+          currentopacity+=0.1
+        }
+
+        if (max_opacity_reached){
+          currentopacity-=0.1
+        }
+
+        if (currentopacity <= 0){
+          min_opacity_reached = true;
+          max_opacity_reached = false;
+        }
+
+        if (currentopacity >= 1){
+          max_opacity_reached = true
+          min_opacity_reached = false
+        }
+        
+        badge.style.opacity = currentopacity;
+
+      }
+      
+      window.setInterval("changeOpacity();", 500)
+    </script>
 
