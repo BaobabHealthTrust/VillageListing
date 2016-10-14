@@ -237,7 +237,35 @@ class ReportController < ApplicationController
 
     render :layout => false
   end
-  
+ 
+  def tornado
+    @report_title = "Chiwelengero cha Akazi ndi Amuna"
+
+    if params[:run] == 'true'
+      server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
+      uri = "http://#{server_address}/population_stats.json/"
+      paramz = {district: session[:user]['district'], stat: 'ta_population'}
+      data = RestClient.post(uri,paramz)
+
+      unless data.blank?
+        @stats = {}
+        data = JSON.parse(data)
+        (data).each do |person|
+          age_group = get_tornado_age_group(person)
+          @stats[age_group[0]][age_group[1]] = 0 if @stats[age_group[0]].blank? 
+          @stats[age_group[0]][age_group[1]] += 1
+        end
+      else
+        @stats = {}
+      end
+    else
+      @report_generation_path = "/get_tornado_data/true"
+      @stats = {}
+    end
+
+    render :layout => false
+  end
+   
   def village_selector
     ta_name = params[:ta_name]
     paramz = {ta_name: params[:ta_name], user: session[:user] }
@@ -307,5 +335,61 @@ class ReportController < ApplicationController
         today.month < birth_date.month && person['created_at'].to_date.year == today.year) ? 1 : 0
   end
 
+  def get_tornado_age_group(gender, birthdate)
+    categories = ['0-4', '5-9', '10-14', '15-19',
+            '20-24', '25-29', '30-34', '35-39', '40-44',
+            '45-49', '50-54', '55-59', '60-64', '65-69',
+            '70-74', '75-79', '80-84', '85 + ']
+
+    
+    return 'Unknown' if person['gender'].blank? || person['birthdate'].blank?
+    gender = person['gender']
+    age = get_age(person)
+    if age <= 4
+      cat = categories[0]
+    elsif age > 4 and age <= 9
+      cat = categories[1]
+    elsif age > 9 and age <= 14
+      cat = categories[2]
+    elsif age > 14 and age <= 19
+      cat = categories[3]
+    elsif age > 19 and age <= 24
+      cat = categories[4]
+    elsif age > 24 and age <= 29
+      cat = categories[5]
+    elsif age > 29 and age <= 34
+      cat = categories[6]
+    elsif age > 34 and age <= 39
+      cat = categories[7]
+    elsif age > 39 and age <= 44
+      cat = categories[8]
+    elsif age > 44 and age <= 49
+      cat = categories[9]
+    elsif age > 49 and age <= 54
+      cat = categories[10]
+    elsif age > 54 and age <= 59
+      cat = categories[11]
+    elsif age > 59 and age <= 64
+      cat = categories[12]
+    elsif age > 64 and age <= 69
+      cat = categories[13]
+    elsif age > 69 and age <= 74
+      cat = categories[14]
+    elsif age > 74 and age <= 79
+      cat = categories[15]
+    elsif age > 79 and age <= 84
+      cat = categories[16]
+    elsif age >=  85
+      cat = categories[17]
+    end 
+      
+
+    if gender.match(/F/i)
+      return ['Female', cat]
+    else
+      return ['Male', cat]
+    end
+
+  end
 
 end

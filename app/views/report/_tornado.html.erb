@@ -1,0 +1,123 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Highcharts Example</title>
+
+    <%=javascript_include_tag "highCharts/jquery.min"%>                                         
+		<style type="text/css">
+${demo.css}
+		</style>
+		<script type="text/javascript">
+    var males  = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+    var females  = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+
+$(function () {
+    <%(@stats || {}).each do |gender, age_group|
+      if gender == 'Female'
+        if age_group == '0-4'
+        elsif age_group == '5-9'
+        elsif age_group == '10-14'
+        elsif age_group == '15-19'
+        elsif age_group == '20-24'
+        elsif age_group == '25-29'
+        elsif age_group == '30-34'
+        elsif age_group == '35-39'
+        elsif age_group == '40-44'
+        elsif age_group == '45-49'
+        elsif age_group == '50-54'
+        elsif age_group == '55-59'
+        elsif age_group == '60-64'
+        elsif age_group == '65-69'
+        elsif age_group == '70-74'
+        elsif age_group == '75-79'
+        elsif age_group == '80-84'
+        elsif age_group == '85 + '
+        end
+      else
+      end
+    %>
+    
+    <%end%>
+
+
+
+    var categories = ['0-4', '5-9', '10-14', '15-19',
+            '20-24', '25-29', '30-34', '35-39', '40-44',
+            '45-49', '50-54', '55-59', '60-64', '65-69',
+            '70-74', '75-79', '80-84', '85 + '];
+    $(document).ready(function () {
+        $('#container').highcharts({
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: ''
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: [{
+                categories: categories,
+                reversed: false,
+                labels: {
+                    step: 1
+                }
+            }, { // mirror axis on right side
+                opposite: true,
+                reversed: false,
+                categories: categories,
+                linkedTo: 0,
+                labels: {
+                    step: 1
+                }
+            }],
+            yAxis: {
+                title: {
+                    text: null
+                },
+                labels: {
+                    format: '{value:,.0f}'
+                }
+            },
+            credits: {
+              enabled: false
+            },
+            exporting: {
+              enabled: false,
+            },
+            plotOptions: {
+                series: {
+                    stacking: 'normal'
+                }
+            },
+
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.series.name + ', age ' + this.point.category + '</b><br/>' +
+                        'Population: ' + Highcharts.numberFormat(Math.abs(this.point.y), 0);
+                }
+            },
+
+            series: [{
+                name: 'Amuna',
+                data: males
+            }, {
+                name: 'Akazi',
+                data: females 
+            }]
+        });
+    });
+
+});
+		</script>
+	</head>
+	<body>
+    
+<%=javascript_include_tag "highCharts/highcharts"%>                                         
+<%=javascript_include_tag "highCharts/exporting"%>                                         
+
+<div id="container" style="width: 100%; height: 70%; margin: 0 auto"></div>
+
+	</body>
+</html>
