@@ -244,7 +244,7 @@ class ReportController < ApplicationController
     if params[:run] == 'true'
       server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
       uri = "http://#{server_address}/population_stats.json/"
-      paramz = {district: session[:user]['district'], stat: 'ta_population'}
+      paramz = {district: session[:user]['district'], ta: session[:user]['ta'], stat: 'ta_population_tabulation'}
       data = RestClient.post(uri,paramz)
 
       unless data.blank?
@@ -252,7 +252,8 @@ class ReportController < ApplicationController
         data = JSON.parse(data)
         (data).each do |person|
           age_group = get_tornado_age_group(person)
-          @stats[age_group[0]][age_group[1]] = 0 if @stats[age_group[0]].blank? 
+          @stats[age_group[0]] = {} if @stats[age_group[0]].blank? 
+          @stats[age_group[0]][age_group[1]] = 0 if @stats[age_group[0]][age_group[1]].blank? 
           @stats[age_group[0]][age_group[1]] += 1
         end
       else
@@ -335,7 +336,7 @@ class ReportController < ApplicationController
         today.month < birth_date.month && person['created_at'].to_date.year == today.year) ? 1 : 0
   end
 
-  def get_tornado_age_group(gender, birthdate)
+  def get_tornado_age_group(person)
     categories = ['0-4', '5-9', '10-14', '15-19',
             '20-24', '25-29', '30-34', '35-39', '40-44',
             '45-49', '50-54', '55-59', '60-64', '65-69',
