@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  
+
   ##################### people ######################
   get 'people/new'
   get 'people/search_results'
@@ -53,6 +53,9 @@ Rails.application.routes.draw do
   post '/report/village_selection_per_ta_data'
   get '/report/village_selector'
   post '/report/village_selector'
+  
+  get '/tornado' => 'report#tornado'
+  get 'get_tornado_data/:run' => 'report#tornado'
   ##################### report end ######################
 
 

@@ -53,7 +53,7 @@ img {
 }
 
 .btncells {
-  width: 25%;
+  width: 20%;
   text-align: center;
 }
 
@@ -137,7 +137,8 @@ img {
   <!-- loop -->
   <% if @role.match(/MFUMU YAYIKULU/i) %>
   <div class="cells btncells">
-      <div class="divbtn" style="background-color:#ff8f1b ;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/village_selection/ta_population_tabulation'" >
+      <div class="divbtn" style="background-color:#ff8f1b ;border: 1px solid #2e6da4; width: 95%;" 
+          onclick="document.location='/village_selection/ta_population_tabulation'" >
         <span class="icons">
           <%=image_tag("icons/ta_population-tabulation.png", class: 'icons')%>
           <p>Chiwelengero Cha TA</p>
@@ -150,6 +151,27 @@ img {
         <span class="icons">
           <%=image_tag("icons/ta_population-tabulation.png", class: 'icons')%>
           <p>Chiwelengero Cha TA</p>
+        </span>
+    </div>
+  </div>
+  <% end %>
+  	
+  <% if @role.match(/MFUMU YAYIKULU/i) %>
+      <div class="cells btncells">
+        <div class="divbtn" style="background-color:white ;border: 1px solid #2e6da4; width: 95%;" 
+            onclick="document.location='/tornado'" >
+          <span class="icons">
+            <%=image_tag("icons/tornado.png", class: 'icons')%>
+            <p>Chiwelengero Cha TA (Chaka chobadwa)</p>
+          </span>
+      </div>
+    </div>
+  <% else %>
+  	<div class="cells btncells">
+      <div class="divbtn" style="background-color:gainsboro ;border: 1px solid #2e6da4; width: 95%; color: darkgrey;" >
+        <span class="icons">
+          <%=image_tag("icons/tornado.png", class: 'icons')%>
+          <p>Chiwelengero Cha TA (Chaka chobadwa)</p>
         </span>
     </div>
   </div>
@@ -216,8 +238,8 @@ img {
   <!-- endloop -->
 
   <!-- loop -->
-  <!--div class="cells btncells">
-  </div-->
+  <div class="cells btncells">
+  </div>
   <!-- endloop -->
 
   <!-- loop -->
