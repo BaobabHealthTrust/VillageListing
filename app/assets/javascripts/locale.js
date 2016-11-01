@@ -7,7 +7,7 @@ var tstLocaleWords = {
 	"dzina la bambo": "Last Name",
 	"mwamuna/mkazi": "Gender",
 	"mayina ofanan sanapezeke?": "Select Patient or Create New Patient",
-	"munthu watsopano ": "Create New Patient",
+	"munthu watsopano": "Create New Patient",
 	"maliza": "Finish",
 	"mkazi": "Female",
 	"mwamuna": "Male",
@@ -35,5 +35,13 @@ var tstLocaleWords = {
 	"mayi": "Mother",
 	"bambo": "Father",
 	"mwana": "Child",
-	"sankhani ubale": "Type of Relationship"
+	"sankhani ubale": "Type of Relationship",
+	"dzina lina": "Middle Name",
+	"chaka chobadwa": "Year of Birth",
+	"mwezi wobadwa": "Month of Birth",
+	"tsiku lakubadwa": "Day of Birth",
+	"chigawo chochokera": "Region of Origin",
+	"boma lanu": "Home District",
+	"mfumu yayikulu yakwanu": "Home T/A",
+	"mudzi wakwanu": "Home Village"
 };

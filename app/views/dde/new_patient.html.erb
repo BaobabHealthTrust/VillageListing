@@ -164,7 +164,11 @@
   var skipped = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 <% address = "http://#{request.host_with_port}/process_result"%>
-  var json = "{national_id: '<%= @id %>', application: '<%= @settings["application_name"] %>', site_code: '<%= @settings["site_code"] %>', return_path: '<%= address %>', place_of_birth: '', names: {family_name: '', given_name: '', middle_name: '', maiden_name: '' }, gender: '<%= params["gender"] %>', person_attributes: {country_of_residence: '', citizenship: '', occupation: '', home_phone_number: '', cell_phone_number: '', office_phone_number: '', race: ''}, birthdate: '', patient: {identifiers: []}, birthdate_estimated: '', addresses: {current_residence: '', current_village: '', current_ta: '', current_district: '', home_village: '', home_ta: '', home_district: '', landmark: ''}}"
+           /**
+            * Add the below in the below json in between return_path and names
+            * place_of_birth: ''
+            * */
+  var json = "{national_id: '<%= @id %>', application: '<%= @settings["application_name"] %>', site_code: '<%= @settings["site_code"] %>', return_path: '<%= address %>', names: {family_name: '', given_name: '', middle_name: '', maiden_name: '' }, gender: '<%= params["gender"] %>', person_attributes: {country_of_residence: '', citizenship: '', occupation: '', home_phone_number: '', cell_phone_number: '', office_phone_number: '', race: ''}, birthdate: '', patient: {identifiers: []}, birthdate_estimated: '', addresses: {current_residence: '', current_village: '', current_ta: '', current_district: '', home_village: '', home_ta: '', home_district: '', landmark: ''}}"
 
   /*var json = <%= {
   "national_id" => nil,
@@ -208,8 +212,7 @@
   json = JSON.parse(JSON.stringify(eval("(" + json + ")")))
 
   function sendToDDE() {
-    console.log("hello")
-    json.place_of_birth = __$("place_of_birth").value;
+    //json.place_of_birth = __$("place_of_birth").value;
     json.names.given_name = __$("first_name").value;
     json.names.family_name = __$("last_name").value;
     json.names.middle_name = (__$("middle_name") ? __$("middle_name").value : null);
@@ -574,7 +577,7 @@
     :absoluteMax => 120,
     :helptext => "Dzaka"} %>
 
-<%= select_tag "person[place_of_birth]", options_for_select([['Ku Chipatala', 'Hospital'], ['Ku Nyumba', 'Home']]),
+<%#= select_tag "person[place_of_birth]", options_for_select([['Ku Chipatala', 'Hospital'], ['Ku Nyumba', 'Home']]),
     {:id => "place_of_birth",
     :helptext => "Malo Obadwira"} %>
 
