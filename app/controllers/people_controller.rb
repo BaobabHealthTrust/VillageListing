@@ -60,7 +60,7 @@ B35,170,0,1,5,15,100,N,"#{patient_bean.national_id}"
 A35,30,0,2,2,2,N,"#{patient_bean.name}"
 A35,76,0,2,2,2,N,"#{patient_bean.national_id} #{patient_bean.birthdate}(#{patient_bean.sex})"
 A35,122,0,2,2,2,N,"#{patient_bean.home_ta}, #{patient_bean.home_village}"
-P1)
+P1\n)
   return print_string
     
   end
@@ -75,7 +75,7 @@ B35,170,0,1,5,15,100,N,"#{patient_bean.national_id}"
 A35,30,0,2,2,2,N,"#{patient_bean.name}"
 A35,76,0,2,2,2,N,"#{patient_bean.national_id} #{patient_bean.birthdate}(#{patient_bean.sex})"
 A35,122,0,2,2,2,N,"#{patient_bean.home_ta}, #{patient_bean.home_village}"
-P1)
+P1\n)
   return print_string
 
   end
