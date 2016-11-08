@@ -35,5 +35,17 @@ var tstLocaleWords = {
 	"mayi": "Mother",
 	"bambo": "Father",
 	"mwana": "Child",
-	"sankhani ubale": "Type of Relationship"
+	"sankhani ubale": "Type of Relationship",
+	"dzina lina": "Middle Name",
+	"chaka chobadwa": "Year of Birth",
+	"mwezi wobadwa": "Month of Birth",
+	"tsiku lakubadwa": "Day of Birth",
+	"malo obadwira": "Place of Birth",
+	"chigawo chochokera": "Region of Origin",
+	"boma lanu": "Home District",
+	"mfumu yayikulu yakwanu": "Home T/A",
+	"mudzi wakwanu": "Home Village",
+	"lembani munthu watsopano": "Create New Patient",
+  	"sakhani muthu": "Select Patient",
+	"lekani": "Cancel"
 };
