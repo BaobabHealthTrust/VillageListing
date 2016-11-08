@@ -40,8 +40,12 @@ var tstLocaleWords = {
 	"chaka chobadwa": "Year of Birth",
 	"mwezi wobadwa": "Month of Birth",
 	"tsiku lakubadwa": "Day of Birth",
+	"malo obadwira": "Place of Birth",
 	"chigawo chochokera": "Region of Origin",
 	"boma lanu": "Home District",
 	"mfumu yayikulu yakwanu": "Home T/A",
-	"mudzi wakwanu": "Home Village"
+	"mudzi wakwanu": "Home Village",
+	"lembani munthu watsopano": "Create New Patient",
+  	"sakhani muthu": "Select Patient",
+	"lekani": "Cancel"
 };
