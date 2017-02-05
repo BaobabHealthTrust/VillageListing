@@ -55,7 +55,9 @@ Rails.application.routes.draw do
   post '/report/village_selector'
   
   get '/tornado' => 'report#tornado'
+  post '/tornado' => 'report#tornado'
   get 'get_tornado_data/:run' => 'report#tornado'
+  post 'get_tornado_data/:run' => 'report#tornado'
   ##################### report end ######################
 
 

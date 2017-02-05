@@ -186,6 +186,10 @@ class ReportController < ApplicationController
   end
 
   def village_selection
+    if params[:extras] == 'tornado'
+      params[:report_path] = 'get_tornado_data/true'
+    end
+    
     paramz = {ta_name: session[:user]['ta'], user: session[:user] }
     server_address = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
     uri = "http://#{server_address}/demographics/villages.json/"
@@ -238,8 +242,12 @@ class ReportController < ApplicationController
   end
  
   def tornado
+    @selected_villages = []
+    params[:ta]['villages'].each do |village|
+      @selected_villages << village.squish.capitalize
+    end
     @report_title = "Chiwelengero cha Akazi ndi Amuna"
-
+    
     if params[:run] == 'true'
       server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
       uri = "http://#{server_address}/population_stats.json/"
@@ -250,6 +258,8 @@ class ReportController < ApplicationController
         @stats = {}
         data = JSON.parse(data)
         (data).each do |person|
+          village_name = person['addresses']['current_village']
+          next unless @selected_villages.include?(village_name.squish.capitalize)
           age_group = get_tornado_age_group(person)
           @stats[age_group[0]] = {} if @stats[age_group[0]].blank? 
           @stats[age_group[0]][age_group[1]] = 0 if @stats[age_group[0]][age_group[1]].blank? 
