@@ -74,4 +74,4 @@ CONFIGURATION
 
 	In the config directory, configure the dde_connection.yml by renaming or copying the dde_connection.yml.example to dde_connection.yml 
 
-
+RUN APPLICATION
