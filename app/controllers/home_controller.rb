@@ -14,9 +14,9 @@ class HomeController < ApplicationController
     @new_births = JSON.parse(RestClient.post(url, {"start_date" => (Date.today - 30.days).to_s,
                                                    "end_date" => Date.today.to_s})).collect{|r|
       r['_id'] if r['created_at'].to_date == Date.today
-    }.compact
+    }.compact rescue {}
 
-    session[:new_births] = @new_births.count
+    session[:new_births] = @new_births.count rescue 0
     render :layout => false
   end
 
