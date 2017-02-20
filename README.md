@@ -2,10 +2,12 @@ VILLAGE LISTING
 ---------------
 
 DESCRIPTION
+-----------
 
 Application built in Ruby on Rails (RoR) to be used for registration of residents per village under TA.
 
 GETTING APPLICATION
+-------------------
 
 Get the application from github either by downloading it as a Zip file and extracting it 
 or by cloning it into /var/www/
@@ -21,6 +23,7 @@ or by cloning it into /var/www/
 		git@github.com:BaobabHealthTrust/VillageListing.git
 
 RUBY VERSION
+------------
 
 Ruby 2.2.2
 
@@ -31,6 +34,7 @@ Run
 	bundle install
 
 SYSTEM DEPENDENCIES
+-------------------
 	
 1. Village Listing User Management. 
 
@@ -65,6 +69,7 @@ SYSTEM DEPENDENCIES
 	and follow it's README. (Make sure you are in the 'village_listing_api' branch)
 
 CONFIGURATION
+-------------
 
 1. globals.yml
 	
@@ -87,4 +92,6 @@ CONFIGURATION
 
 		eg. MTA for Mtema
 
-RUN APPLICATION
+RUN APPLICATION !!!
+------------------
+Yeay...!!! We all Good. :-) 
