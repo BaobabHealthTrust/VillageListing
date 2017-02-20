@@ -22,13 +22,13 @@ or by cloning it into /var/www/
 
 RUBY VERSION
 
-	Ruby 2.2.2
+Ruby 2.2.2
 
-		Verify that your Ruby Version Manager has ruby 2.2.2. activated for this application
+	Verify that your Ruby Version Manager has ruby 2.2.2. activated for this application
 
-	Run
+Run
 
-		bundle install
+	bundle install
 
 SYSTEM DEPENDENCIES
 	
