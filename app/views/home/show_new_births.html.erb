@@ -1,5 +1,5 @@
 <html>
-  <head>
+<head>
     <script type="text/javascript">
     </script>
 
@@ -191,51 +191,51 @@
 
     </style>
 
-  </head>
-  <body>
+</head>
+<body>
 
-    <div id="details" style="height: 100%;overflow:auto;display:block; width: 100%; background-color: white; border: 1px solid #000; vertical-align: top;">
+<div id="details" style="height: 100%;overflow:auto;display:block; width: 100%; background-color: white; border: 1px solid #000; vertical-align: top;">
 
-      <div style="height: 70px; width: 100%; background-color: #415772; text-align: center; vertical-align: middle; font-size: 42px; color: #9aa0a7; padding-top: 10px;">
+    <div style="height: 70px; width: 100%; background-color: #415772; text-align: center; vertical-align: middle; font-size: 42px; color: #9aa0a7; padding-top: 10px;">
         New Births
-      </div>
+    </div>
 
-      <div id="main" style="width: 98%; height: 73%; margin: auto; margin-top: 10px; border: 1px solid #415772; overflow-y: auto; text-align: center; padding-top: 8px;">
+    <div id="main" style="width: 98%; height: 73%; margin: auto; margin-top: 10px; border: 1px solid #415772; overflow-y: auto; text-align: center; padding-top: 8px;">
         <table>
-          <thead>
-            <tr style="font-size: 24px; background-color: gold;">
-              <th>Nambala Ya Chiphaso</th>
-              <th>Dzina Loyamba</th>
-              <th>Dzina Labambo</th>
-              <th>Mudzi Okhala</th>
+            <thead>
+            <tr style="font-size: 26px; background-color: #415772; color: lightgrey; padding: 20px;">
+                <th style="padding: 10px;">Nambala Ya Chiphaso</th>
+                <th>Dzina Loyamba</th>
+                <th>Dzina Labambo</th>
+                <th>Mudzi Okhala</th>
             </tr>
-          </thead>
-          <tbody style="font-size: 14pt; font-weight: bold;">
+            </thead>
+            <tbody style="font-size: 14pt; font-weight: bold;">
 
             <% @new_births.each do |record| %>
-            <tr>
-              <td><%= record["_id"] %></td>
-              <td><%= record["names"]["given_name"] %></td>
-              <td><%= record["names"]["family_name"] %></td>
-              <td><%= record["addresses"]["current_village"] %></td>
-            </tr>
+                <tr>
+                    <td><%= record["_id"] %></td>
+                    <td><%= record["names"]["given_name"] %></td>
+                    <td><%= record["names"]["family_name"] %></td>
+                    <td><%= record["addresses"]["current_village"] %></td>
+                </tr>
             <% end %>
-          </tbody>
+            </tbody>
         </table>
-      </div>
-
     </div>
 
-    <div id="footer" style="background-color: #333; height: 90px; margin-top: 10px; position: absolute; bottom: -1px; width: 100%;">
-      <button class="button button_green" style="float: right; margin-right: 20px; height: 70px; width: 150px; border-radius: 8px; margin-top: 10px;" onclick="window.location = '/'">
+</div>
+
+<div id="footer" style="background-color: #333; height: 90px; margin-top: 10px; position: absolute; bottom: -1px; width: 100%;">
+    <button class="button button_green" style="float: right; margin-right: 20px; height: 70px; width: 150px; border-radius: 8px; margin-top: 10px;" onclick="window.location = '/'">
         Malizani
-      </button>
-    </div>
+    </button>
+</div>
 
-    <script type="text/javascript">
-      tt_cancel_destination = "/people";
-    </script>
-  </body>
+<script type="text/javascript">
+  tt_cancel_destination = "/people";
+</script>
+</body>
 </html>
 
 
