@@ -214,10 +214,10 @@
 
             <% @new_births.each do |record| %>
                 <tr>
-                    <td><%= record["_id"] %></td>
-                    <td><%= record["names"]["given_name"] %></td>
-                    <td><%= record["names"]["family_name"] %></td>
-                    <td><%= record["addresses"]["current_village"] %></td>
+                    <td style="padding: 10px; font-size: 20px; border-bottom: 1px solid lightgrey; font-weight: bold;"><%= record["_id"] %></td>
+                    <td style="padding: 10px; font-size: 20px; border-bottom: 1px solid lightgrey;"><%= record["names"]["given_name"] %></td>
+                    <td style="padding: 10px; font-size: 20px; border-bottom: 1px solid lightgrey;"><%= record["names"]["family_name"] %></td>
+                    <td style="padding: 10px; font-size: 20px; border-bottom: 1px solid lightgrey;"><%= record["addresses"]["current_village"] %></td>
                 </tr>
             <% end %>
             </tbody>
