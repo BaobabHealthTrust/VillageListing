@@ -70,8 +70,21 @@ CONFIGURATION
 	
 	In the config directory, configure the globals.yml by renaming or copying the globals.yml.example to globals.yml
 
+	Open the file with your favourite editor and modify line 25 specifying the user_mgmt_url to the url which 
+	Village Listing User Management is running on. 
+
 2. dde_connection.yml
 
 	In the config directory, configure the dde_connection.yml by renaming or copying the dde_connection.yml.example to dde_connection.yml 
+
+	Open the file with your favourite editor and set the following attributes;
+
+		dde_server, dde_username, dde_password, site_code
+
+	dde_server is the url with port on which DDE 2 Application is running on. 
+	dde_username and dde_password is the username and password respectively to which couchdb is configured.
+	The site code should be the code for the site at which the application is being developed for.
+
+		eg. MTA for Mtema
 
 RUN APPLICATION
