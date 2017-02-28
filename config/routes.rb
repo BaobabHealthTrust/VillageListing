@@ -42,6 +42,7 @@ Rails.application.routes.draw do
   get '/village_age_groups' => 'report#village_age_groups'
   post '/ta_population_tabulation' => 'report#ta_population_tabulation'
   get '/village_outcomes' => 'report#village_outcome'
+  get '/death_outcomes' => 'report#death_outcome'
   post '/village_population_birth_year' => 'report#village_population_birth_year'
   get '/report/village_population_per_ta'
   post '/report/village_population_per_ta'
