@@ -59,7 +59,7 @@
     <div class="cells" style="width: 5%; vertical-align: middle; text-align: left;">
       <span class="icons">
         <%gender = @patient_bean.sex
-          gender = gender == 'F' ? 'Female' : 'Male'
+          gender = gender == 'F' || 'Mkazi' ? 'Female' : 'Male'
         %>
         <img src="/assets/icons/Person_Undefined_<%=gender%>_Dark.png" class='icons gender-icon'  />
       </span>
