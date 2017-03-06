@@ -90,12 +90,14 @@ class ReportController < ApplicationController
 		
 		server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
 		uri = "http://#{server_address}/population_stats.json/"
-		#paramz = {district: 'Lilongwe',ta: 'Mtema', village: 'Kanyoza', stat: 'current_district_ta_village'}
 		paramz = {district: session[:user]['district'], ta: session[:user]['ta'],
 		          stat: 'current_district_ta_village', village: session[:user]['village']}
 		data = RestClient.post(uri,paramz)
 		unless data.blank?
 			@people = JSON.parse(data)
+			File.open("kambulire1.json","w") do |f|
+				f.write(data)
+			end
 		else
 			@people = []
 		end
