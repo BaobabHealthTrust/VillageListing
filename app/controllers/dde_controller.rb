@@ -1120,10 +1120,10 @@ A35,76,0,2,2,2,N,"#{patient_bean.national_id} #{patient_bean.birthdate}(#{patien
 		
 		settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] # rescue {}
 		
-		if params["gender"] == 'Mwamuna'
-			params["gender"] = 'M'
-		elsif params["gender"] == 'Mkazi'
-			params["gender"] = 'F'
+		if params['gender'] == 'Mwamuna'
+			params['gender'] = 'M'
+		elsif params['gender'] == 'Mkazi'
+			params['gender'] = 'F'
 		end
 		
 		search_hash = {
