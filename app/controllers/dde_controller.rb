@@ -192,6 +192,12 @@ class DdeController < ApplicationController
 	
 	def new_patient
 		
+		if params[:gender] == 'Mkazi'
+			params[:gender] = 'F'
+		elsif params[:gender] == 'Mwamuna'
+			params[:gender] = 'M'
+		end
+		
 		settings = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env] rescue {}
 		
 		@settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] rescue {}
@@ -1236,7 +1242,7 @@ A35,76,0,2,2,2,N,"#{patient_bean.national_id} #{patient_bean.birthdate}(#{patien
 		
 		if json['gender'] == 'Mkazi'
 			json['gender'] = 'F'
-		else
+		elsif json['gender'] == 'Mwamuna'
 			json['gender'] = 'M'
 		end
 		
