@@ -1120,6 +1120,12 @@ A35,76,0,2,2,2,N,"#{patient_bean.national_id} #{patient_bean.birthdate}(#{patien
 		
 		settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] # rescue {}
 		
+		if params["gender"] == 'Mwamuna'
+			params["gender"] = 'M'
+		elsif params["gender"] == 'Mkazi'
+			params["gender"] = 'F'
+		end
+		
 		search_hash = {
 				"names" => {
 						"given_name" => (params["given_name"] rescue nil),
@@ -1239,13 +1245,7 @@ A35,76,0,2,2,2,N,"#{patient_bean.national_id} #{patient_bean.birthdate}(#{patien
 	def send_to_dde
 		@relationship_type = JSON.parse(params["person"])["relation"] rescue nil
 		json = JSON.parse(params[:person]) rescue {}
-		
-		if json['gender'] == 'Mkazi'
-			json['gender'] = 'F'
-		elsif json['gender'] == 'Mwamuna'
-			json['gender'] = 'M'
-		end
-		
+	
 		@json = json
 		
 		@settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] # rescue {}
