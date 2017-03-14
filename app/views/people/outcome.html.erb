@@ -110,6 +110,7 @@
     <%= select_tag('cause_of_death', options_for_select( causes_of_death ,''),
                    :helpText =>"Chinachitika ndi Chani?",
                    :id => "cause_of_death",
+                   :condition =>"$('outcome').value == 'Adamwalira'",
                    :tt_onLoad => "$('nextButton').style.display = ''",
                    :allowFreeText => false)
     %>

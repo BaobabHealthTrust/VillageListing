@@ -350,6 +350,7 @@ P1\n)
 		@patient_bean = formatted_dde_object
 		
 		if request.post?
+			
 			dde_server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
 			url = "http://#{dde_server_address}/population_stats"
 			outcome_paramz = {}

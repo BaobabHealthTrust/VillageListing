@@ -14,6 +14,7 @@ class ReportController < ApplicationController
 		uri = "http://#{server_address}/population_stats.json/"
 		paramz = {district: session[:user]['district'], ta: session[:user]['ta'],
 		          stat: 'current_death_outcomes', village: session[:user]['village']}
+		
 		data = RestClient.post(uri,paramz)
 		
 		unless data.blank?
