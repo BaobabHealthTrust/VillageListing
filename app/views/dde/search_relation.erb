@@ -591,13 +591,17 @@
           <td>
             Gender
           </td>
-          <td>
-            <select id="gender" name="gender" value="" helpText="Mwamuna/Mkazi" condition="<%= (!@globals["default_gender_female"].nil? and @globals["default_gender_female"] == true ? false : true) %>">
-              <option></option>
-              <option value="F" <%= (!@globals["default_gender_female"].nil? and @globals["default_gender_female"] == true ? "selected" : "") %> >Mkazi</option>
-              <option value="M">Mwamuna</option>
-            </select>
-          </td>
+            <td>
+                <select id="gender" name="gender" value="" helpText="Mwamuna/Mkazi">
+                    <option></option>
+                    <option>
+                        Mkazi
+                    </option>
+                    <option>
+                        Mwamuna
+                    </option>
+                </select>
+            </td>
         </tr>
         <tr>
           <td>
