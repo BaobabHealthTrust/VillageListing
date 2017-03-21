@@ -106,7 +106,8 @@ img {
 }
 
 .percentage {
-  background-color: gold;
+  background-color: #415772;
+    color: lightgrey;
 }
 
 </style>
@@ -118,8 +119,8 @@ img {
 
 <table class="people" style="width: 99%">
   <thead>
-    <tr>
-      <th style="text-align: left;">TA</th>
+    <tr style="font-size: 20px; padding: 20px;">
+      <th>TA</th>
       <th>Female</th>
       <th class="percentage">Female(%)</th>
       <th>Male</th>
@@ -131,7 +132,7 @@ img {
   <%
   total_females = 0 ; total_males = 0
   (@stats || {}).each do |ta, gender|%>
-  <tr>
+  <tr style="font-size: 26px; background-color: #415772; color: lightgrey; padding: 20px;">
     <td style="text-align: left;"><%=ta%></td>
     <td><%=gender['F']%></td>
     <td class="percentage"><%=(gender['F'].to_i*100)/(gender['M'].to_i + gender['F'])%>%</td>

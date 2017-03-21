@@ -163,7 +163,7 @@ img {
     <td style="text-align: left;"><%=age_group%></td>
     <td><%=gender['F']%></td>
     <td><%=gender['M']%></td>
-    <td><%=(gender['M'].to_i + gender['F'])%></td>
+    <td><%=(gender['M'].to_i + gender['F'].to_i)%></td>
   </tr>
   <%
   total_females +=  gender['F'].to_i ; total_males +=  gender['M'].to_i
