@@ -59,6 +59,9 @@ Rails.application.routes.draw do
   post '/tornado' => 'report#tornado'
   get 'get_tornado_data/:run' => 'report#tornado'
   post 'get_tornado_data/:run' => 'report#tornado'
+  
+  get '/drill_down/:report_type' => 'report#drill_down'
+  post '/drill_down/:report_type' => 'report#drill_down'
   ##################### report end ######################
 
 

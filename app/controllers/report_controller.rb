@@ -110,6 +110,40 @@ class ReportController < ApplicationController
 		render :layout => false
 	end
 	
+	def drill_down
+		@report_title = ''
+		report_type = params[:report_type]
+		case report_type
+			when 'death_outcome'
+				outcome = params[:outcome]
+				@report_title = "Zotsatira za omwalira (#{outcome.gsub('_',' ').titleize})"
+		end
+		
+		village = session[:user]['village']
+		
+		server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
+		uri = "http://#{server_address}/population_stats.json/"
+		
+		if outcome
+			paramz = {district: session[:user]['district'], ta: session[:user]['ta'],
+			          stat: 'current_district_ta_village_outcome_cause', village: village, outcome: outcome}
+		end
+
+		data = RestClient.post(uri,paramz)
+		unless data.blank?
+			@people = JSON.parse(data)
+			File.open("#{Rails.root}/#{village}.json","w") do |f|
+				f.write(data)
+			end
+			Kernel.system "node #{Rails.root}/json2csv.js > #{Rails.root}/#{village}.csv"
+		else
+			@people = []
+		end
+		@report_generation_path = "/village_population?run=true"
+		
+		render :layout => false
+	end
+	
 	def ta_population_tabulation
 		@selected_villages = []
 		params[:ta]['villages'].each do |village|
