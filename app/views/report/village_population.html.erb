@@ -44,7 +44,7 @@
         width: 160px;
         height: 160px;
         margin-top: 10%;
-        text-align: middle;
+        text-align: center;
     }
 
     .divbtn p {
@@ -126,76 +126,73 @@
 <%= stylesheet_link_tag "DataTables/demo_table_jui" %>
 <%= stylesheet_link_tag "DataTables/jquery.dataTables" %>
 
-
 <div class="table-container">
 
-    <div class="table-container">
-
-        <table class="people" style="width:99%;" id="results">
-            <thead>
+    <table class="people" style="width:99%;" id="results">
+        <thead>
+        <tr>
+            <th>Nambala</th>
+            <th>Dzina Loyamba</th>
+            <th>Dzina La Bambo</th>
+            <th>Mkazi/Mwamuna</th>
+            <th>Tsiku Lobadwa</th>
+            <th>Boma Lakwawo</th>
+            <th>TA Wakwawo</th>
+            <th>Mudzi Wakwawo</th>
+        </tr>
+        </thead>
+        <tbody>
+        <%total_people = 0
+          (@people || []).each_with_index do |person, i|%>
             <tr>
-                <th>Nambala</th>
-                <th>Dzina Loyamba</th>
-                <th>Dzina La Bambo</th>
-                <th>Mkazi/Mwamuna</th>
-                <th>Tsiku Lobadwa</th>
-                <th>Boma Lakwawo</th>
-                <th>TA Wakwawo</th>
-                <th>Mudzi Wakwawo</th>
+                <td><%=person['_id'] rescue 'Not assigned'%></td>
+                <td><%=person['names']['given_name']%></td>
+                <td><%=person['names']['family_name']%></td>
+                <td><%=person['gender']%></td>
+                <td><%=(person['birthdate'].to_date.strftime('%d/%b/%Y') rescue 'N/A')%></td>
+                <td><%=person['addresses']['home_district']%></td>
+                <td><%=person['addresses']['home_ta']%></td>
+                <td><%=person['addresses']['home_village']%></td>
             </tr>
-            </thead>
-            <tbody>
-            <%total_people = 0
-              (@people || []).each_with_index do |person, i|%>
-                <tr>
-                    <td><%=person['_id'] rescue 'Not assigned'%></td>
-                    <td><%=person['names']['given_name']%></td>
-                    <td><%=person['names']['family_name']%></td>
-                    <td><%=person['gender']%></td>
-                    <td><%=(person['birthdate'].to_date.strftime('%d/%b/%Y') rescue 'N/A')%></td>
-                    <td><%=person['addresses']['home_district']%></td>
-                    <td><%=person['addresses']['home_ta']%></td>
-                    <td><%=person['addresses']['home_village']%></td>
-                </tr>
-            <%total_people = i
-              end
-              if @people.length > 0%>
-                <tfoot>
-                <tr>
-                    <td style="border-right:0px;">Anthu Onse</td>
-                    <td style="border-width:1px 0px 1px 0px;"></td>
-                    <td style="border-width:1px 0px 1px 0px;"></td>
-                    <td style="border-width:1px 0px 1px 0px;"></td>
-                    <td style="border-width:1px 0px 1px 0px;"></td>
-                    <td style="border-left:0px; border-right:0px;"></td>
-                    <td style="border-width:1px 1px 1px 0px;"></td>
-                    <td style="border-width:1px 1px 1px 1px;"><%=(total_people+1)%></td>
-                </tr>
-                </tfoot>
-            <%end%>
-            </tbody>
-            </table>
+        <%total_people = i
+          end
+          if @people.length > 0%>
+            <tfoot>
+            <tr>
+                <td style="border-right:0px;">Anthu Onse</td>
+                <td style="border-width:1px 0px 1px 0px;"></td>
+                <td style="border-width:1px 0px 1px 0px;"></td>
+                <td style="border-width:1px 0px 1px 0px;"></td>
+                <td style="border-width:1px 0px 1px 0px;"></td>
+                <td style="border-left:0px; border-right:0px;"></td>
+                <td style="border-width:1px 1px 1px 0px;"></td>
+                <td style="border-width:1px 1px 1px 1px;"><%=(total_people+1)%></td>
+            </tr>
+            </tfoot>
+        <%end%>
+        </tbody>
+        </table>
 
-    </div>
+</div>
 
-    <%= render :partial => 'footer' %>
+<%= render :partial => 'footer' %>
 
-    <script>
-        dataT();
+<script>
+    dataT();
 
-        function dataT(){
-            table = jQuery('#results').dataTable();
-            setF();
-        }
+    function dataT(){
+        table = jQuery('#results').dataTable();
+        setF();
+    }
 
-        function setF() {
-            try {
-                sel = document.getElementsByName('results_length')[0];
-                sel.innerHTML = "<option value='<%=total_people%>'><%=total_people%></option>";
-                document.getElementById('results_length').style.display = "none";
-                document.getElementById('results').style.display = "width:99%;height: 82%;";
-            }catch(e) {};
-        }
+    function setF() {
+        try {
+            sel = document.getElementsByName('results_length')[0];
+            sel.innerHTML = "<option value='<%=total_people%>'><%=total_people%></option>";
+            document.getElementById('results_length').style.display = "none";
+            document.getElementById('results').style.display = "width:99%;height: 82%;";
+        }catch(e) {};
+    }
 
-    </script>
+</script>
 

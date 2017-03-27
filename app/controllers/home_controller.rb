@@ -15,7 +15,7 @@ class HomeController < ApplicationController
                                                    "end_date" => Date.today.to_s})).collect{|r|
       r['_id'] if r['created_at'].to_date == Date.today
     }.compact rescue {}
-
+    
     session[:new_births] = @new_births.count rescue 0
     render :layout => false
   end
