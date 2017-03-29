@@ -126,6 +126,8 @@
 <%= stylesheet_link_tag "DataTables/demo_table_jui" %>
 <%= stylesheet_link_tag "DataTables/jquery.dataTables" %>
 
+<%=javascript_include_tag "toCSV/jQueryTable2CSV" %>
+
 <div class="table-container">
 
     <table class="people" style="width:99%;" id="results">
@@ -192,6 +194,11 @@
             document.getElementById('results_length').style.display = "none";
             document.getElementById('results').style.display = "width:99%;height: 82%;";
         }catch(e) {};
+    }
+
+    function tableToCSV() {
+        var csv =  jQuery('#results').table2CSV({delivery:'value'});
+        window.location.href = 'data:text/csv;charset=UTF-8,' + encodeURIComponent(csv);
     }
 
 </script>

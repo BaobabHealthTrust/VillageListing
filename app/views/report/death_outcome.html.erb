@@ -143,6 +143,7 @@
 <%= stylesheet_link_tag "DataTables/demo_table_jui" %>
 <%= stylesheet_link_tag "DataTables/jquery.dataTables" %>
 
+<%=javascript_include_tag "toCSV/jQueryTable2CSV" %>
 
 <div class="table-container">
 
@@ -197,5 +198,26 @@
         table = jQuery('#search_results').dataTable();
     }
 
+    function tableToCSV() {
+        var csv =  jQuery('#search_results').table2CSV({delivery:'value'});
+        window.location.href = 'data:text/csv;charset=UTF-8,' + encodeURIComponent(csv);
+    }
+
+    function createExportbutton(){
+        buttonsDiv = document.getElementById("buttons");
+        button = document.createElement("button");
+        button.className = 'green';
+        button.style.margin = '5px 0px 0px';
+        button.style.minWidth = '190px';
+        button.style.float = 'right';
+        button.innerHTML = '<span>Tsitsani CSV</span>';
+        button.onclick = function(){
+            tableToCSV();
+        }
+        buttonsDiv.appendChild(button);
+
+    }
+
+    createExportbutton();
 </script>
 

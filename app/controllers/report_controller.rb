@@ -440,9 +440,9 @@ class ReportController < ApplicationController
 		end
 		
 		
-		if gender.match(/F/i)
+		if gender == 'F' || gender == 'Female' || gender == 'Mkazi' #gender.match(/F/i)
 			return ['Female', cat]
-		else
+		elsif gender == 'M' || gender == 'Male' || gender == 'Mwamuna'
 			return ['Male', cat]
 		end
 	
