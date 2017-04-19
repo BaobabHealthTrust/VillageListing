@@ -1,118 +1,119 @@
 
 <style>
 
-/* .......................... demographics css starts ................................. */
-.demographics {
-  width: 99%;
-  display: table;
-  padding: 0px 1px 0px 1px;
-  border-style: solid;
-  border-width: 0px 0px 1px 0px;
-  height: 15%;
-}
+    /* .......................... demographics css starts ................................. */
+    .demographics {
+        width: 99%;
+        display: table;
+        padding: 0px 1px 0px 1px;
+        border-style: solid;
+        border-width: 0px 0px 1px 0px;
+        height: 15%;
+    }
 
-.main-page-container-rows  {
-  display: table-row;
-}
+    .main-page-container-rows  {
+        display: table-row;
+    }
 
-.cells {
-  display: table-cell;
-}
+    .cells {
+        display: table-cell;
+    }
 
-.demographics .cells {
-  
-}
+    .demographics .cells {
 
-.gender-icon {
-  width: 75px;
-  height: 75px;
-  padding-bottom: 35px;
-}
+    }
 
-.demographics-table {
-  width: 100%;
-}
+    .gender-icon {
+        width: 75px;
+        height: 75px;
+        padding-bottom: 35px;
+    }
 
-.attributes-table {
-  width: 100%;
-}
+    .demographics-table {
+        width: 100%;
+    }
 
-.main-container th {
-  font-size: 12px;
-  text-align: left;
-}
+    .attributes-table {
+        width: 100%;
+    }
 
-.village-reach-icon {
-  width: 100px;
-  height: 100px;
-  border-style: solid;
-  border-width: 1px;
-}
+    .main-container th {
+        font-size: 12px;
+        text-align: left;
+    }
 
-/* .......................... tabs css start ................................. */
+    .village-reach-icon {
+        width: 100px;
+        height: 100px;
+        border-style: solid;
+        border-width: 1px;
+    }
+
+    /* .......................... tabs css start ................................. */
 </style>
 
 
 <div class="main-container">
-  <div class="demographics">
-    
-    <div class="cells" style="width: 5%; vertical-align: middle; text-align: left;">
+    <div class="demographics">
+
+        <div class="cells" style="width: 5%; vertical-align: middle; text-align: left;">
       <span class="icons">
         <%gender = @patient_bean.sex
           gender = gender == 'F' ? 'Female' : 'Male'
         %>
-        <img src="/assets/icons/Person_Undefined_<%=gender%>_Dark.png" class='icons gender-icon'  />
+          <img src="/assets/icons/Person_Undefined_<%=gender%>_Dark.png" class='icons gender-icon'  />
       </span>
-    </div>
+        </div>
 
-    <div class="cells" style="width: 30%;">
-      <table class="demographics-table">
-        <tr>
-          <th style="width:185px;">Chitupa Chadziko:</th>
-          <td><%=@patient_bean.national_id%></td>
-        </tr>
-        <tr>
-          <th style="width:55px;">Dzina:</th>
-          <td><%=@patient_bean.name%></td>
-        </tr>
-        <tr>
-          <th style="width:185px;">Tsiku Lobadwa:</th>
-          <td style="text-align: left;"><%=@patient_bean.birthdate%></td>
-        </tr>
-        <tr>
-          <th style="width:100px;">TA Wakwanu:</th>
-          <td style="text-align: left;"><%= @patient_bean.home_ta %></td>
-        </tr>
-      </table> 
-    </div>
+        <div class="cells" style="width: 30%;">
+            <table class="demographics-table">
+                <tr>
+                    <th style="width:185px;">Chitupa Chadziko:</th>
+                    <td><%=@patient_bean.national_id%></td>
+                </tr>
+                <tr>
+                    <th style="width:55px;">Dzina:</th>
+                    <td><%=@patient_bean.name%></td>
+                </tr>
+                <tr>
+                    <th style="width:185px;">Tsiku Lobadwa:</th>
+                    <td style="text-align: left;"><%=@patient_bean.birthdate%></td>
+                </tr>
+                <tr>
+                    <th style="width:100px;">TA Wakwanu:</th>
+                    <td style="text-align: left;"><%= @patient_bean.home_ta %></td>
+                </tr>
+            </table>
+        </div>
 
-    <div class="cells" style="width: 55%;">
-      <table class="attributes-table">
-        <tr>
-          <th style="width:185px;">Boma Lomwe Mukukhala:</th>
-          <td style="text-align: left;"><%= @patient_bean.current_district %></td>
-          <th style="width:100px;">Zotsatila:</th>
-          <td style="text-align: left;"><%= @patient_bean.outcome ||= 'Ali-Moyo'%></td>
-        </tr>
-        <tr>
-          <th style="width:185px;">T/A wakumene mukukhala:</th>
-          <td style="text-align: left;"><%= @patient_bean.current_ta %></td>
-          <th style="width:100px;">Tsiku otsatila:</th>
-          <td style="text-align: left;"><%= @patient_bean.outcome_date.to_date.strftime("%d/%b/%Y") rescue '' %></td>
-        </tr>
-        <tr>
-          <th style="width:185px;">Mudzi Omwe Mukukhala:</th>
-          <td style="text-align: left;"><%= @patient_bean.current_village %></td>
-        </tr>
-      </table> 
-    </div>
+        <div class="cells" style="width: 55%;">
+            <table class="attributes-table">
+                <tr>
+                    <th style="width:185px;">Boma Lomwe Mukukhala:</th>
+                    <td style="text-align: left;"><%= @patient_bean.current_district %></td>
+                    <th style="width:100px;">Zotsatila:</th>
+                    <td style="text-align: left;"><%= @patient_bean.outcome ||= 'Ali-Moyo'%></td>
+                </tr>
+                <tr>
+                    <th style="width:185px;">T/A wakumene mukukhala:</th>
+                    <td style="text-align: left;"><%= @patient_bean.current_ta %></td>
+                    <th style="width:100px;">Tsiku otsatila:</th>
+                    <td style="text-align: left;"><%= @patient_bean.outcome_date.to_date.strftime("%d/%b/%Y") rescue '' %></td>
+                </tr>
+                <tr>
+                    <th style="width:185px;">Mudzi Omwe Mukukhala:</th>
+                    <td style="text-align: left;"><%= @patient_bean.current_village %></td>
+                </tr>
+            </table>
+        </div>
 
-    <div class="cells" style="width: 10%; vertical-align: middle; text-align: right;">
+        <div class="cells" style="width: 10%; vertical-align: middle; text-align: right;">
       <span class="icons">
         <%=image_tag("icons/village.png", class: 'icons village-reach-icon')%>
       </span>
+        </div>
+
     </div>
 
-  </div>
+    <!-- .......................... header ends ................................. -->
 </div>
-<!-- .......................... header ends ................................. -->
