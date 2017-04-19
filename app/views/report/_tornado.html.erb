@@ -140,7 +140,10 @@
                             text: null
                         },
                         labels: {
-                            format: '{value:,.0f}'
+                            //format: '{value:,.0f}'
+                            formatter: function() {
+                                return Math.abs(this.value);
+                            }
                         }
                         //min: 0 // this sets minimum values of y to 0
                     },
