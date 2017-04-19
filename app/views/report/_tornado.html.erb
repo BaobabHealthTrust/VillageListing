@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Highcharts Example</title>
+    <title>Tornado | Chiwerengero cha Akazi ndi Amuna</title>
 
     <%=javascript_include_tag "highCharts/jquery.min"%>
     <style type="text/css">
@@ -122,7 +122,8 @@
                         categories: categories,
                         reversed: false,
                         labels: {
-                            step: 1
+                            step: 1,
+                            enabled: false
                         }
                     }, { // mirror axis on right side
                         opposite: true,
@@ -130,7 +131,8 @@
                         categories: categories,
                         linkedTo: 0,
                         labels: {
-                            step: 1
+                            step: 1,
+                            enabled: false
                         }
                     }],
                     yAxis: {
@@ -164,10 +166,10 @@
                     series: [{
                         name: 'Amuna',
                         data: males
-                    }, {
+                    }/**, {
                         name: 'Akazi',
                         data: females
-                    }]
+                    }*/]
                 });
             });
 
@@ -291,7 +293,8 @@
                         categories: categories,
                         linkedTo: 0,
                         labels: {
-                            step: 1
+                            step: 1,
+                            enabled: false
                         }
                     }],
                     yAxis: {
@@ -322,12 +325,13 @@
                         }
                     },
 
-                    series: [{
+                    series: [/**{
                         name: 'Amuna',
                         data: males
-                    }, {
+                    },*/ {
                         name: 'Akazi',
-                        data: females
+                        data: females,
+                        color: 'black'
                     }]
                 });
             });

@@ -13,7 +13,8 @@ class UserController < ApplicationController
   end
 
   def portal
-    @new_app_path = 'http://192.168.21.254:3004'
+    settings = YAML.load_file("#{Rails.root}/config/application.yml") rescue {}
+    @new_app_path = settings["#{Rails.env}"]["news.app.reader.url"]
     render :layout => false
   end
 
