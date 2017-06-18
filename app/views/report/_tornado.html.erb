@@ -14,6 +14,13 @@
 
         $(function () {
 
+            // used to make all thousands separated by commas.
+            /** Highcharts.setOptions({
+                lang: {
+                        thousandsSep: ','
+                }
+            }); */
+            ///--------------------
             <%(@stats || {}).each do |gender, group|
               if gender == 'Male'
               (group || []).each do |age_group, count|
@@ -38,7 +45,7 @@
             males[8] = <%=(count)*-1%>;
             <%elsif age_group == '45-49'%>
             males[9] = <%=(count)*-1%>;
-            <%elsif age_group == '50-54'%>
+        <%elsif age_group == '50-54'%>
             males[10] = <%=(count)*-1%>;
             <%elsif age_group == '55-59'%>
             males[11] = <%=(count)*-1%>;
@@ -118,31 +125,27 @@
                     subtitle: {
                         text: ''
                     },
-                    xAxis: [{
-                        categories: categories,
-                        reversed: false,
-                        labels: {
-                            step: 1,
-                            enabled: false
-                        }
-                    }, { // mirror axis on right side
+                    xAxis: {
                         opposite: true,
-                        reversed: false,
                         categories: categories,
-                        linkedTo: 0,
+                        reversed: false,
                         labels: {
                             step: 1,
                             enabled: false
                         }
-                    }],
+                    },
                     yAxis: {
                         title: {
                             text: null
                         },
                         labels: {
-                            //format: '{value:,.0f}'
+                            //format: '{value:,.0f}',
                             formatter: function() {
                                 return Math.abs(this.value);
+                            },
+                            style: {
+                                color: 'black',
+                                fontSize: '14px'
                             }
                         }
                         //min: 0 // this sets minimum values of y to 0
@@ -167,7 +170,7 @@
                     },
 
                     series: [{
-                        name: 'Amuna',
+                        name: 'Amuna (Male)',
                         data: males
                     }/**, {
                         name: 'Akazi',
@@ -179,7 +182,6 @@
         });
 
         $(function () {
-
             <%(@stats || {}).each do |gender, group|
               if gender == 'Male'
               (group || []).each do |age_group, count|
@@ -220,12 +222,12 @@
             males[16] = <%=(count)*-1%>;
             <%elsif age_group == '85 + '%>
             males[17] = <%=(count)*-1%>;
-            <%end
-            end
-          else
-          (group || []).each do |age_group, count|
-            #raise age_group.inspect
-            if age_group == '0-4' %>
+        <%end
+        end
+      else
+      (group || []).each do |age_group, count|
+        #raise age_group.inspect
+        if age_group == '0-4' %>
             females[0] = <%= (count)%>;
             <%elsif age_group == '5-9'%>
             females[1] = <%=(count)%>;
@@ -272,7 +274,6 @@
                 '20-24', '25-29', '30-34', '35-39', '40-44',
                 '45-49', '50-54', '55-59', '60-64', '65-69',
                 '70-74', '75-79', '80-84', '85 + '];
-
             $(document).ready(function () {
                 $('#right-container').highcharts({
                     chart: {
@@ -284,28 +285,28 @@
                     subtitle: {
                         text: ''
                     },
-                    xAxis: [{
+                    xAxis: {
                         categories: categories,
                         reversed: false,
-                        labels: {
-                            step: 1
-                        }
-                    }, { // mirror axis on right side
-                        opposite: true,
-                        reversed: false,
-                        categories: categories,
-                        linkedTo: 0,
                         labels: {
                             step: 1,
-                            enabled: false
+                            textAlign: 'center',
+                            style: {
+                                color: 'black',
+                                fontSize: '14px'
+                            }
                         }
-                    }],
+                    },
                     yAxis: {
                         title: {
                             text: null
                         },
                         labels: {
-                            format: '{value:,.0f}'
+                            format: '{value:,.0f}',
+                            style: {
+                                color: 'black',
+                                fontSize: '14px'
+                            }
                         }
                         //min: 0 // this sets minimum values of y to 0
                     },
@@ -332,7 +333,7 @@
                         name: 'Amuna',
                         data: males
                     },*/ {
-                        name: 'Akazi',
+                        name: 'Akazi (Female)',
                         data: females,
                         color: 'black'
                     }]
@@ -347,7 +348,7 @@
 <%=javascript_include_tag "highCharts/highcharts"%>
 <%=javascript_include_tag "highCharts/exporting"%>
 
-<div style="width: 100%; height: 70%;margin: 0 auto">
+<div style="width: 100%; height: 80%;margin: 0 auto">
     <div id="left-container" style="height: 90%; width: 50%; float: left;"></div>
     <div id="right-container" style="height: 90%; width: 50%; float: right;"></div>
 </div>
