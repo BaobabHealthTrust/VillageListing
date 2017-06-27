@@ -107,7 +107,7 @@
                        :condition => '($("outcome_year").value != "Unknown") && ($("outcome_month").value != "Unknown");',
                        :tt_onLoad => "changeFinishButton();getDayOfMonthPicker($('outcome_year').value, getMonth($('outcome_month').value))"  %>
 
-    <%= select_tag('cause_of_death', options_for_select( causes_of_death ,''),
+    <%#= select_tag('cause_of_death', options_for_select( causes_of_death ,''),
                    :helpText =>"Chinachitika ndi Chani?",
                    :id => "cause_of_death",
                    :condition =>"$('outcome').value == 'Adamwalira'",
