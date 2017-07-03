@@ -149,22 +149,22 @@
         <%total_people = 0
           (@people || []).each_with_index do |person, i|%>
             <tr>
-                <td><%=person['_id'] rescue 'Not assigned'%></td>
-                <td><%=person['names']['given_name']%></td>
-                <td><%=person['names']['family_name']%></td>
-                <td><%=person['gender']%></td>
-                <td><%=(person['birthdate'].to_date.strftime('%d/%b/%Y') rescue 'N/A')%></td>
+                <td><%=person['person'] rescue 'Not assigned'%></td>
+                <td><%=person['person_record']['names']['given_name']%></td>
+                <td><%=person['person_record']['names']['family_name']%></td>
+                <td><%=person['person_record']['gender']%></td>
+                <td><%=(person['person_record']['birthdate'].to_date.strftime('%d/%b/%Y') rescue 'N/A')%></td>
                 <% if person['outcome_date'].nil? %>
                     <td>
-                        <%=person['addresses']['home_district']%>
+                        <%=person['person_record']['addresses']['home_district']%>
                     </td>
                 <% else %>
                     <td>
                         <%= person['outcome_date'].to_date.strftime('%d/%b/%Y') %>
                     </td>
                 <% end %>
-                <td><%=person['addresses']['home_ta']%></td>
-                <td><%=person['addresses']['home_village']%></td>
+                <td><%=person['person_record']['addresses']['home_ta']%></td>
+                <td><%=person['person_record']['addresses']['home_village']%></td>
             </tr>
         <%total_people = i
           end
