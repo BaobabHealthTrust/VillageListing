@@ -3,6 +3,34 @@ require "rest-client"
 class DdeController < ApplicationController
 	skip_before_action :verify_authenticity_token
 	
+	# -- Based on RSpec tests ----
+	def dde_connection
+		dde_connection = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]
+		dde_server = dde_connection['dde_server']
+		dde_username = dde_connection['dde_username']
+		dde_password = dde_connection['dde_password']
+		application_name = dde_connection['application_name']
+		
+		return {'dde_server': dde_server, 'dde_username': dde_username, 'dde_password': dde_password,
+		        'application_name': application_name}
+	end
+	
+	def dde_authenticate
+		dde_connection = self.dde_connection
+		dde_server = dde_connection[:dde_server]
+		dde_username = dde_connection[:dde_username]
+		dde_password = dde_connection[:dde_password]
+		
+		response = RestClient.post "#{dde_server}/v1/authenticate", {'username': dde_username,
+		                                                                  'password': dde_password}.to_json,
+		                                content_type: :json
+		
+		parsed_response = JSON.parse(response)
+		session[dde_user]
+		render :text => parsed_response['data']['token']
+	end
+	# ----------------------------
+	
 	def index
 		session[:cohort] = nil
 		

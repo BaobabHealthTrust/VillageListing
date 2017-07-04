@@ -267,6 +267,9 @@ Rails.application.routes.draw do
 	post '/show_new_births' => 'home#show_new_births'
 	# ------------------------------- END OF INSTALLATION GENERATED ----------------------------------------------
 	
+    # ---- Based on Rspec tests -----
+    get 'dde_authenticate' => 'dde#dde_authenticate'
+    # --------------------------------
 	
 	#APIs
 	
