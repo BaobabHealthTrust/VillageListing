@@ -1,34 +1,43 @@
 require "rest-client"
+require "#{Rails.root}/lib/dde2_service"
 
 class DdeController < ApplicationController
 	skip_before_action :verify_authenticity_token
 	
 	# -- Based on RSpec tests ----
-	def dde_connection
-		dde_connection = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]
-		dde_server = dde_connection['dde_server']
-		dde_username = dde_connection['dde_username']
-		dde_password = dde_connection['dde_password']
-		application_name = dde_connection['application_name']
-		
-		return {'dde_server': dde_server, 'dde_username': dde_username, 'dde_password': dde_password,
-		        'application_name': application_name}
-	end
 	
 	def dde_authenticate
-		dde_connection = self.dde_connection
-		dde_server = dde_connection[:dde_server]
-		dde_username = dde_connection[:dde_username]
-		dde_password = dde_connection[:dde_password]
+		dde = DDE2Service.dde_settings
+		returned_token = DDE2Service.dde_authenticate(dde)
+		dde_token = returned_token['token']
 		
-		response = RestClient.post "#{dde_server}/v1/authenticate", {'username': dde_username,
-		                                                                  'password': dde_password}.to_json,
-		                                content_type: :json
-		
-		parsed_response = JSON.parse(response)
-		session[dde_user]
-		render :text => parsed_response['data']['token']
+		File.open("#{Rails.root}/tmp/token",'w') do |token|
+			token.write(dde_token)
+		end
 	end
+	
+	def add_dde_user
+		dde_token = File.open("#{Rails.root}/tmp/token", 'rb') {|token|
+			token.read
+		}
+		dde = DDE2Service.dde_settings
+		returned_token = DDE2Service.dde_add_user(dde, dde_token)
+		dde_token = returned_token['token']
+		
+		File.open("#{Rails.root}/tmp/token",'w') do |token|
+			token.write(dde_token)
+		end
+	end
+	
+	def check_dde_token
+		dde = DDE2Service.dde_settings
+		dde_token = File.open("#{Rails.root}/tmp/token", 'rb') {|token|
+			token.read
+		}
+		
+		response = DDE2Service.check_dde_token(dde_token)
+	end
+	
 	# ----------------------------
 	
 	def index

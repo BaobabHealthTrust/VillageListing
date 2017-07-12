@@ -1,9 +1,10 @@
 require 'rails_helper'
 
-describe 'dde_controller' do
-	describe 'GET dde_authenticate' do
-		it 'responds 200 status code' do
-			expect(response.status).to eq(200)
+RSpec.describe DdeController do
+	describe 'GET #dde_authenticate' do
+		it 'responds with status 200 or 320' do
+			get :dde_authenticate
+			expect(response.status).to be_between(200, 320).inclusive
 		end
 	end
 end

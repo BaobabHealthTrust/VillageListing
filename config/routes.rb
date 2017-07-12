@@ -269,6 +269,10 @@ Rails.application.routes.draw do
 	
     # ---- Based on Rspec tests -----
     get 'dde_authenticate' => 'dde#dde_authenticate'
+  
+    get 'add_dde_user' => 'dde#add_dde_user'
+  
+    get 'check_dde_token/:token' => 'dde#check_dde_token'
     # --------------------------------
 	
 	#APIs
