@@ -83,7 +83,7 @@ module DDE2Service
 	def self.search_by_name_and_gender(given_name, family_name, gender)
 		token = self.get_token
 		dde = self.dde_settings
-		dde_target = self.dde_target('search_by_name_and_gender')  #"#{dde[:server]}/v1/search_by_name_and_gender"
+		dde_target = self.dde_target('search_by_name_and_gender')
 		payload_params = {'given_name': given_name, 'family_name': family_name, 'gender': gender, 'token': token}
 		
 		response = RestClient.post(dde_target, payload_params.to_json, content_type: :json) {
