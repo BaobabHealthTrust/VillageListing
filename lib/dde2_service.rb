@@ -15,11 +15,22 @@ module DDE2Service
 	end
 	
 	def self.dde_authenticate(dde)
-		payload_params = {'username': dde[:default_username], 'password': dde[:default_password]}
+		if dde[:username].nil?
+			payload_params = {'username': dde[:default_username], 'password': dde[:default_password]}
+		else
+			payload_params = {'username': dde[:username], 'password': dde[:password]}
+		end
+		
 		response = RestClient.post "#{dde[:server]}/v1/authenticate", payload_params.to_json,
 		                           content_type: :json
 		
 		data = JSON.parse(response)['data']
+		
+		dde_token = data['token']
+		
+		File.open("#{Rails.root}/tmp/token",'w') do |token|
+			token.write(dde_token)
+		end
 		
 		return data
 	end
@@ -45,13 +56,7 @@ module DDE2Service
 		response = RestClient.put"#{dde[:server]}/v1/add_user", payload_params.to_json,
 		                         content_type: :json
 		
-		data = JSON.parse(response)['data']
-		
-		dde_token = data['token']
-		
-		File.open("#{Rails.root}/tmp/token",'w') do |token|
-			token.write(dde_token)
-		end
+		return response
 	end
 	
 	def self.search_by_identifer(identifier, token)
@@ -78,7 +83,7 @@ module DDE2Service
 	def self.search_by_name_and_gender(given_name, family_name, gender)
 		token = self.get_token
 		dde = self.dde_settings
-		dde_target = "#{dde[:server]}/v1/search_by_name_and_gender"
+		dde_target = self.dde_target('search_by_name_and_gender')  #"#{dde[:server]}/v1/search_by_name_and_gender"
 		payload_params = {'given_name': given_name, 'family_name': family_name, 'gender': gender, 'token': token}
 		
 		response = RestClient.post(dde_target, payload_params.to_json, content_type: :json) {
@@ -99,5 +104,52 @@ module DDE2Service
 		return response
 	end
 	
+	def self.add_patient(dde_object)
+		token = self.get_token
+		dde_object = {
+				'given_name': dde_object['names']['given_name'],
+		        'family_name': dde_object['names']['family_name'],
+				'gender': dde_object['gender'],
+		        'birthdate': dde_object['birthdate'].gsub('/','-'),
+		        'birthdate_estimated': dde_object['birthdate_estimated'],
+		        'current_residence': dde_object['addresses']['given_name'],
+		        'current_village': dde_object['addresses']['current_village'],
+		        'current_ta': dde_object['addresses']['current_ta'],
+		        'current_district': dde_object['addresses']['current_district'],
+		        'home_village': dde_object['addresses']['home_village'],
+		        'home_ta': dde_object['addresses']['home_ta'],
+		        'home_district': dde_object['addresses']['home_district'],
+		        'token': token
+		}
+		dde_target = self.dde_target('add_patient')
+		payload_params = dde_object
+		
+		response = RestClient.put(dde_target, payload_params.to_json, content_type: :json) {
+				|response, request, result, &block|
+		case response.code
+			when 201
+				'Created'
+			when 400
+				'Bad Request'
+			when 401
+				'Unauthorised'
+			else
+				response # .return!(&block)
+		end
+		}
+		return response
+	end
 	
+	def self.dde_target(path, identifier=nil, token=self.get_token)
+		dde = self.dde_settings
+		case path
+			when 'search_by_name_and_gender'
+				dde_target = "#{dde[:server]}/v1/search_by_name_and_gender"
+			when 'search_by_identifer'
+				dde_target = "#{dde[:server]}/v1/search_by_identifier/#{identifier}/#{token}"
+			when 'add_patient'
+				dde_target = "#{dde[:server]}/v1/add_patient"
+		end
+		return dde_target
+	end
 end

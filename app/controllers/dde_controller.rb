@@ -85,7 +85,6 @@ class DdeController < ApplicationController
 	end
 	
 	def process_result
-		
 		json = JSON.parse(params['person']) rescue {}
 		
 		session[:dde_object] = json
@@ -223,7 +222,6 @@ class DdeController < ApplicationController
 	end
 	
 	def new_patient
-		
 		if params[:gender] == 'Mkazi'
 			params[:gender] = 'F'
 		elsif params[:gender] == 'Mwamuna'
@@ -1275,23 +1273,17 @@ A35,76,0,2,2,2,N,"#{patient_bean.national_id} #{patient_bean.birthdate}(#{patien
 		
 		@settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] # rescue {}
 		
-		if secure?
-			url = "https://#{(@settings["dde_username"])}:#{(@settings["dde_password"])}@#{(@settings["dde_server"])}/ajax_process_data"
-		else
-			url = "http://#{(@settings["dde_username"])}:#{(@settings["dde_password"])}@#{(@settings["dde_server"])}/ajax_process_data"
-		end
-		
 		result = DDE2Service.search_by_name_and_gender(given_name, family_name, gender)
 		
 		if result == 'No Content'
-			
-			json = JSON.parse(JSON.parse(@results)[0])
-			
-			session[:dde_object] = json
+			# add person
+			dde_patient = DDE2Service.add_patient(json)
+			raise dde_patient.inspect
+			session[:dde_object] = dde_patient
 			
 			redirect_to '/' and return
 		else
-			render :layout => "ts"
+			render :layout => 'ts'
 		end
 	
 	end

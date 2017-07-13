@@ -172,45 +172,6 @@
      * */
     var json = "{national_id: '<%= @id %>', application: '<%= @settings["application_name"] %>', site_code: '<%= @settings["site_code"] %>', return_path: '<%= address %>', names: {family_name: '', given_name: '', middle_name: '', maiden_name: '' }, gender: '<%= params["gender"] %>', person_attributes: {country_of_residence: '', citizenship: '', occupation: '', home_phone_number: '', cell_phone_number: '', office_phone_number: '', race: ''}, birthdate: '', patient: {identifiers: []}, birthdate_estimated: '', addresses: {current_residence: '', current_village: '', current_ta: '', current_district: '', home_village: '', home_ta: '', home_district: '', landmark: ''}}"
 
-    /*var json = <%= {
-  "national_id" => nil,
-  "application" => "#{@settings["application_name"]}",
-  "site_code" => "#{@settings["site_code"]}",
-  "return_path" => "http://#{request.host_with_port}/process_result",
-  "names" =>
-    {
-    "family_name" => nil,
-    "given_name" => nil,
-    "middle_name" => nil,
-    "maiden_name" => nil
-  },
-  "gender" => "#{params["gender"]}",
-  "person_attributes" => {
-    "country_of_residence" => nil,
-    "citizenship" => nil,
-    "occupation" => nil,
-    "home_phone_number" => nil,
-    "cell_phone_number" => nil,
-    "office_phone_number" => nil,
-    "race" => nil
-  },
-  "birthdate" => nil,
-  "patient" => {
-    "identifiers" => []
-  },
-  "birthdate_estimated" => nil,
-  "addresses" => {
-    "current_residence" => nil,
-    "current_village" => nil,
-    "current_ta" => nil,
-    "current_district" => nil,
-    "home_village" => nil,
-    "home_ta" => nil,
-    "home_district" => nil,
-    "landmark" => nil
-  }
-}.to_json %>;*/
-
     json = JSON.parse(JSON.stringify(eval("(" + json + ")")))
 
     function sendToDDE() {
