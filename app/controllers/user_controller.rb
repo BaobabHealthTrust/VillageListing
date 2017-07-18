@@ -7,7 +7,8 @@ class UserController < ApplicationController
 
       unless user.blank?
         session[:user] = user
-        redirect_to '/' and return
+        redirect_to '/dde_authenticate' and return
+        #redirect_to '/' and return
       end
     end
   end

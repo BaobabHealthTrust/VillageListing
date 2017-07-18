@@ -109,13 +109,10 @@ module DDE2Service
 		dde_object = {
 				'given_name': dde_object['names']['given_name'],
 		        'family_name': dde_object['names']['family_name'],
-				'gender': dde_object['gender'],
-		        'birthdate': dde_object['birthdate'].gsub('/','-'),
+				'middle_name': dde_object['names']['middle_name'],
+				'gender': (dde_object['gender']=='F'?'Female':'Male'),
+		        'birthdate': dde_object['birthdate'].gsub('/','-').to_date.strftime("%Y-%m-%d"),
 		        'birthdate_estimated': dde_object['birthdate_estimated'],
-		        'current_residence': dde_object['addresses']['given_name'],
-		        'current_village': dde_object['addresses']['current_village'],
-		        'current_ta': dde_object['addresses']['current_ta'],
-		        'current_district': dde_object['addresses']['current_district'],
 		        'home_village': dde_object['addresses']['home_village'],
 		        'home_ta': dde_object['addresses']['home_ta'],
 		        'home_district': dde_object['addresses']['home_district'],
@@ -126,16 +123,7 @@ module DDE2Service
 		
 		response = RestClient.put(dde_target, payload_params.to_json, content_type: :json) {
 				|response, request, result, &block|
-		case response.code
-			when 201
-				'Created'
-			when 400
-				'Bad Request'
-			when 401
-				'Unauthorised'
-			else
-				response # .return!(&block)
-		end
+			response
 		}
 		return response
 	end

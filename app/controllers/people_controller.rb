@@ -108,36 +108,37 @@ P1\n)
 		identifiers = []
 		identifiers = dde_object["patient"]["identifiers"] unless dde_object["patient"].blank?
 		
-		home_phone_number = dde_object["person_attributes"]["home_phone_number"]
-		cell_phone_number = dde_object["person_attributes"]["cell_phone_number"]
-		office_phone_number = dde_object["person_attributes"]["office_phone_number"]
+		home_phone_number = dde_object["person_attributes"]["home_phone_number"] rescue nil
+		cell_phone_number = dde_object["person_attributes"]["cell_phone_number"] rescue nil
+		office_phone_number = dde_object["person_attributes"]["office_phone_number"] rescue nil
 		
-		race = dde_object["person_attributes"]["race"]
-		occupation = dde_object["person_attributes"]["occupation"]
-		citizenship = dde_object["person_attributes"]["citizenship"]
-		country_of_residence = dde_object["person_attributes"]["country_of_residence"]
+		race = dde_object["person_attributes"]["race"] rescue nil
+		occupation = dde_object["person_attributes"]["occupation"] rescue nil
+		citizenship = dde_object["person_attributes"]["citizenship"] rescue nil
+		country_of_residence = dde_object["person_attributes"]["country_of_residence"] rescue nil
 		
 		#################### Code to pull person outcome from the DDE ############################
-		dde_server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue "raise dde_server_address not set in dde_connection.yml"
-		url = "http://#{dde_server_address}/population_stats"
-		outcome_paramz = {}
-		outcome_paramz['stat'] = 'fetch_outcome' ; outcome_paramz['identifier'] = national_id
-		result = RestClient.post(url, outcome_paramz) rescue {}
-		data = JSON.parse(result) rescue {}
-		
-		session[:dde_object]['outcome'] = data['outcome_data']['outcome'] rescue nil
-		session[:dde_object]['outcome_date'] = data['outcome_data']['outcome_date'] rescue nil
-		outcome_date = session[:dde_object]['outcome_date'] ; outcome = session[:dde_object]['outcome']
-		
-		unless data['person'].blank?
-			current_district = data['person']['addresses']['current_district']
-			current_ta = data['person']['addresses']['current_ta']
-			current_village = data['person']['addresses']['current_village']
-		end unless data.blank?
+		# dde_server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue "raise dde_server_address not set in dde_connection.yml"
+		# url = "http://#{dde_server_address}/population_stats"
+		# outcome_paramz = {}
+		# outcome_paramz['stat'] = 'fetch_outcome'
+		# outcome_paramz['identifier'] = national_id
+		# result = RestClient.post(url, outcome_paramz) rescue {}
+		# data = JSON.parse(result) rescue {}
+		#
+		# session[:dde_object]['outcome'] = data['outcome_data']['outcome'] rescue nil
+		# session[:dde_object]['outcome_date'] = data['outcome_data']['outcome_date'] rescue nil
+		# outcome_date = session[:dde_object]['outcome_date'] ; outcome = session[:dde_object]['outcome']
+		#
+		# unless data['person'].blank?
+		# 	current_district = data['person']['addresses']['current_district']
+		# 	current_ta = data['person']['addresses']['current_ta']
+		# 	current_village = data['person']['addresses']['current_village']
+		# end unless data.blank?
 		#################### Code to pull person outcome from the DDE (ends)############################
-		unless outcome.blank?
-			outcome = outcome == 'Transfer Out' ? 'Adasamuka' : 'Died'
-		end
+		# unless outcome.blank?
+		# 	outcome = outcome == 'Transfer Out' ? 'Adasamuka' : 'Died'
+		# end
 		patient_bean = {
 				:national_id => national_id,
 				:first_name => given_name,
@@ -162,9 +163,9 @@ P1\n)
 				:race => race,
 				:occupation => occupation,
 				:citizenship => citizenship,
-				:country_of_residence => country_of_residence,
-				:outcome => outcome, :outcome_date => outcome_date
+				:country_of_residence => country_of_residence
 		}
+		# :outcome => outcome , :outcome_date => outcome_date (to add above later on)
 		
 		patient_bean = OpenStruct.new patient_bean #Making the keys accessible by a dot operator
 		return patient_bean

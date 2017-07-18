@@ -14,6 +14,7 @@ class DdeController < ApplicationController
 		File.open("#{Rails.root}/tmp/token",'w') do |token|
 			token.write(dde_token)
 		end
+		redirect_to '/' and return
 	end
 	
 	def add_dde_user
@@ -1195,70 +1196,7 @@ A35,76,0,2,2,2,N,"#{patient_bean.national_id} #{patient_bean.birthdate}(#{patien
 			end
 		
 		end
-		
-		# pagesize = ((pagesize) * 2) - result.length
-=begin
-    Person.find(:all, :joins => [:names], :limit => pagesize, :offset => offset, :conditions => ["given_name = ? AND family_name = ? AND gender = ?", params["given_name"], params["family_name"], params["gender"]]).each do |person|
 
-      patient = person.patient # rescue nil
-
-      national_id = (patient.patient_identifiers.find_by_identifier_type(PatientIdentifierType.find_by_name("National id").id).identifier rescue nil)
-
-      next if filter[national_id]
-
-      name = patient.person.names.last rescue nil
-
-      address = patient.person.addresses.last rescue nil
-
-      person = {
-          "local" => true,
-          "national_id" => national_id,
-          "patient_id" => (patient.patient_id rescue nil),
-          "age" => (((Date.today - patient.person.birthdate.to_date).to_i / 365) rescue nil),
-          "names" =>
-              {
-                  "family_name" => (name.family_name rescue nil),
-                  "given_name" => (name.given_name rescue nil),
-                  "middle_name" => (name.middle_name rescue nil),
-                  "maiden_name" => (name.family_name2 rescue nil)
-              },
-          "gender" => (patient.person.gender rescue nil),
-          "person_attributes" => {
-              "occupation" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Occupation").id).value rescue nil),
-              "cell_phone_number" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Cell Phone Number").id).value rescue nil),
-              "home_phone_number" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Home Phone Number").id).value rescue nil),
-              "office_phone_number" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Office Phone Number").id).value rescue nil),
-              "race" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Race").id).value rescue nil),
-              "country_of_residence" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Country of Residence").id).value rescue nil),
-              "citizenship" => (patient.person.person_attributes.find_by_person_attribute_type_id(PersonAttributeType.find_by_name("Citizenship").id).value rescue nil)
-          },
-          "birthdate" => (patient.person.birthdate rescue nil),
-          "patient" => {
-              "identifiers" => (patient.patient_identifiers.collect { |id| {id.type.name => id.identifier} if id.type.name.downcase != "national id" }.delete_if { |x| x.nil? } rescue [])
-          },
-          "birthdate_estimated" => ((patient.person.birthdate_estimated rescue 0).to_s.strip == '1' ? true : false),
-          "addresses" => {
-              "current_residence" => (address.address1 rescue nil),
-              "current_village" => (address.city_village rescue nil),
-              "current_ta" => (address.township_division rescue nil),
-              "current_district" => (address.state_province rescue nil),
-              "home_village" => (address.neighborhood_cell rescue nil),
-              "home_ta" => (address.county_district rescue nil),
-              "home_district" => (address.address2 rescue nil)
-          }
-      }
-
-      person["application"] = "#{settings["application_name"]}"
-      person["site_code"] = "#{settings["site_code"]}"
-
-      result << person
-
-      # TODO: Need to find a way to limit in a better way the number of records returned without skipping any as some will never be seen with the current approach
-
-      # break if result.length >= 7
-
-    end if pagesize > 0 and result.length < 8
-=end
 		render :text => result.to_json
 	end
 	
@@ -1277,10 +1215,10 @@ A35,76,0,2,2,2,N,"#{patient_bean.national_id} #{patient_bean.birthdate}(#{patien
 		
 		if result == 'No Content'
 			# add person
-			dde_patient = DDE2Service.add_patient(json)
-			raise dde_patient.inspect
-			session[:dde_object] = dde_patient
-			
+			results = DDE2Service.add_patient(json)
+			@results = JSON.parse(results.body)
+			session[:dde_object] = @results['data']
+			print_and_redirect('/people/national_id_label_relation', '/people') and return if (json['print_barcode'] rescue false)
 			redirect_to '/' and return
 		else
 			render :layout => 'ts'
