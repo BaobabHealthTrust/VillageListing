@@ -27,6 +27,27 @@ class ReportController < ApplicationController
 	
 	end
 	
+	def bloomberg_union
+		
+		@report_title = 'Bloomberg Monthly'
+		
+		server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
+		uri = "http://#{server_address}/population_stats.json/"
+		paramz = {district: session[:user]['district'], ta: session[:user]['ta'],
+		          stat: 'bloomberg_union'}
+		
+		data = RestClient.post(uri,paramz)
+		
+		unless data.blank?
+			@stats = JSON.parse(data)
+		else
+			@stats = []
+		end
+		
+		render :layout => false
+	
+	end
+	
 	def village_outcome
 		
 		@report_title = 'Zotsatira zonse' #Village outcome stats
@@ -117,6 +138,9 @@ class ReportController < ApplicationController
 			when 'death_outcome'
 				outcome = params[:outcome]
 				@report_title = "Zotsatira za omwalira (#{outcome.gsub('_',' ').titleize})"
+			when 'bloomberg_union'
+				outcome = params[:outcome]
+				@report_title = "Bloomberg Union (#{outcome.gsub('_',' ').titleize})"
 		end
 		
 		village = session[:user]['village']
