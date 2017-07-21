@@ -19,6 +19,14 @@
 		function initialize() {
 
 			var feed = new google.feeds.Feed("http://mwnation.com/section/chichewa/feed");
+			/** This can be used for passing all parameters
+			var feed = new google.feeds.Feed("https://news.ycombinator.com/rss",{
+				api_key : '0000000000000000000000000000000000000000',
+				count : 5,
+				order_by : 'title',
+				order_dir : 'asc'
+			});
+             */
 			feed.load(function(result) {
 				if (!result.error) {
 					var container = document.getElementById("feed");
