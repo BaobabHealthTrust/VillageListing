@@ -40,6 +40,9 @@ class ReportController < ApplicationController
 		
 		unless data.blank?
 			@stats = JSON.parse(data)
+			File.open("bloomberg_union.json","w") do |f|
+				f.write(@stats)
+			end
 		else
 			@stats = []
 		end
