@@ -1,0 +1,103 @@
+<html>
+<head>
+    <!--
+        === Remove google's feed script ===
+        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    -->
+
+    <!-- === Add this (rss2json) script === -->
+    <script type="text/javascript" src="https://rss2json.com/gfapi.js"></script>
+
+    <script type="text/javascript">
+
+		google.load("feeds", "1");
+
+		/**
+		 * Returns entry = {title: '', link: '', content: '', contentSnippet: '',
+         * publishedDate: '', categories: Array[1]}
+		 */
+		function initialize() {
+
+			var feed = new google.feeds.Feed("http://mwnation.com/section/chichewa/feed");
+			feed.load(function(result) {
+				if (!result.error) {
+					var container = document.getElementById("feed");
+					var ul = document.createElement("ul");
+					ul.style.padding = "0px";
+					ul.style.listStyle = "none";
+					ul.style.width = "100%";
+					ul.style.margin = "0px";
+
+					container.appendChild(ul);
+
+					for (var i = 0; i < result.feed.entries.length; i++) {
+						var entry = result.feed.entries[i];
+
+						var title = document.createElement('li');
+						title.className = 'title';
+						title.style.padding = "20px";
+						title.style.fontSize = "24px";
+						title.style.borderBottom = "1px dotted rgba(204,204,204,1)";
+						title.setAttribute("path", entry.link);
+
+						var title_text = document.createTextNode(entry.title);
+						title.appendChild(title_text);
+
+						title.onmousedown = function () {
+							if (document.getElementById("iframe")) {
+								bhtNewsShowArticle(this.getAttribute("path"));
+								window.parent.bhtNewsShowBackButton();
+							}
+						}
+
+						ul.appendChild(title);
+					}
+				}
+			});
+		}
+
+		function bhtNewsShowArticle(id) {
+
+			bhtNewsAjaxLogClick(id);
+
+			var index = bhtNewsCounts[bhtNewsCurrentCategory].indexOf(id);
+
+			if (index > -1) {
+
+				bhtNewsCounts[bhtNewsCurrentCategory].splice(index, 1);
+
+			}
+
+			var doc = bhtNewsDataById[id];
+
+			if (!doc)
+				return;
+
+			var html = "<body><style>body{margin:0px;font:14px'LucidaGrande',Helvetica,Arial,sans-serif;-moz-user-select:none;color:rgba(51,51,51,1);}</style>";
+
+			var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+			var date = new Date(parseInt(doc.datetime));
+			var published = date.getDate() + "/" + months[date.getMonth()] + "/" + date.getFullYear();
+
+			html += "<table style='width: 100%;' cellpadding=10 ><tr><th style='text-align: left; font-size: 28px;' >" +
+					doc.title + "</th><td align='right'>" + published + "</td></tr><tr><td colspan='2' style='border-top: 1px solid rgba(204,204,204,1); font-size: 26px;'>" +
+					doc.body + "</td></tr></table></body>";
+
+			var page = 'data:text/html;charset=utf-8,' + encodeURI(html);
+
+			if (__$("iframe")) {
+
+				__$("iframe").setAttribute("src", page);
+
+			}
+
+		}
+
+		google.setOnLoadCallback(initialize);
+
+    </script>
+</head>
+<body>
+<div id="feed"></div>
+</body>
+</html>

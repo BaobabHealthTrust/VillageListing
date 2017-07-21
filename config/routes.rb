@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 	
+  get 'news/index'
+
 	get 'main/index'
 	
 	##################### people ######################
@@ -219,6 +221,8 @@ Rails.application.routes.draw do
 	get "/api/ping"
 	get "/api/dashboard"
 	
+    # news
+    get '/news' => 'news#index'
 	#End of APIs
 	root 'home#index'
 end
