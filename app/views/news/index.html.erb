@@ -1,9 +1,115 @@
 <html>
 <head>
-    <!--
-        === Remove google's feed script ===
-        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    -->
+
+    <style type="text/css">
+        .buttons {
+            top: 0px;
+        }
+        .button {
+            font-size: 24px;
+            text-shadow: -1px -1px 0 rgba(0,0,0,0.3);
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 5px 0px 0px;
+            color: #ffffff;
+            padding: 10px;
+            display: inline-block;
+            text-align: center;
+            text-decoration: none;
+            width: 120px;
+            min-height: 55px;
+            margin: 3px;
+            border-radius: 3px !important;
+        }
+        .button-cancel:hover {
+            border: #5ca6c4;
+            background-color: red;
+        }
+        .button-cancel {
+            border: #7eb9d0;
+            background-color: darkred;
+            float: left;
+        }
+        .button-finish:hover {
+            border: #224b09;
+            background-color: #224b09;
+        }
+        .button-finish {
+            border: #4ba614;
+            background-color: #4ba614;
+            float: right;
+        }
+        .feed-body {
+            height: 90%;
+            top: 0px;
+            left: 0px;
+            width: 99.9%;
+            overflow-y:auto;
+            overflow-x:hidden;
+            border-radius: 10px;
+            border: 1px solid lightgray;
+        }
+        .row-button-print {
+            position: fixed;
+            left: 0px;
+            bottom: 0px;
+            height: 80px;
+            overflow: hidden;
+            padding-right: 20px;
+            width: 100%;
+            background-color: rgb(51,51,51);
+        }
+        .modalDialog {
+            position: fixed;
+            font-family: Arial, Helvetica, sans-serif;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 99999;
+            opacity:0;
+            -webkit-transition: opacity 400ms ease-in;
+            -moz-transition: opacity 400ms ease-in;
+            transition: opacity 400ms ease-in;
+            pointer-events: none;
+        }
+        .modalDialog:target {
+            opacity:1;
+            pointer-events: auto;
+        }
+        .modalDialog > div {
+            width: 400px;
+            position: relative;
+            margin: 10% auto;
+            padding: 5px 20px 13px 20px;
+            border-radius: 10px;
+            background: #fff;
+            background: -moz-linear-gradient(#fff, #999);
+            background: -webkit-linear-gradient(#fff, #999);
+            background: -o-linear-gradient(#fff, #999);
+        }
+        .close {
+            background: #606061;
+            color: #FFFFFF;
+            line-height: 25px;
+            position: absolute;
+            right: -12px;
+            text-align: center;
+            top: -10px;
+            width: 24px;
+            text-decoration: none;
+            font-weight: bold;
+            -webkit-border-radius: 12px;
+            -moz-border-radius: 12px;
+            border-radius: 12px;
+            -moz-box-shadow: 1px 1px 3px #000;
+            -webkit-box-shadow: 1px 1px 3px #000;
+            box-shadow: 1px 1px 3px #000;
+        }
+        .close:hover { background: #00d9ff; }
+    </style>
 
     <!-- === Add this (rss2json) script === -->
     <script type="text/javascript" src="https://rss2json.com/gfapi.js"></script>
@@ -30,6 +136,7 @@
 			feed.load(function(result) {
 				if (!result.error) {
 					var container = document.getElementById("feed");
+
 					var ul = document.createElement("ul");
 					ul.style.padding = "0px";
 					ul.style.listStyle = "none";
@@ -40,72 +147,69 @@
 
 					for (var i = 0; i < result.feed.entries.length; i++) {
 						var entry = result.feed.entries[i];
+                        var content = entry.content;
 
-						var title = document.createElement('li');
-						title.className = 'title';
-						title.style.padding = "20px";
-						title.style.fontSize = "24px";
-						title.style.borderBottom = "1px dotted rgba(204,204,204,1)";
-						title.setAttribute("path", entry.link);
+						var li = document.createElement('li');
+						li.className = 'title';
+						li.style.padding = "20px";
+						li.style.fontSize = "24px";
+						li.style.textDecoration = 'none';
+						li.style.borderBottom = "1px dotted rgba(204,204,204,1)";
+                            var link = document.createElement('a')
+                            link.setAttribute('href', '#showArticle');
+                            link.className = 'title';
+                            link.style.padding = "20px";
+                            link.style.fontSize = "24px";
+                            link.style.borderBottom = "1px dotted rgba(204,204,204,1)";
 
-						var title_text = document.createTextNode(entry.title);
-						title.appendChild(title_text);
+                            var title_text = document.createTextNode(entry.title);
+						    link.appendChild(title_text);
+						li.appendChild(link);
+						ul.appendChild(li);
 
-						title.onmousedown = function () {
-							if (document.getElementById("iframe")) {
-								bhtNewsShowArticle(this.getAttribute("path"));
-								window.parent.bhtNewsShowBackButton();
-							}
-						}
+						document.getElementById('showArticle').innerHTML = content;
+//
+//						var show_article = document.createElement('div');
+//						show_article.className = 'modalDialog';
+//						container.appendChild(show_article);
+//                            var article_holder = document.createElement('div');
+//                            show_article.appendChild(article_holder);
+//
+//                                var article_close = document.createTextNode('<a href="#close" title="Close" class="close">X</a>');
+//                                article_holder.appendChild(article_close);
+//                                var article_content = document.createElement('div');
+//                                article_holder.innerHTML = entry.content;
 
-						ul.appendChild(title);
 					}
 				}
 			});
 		}
 
-		function bhtNewsShowArticle(id) {
-
-			bhtNewsAjaxLogClick(id);
-
-			var index = bhtNewsCounts[bhtNewsCurrentCategory].indexOf(id);
-
-			if (index > -1) {
-
-				bhtNewsCounts[bhtNewsCurrentCategory].splice(index, 1);
-
-			}
-
-			var doc = bhtNewsDataById[id];
-
-			if (!doc)
-				return;
-
-			var html = "<body><style>body{margin:0px;font:14px'LucidaGrande',Helvetica,Arial,sans-serif;-moz-user-select:none;color:rgba(51,51,51,1);}</style>";
-
-			var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-			var date = new Date(parseInt(doc.datetime));
-			var published = date.getDate() + "/" + months[date.getMonth()] + "/" + date.getFullYear();
-
-			html += "<table style='width: 100%;' cellpadding=10 ><tr><th style='text-align: left; font-size: 28px;' >" +
-					doc.title + "</th><td align='right'>" + published + "</td></tr><tr><td colspan='2' style='border-top: 1px solid rgba(204,204,204,1); font-size: 26px;'>" +
-					doc.body + "</td></tr></table></body>";
-
-			var page = 'data:text/html;charset=utf-8,' + encodeURI(html);
-
-			if (__$("iframe")) {
-
-				__$("iframe").setAttribute("src", page);
-
-			}
-
-		}
-
 		google.setOnLoadCallback(initialize);
 
     </script>
+
 </head>
 <body>
-<div id="feed"></div>
+
+<div id="feed" class="feed-body">
+
+</div>
+
+<div id="showArticle" class="modalDialog">
+    <div id="article_holder">
+        <a href="#close" title="Close" class="close">X</a>
+        <div id="article_content"></div>
+    </div>
+</div>
+
+<!-- Controls -->
+<div class="row-button-print">
+    <div class="buttons">
+        <%= button_to 'Maliza', {}, {class: 'button button-finish'} %>
+        <%= button_to 'Bwerera', {}, {class: 'button button-cancel'} %>
+    </div>
+</div>
+<!-- //-->
 </body>
 </html>

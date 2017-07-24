@@ -1,87 +1,87 @@
 <style>
 
-body {
-  -webkit-user-select: none;  /* Chrome all / Safari all */
-  -moz-user-select: none;     /* Firefox all */
-  -ms-user-select: none;      /* IE 10+ */
-  user-select: none;          /* Likely future */ 
-}
+    body {
+        -webkit-user-select: none;  /* Chrome all / Safari all */
+        -moz-user-select: none;     /* Firefox all */
+        -ms-user-select: none;      /* IE 10+ */
+        user-select: none;          /* Likely future */
+    }
 
-img {
-  user-drag: none; 
-  user-select: none;
-  -moz-user-select: none;
-  -webkit-user-drag: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  pointer-events: none;
-}
+    img {
+        user-drag: none;
+        user-select: none;
+        -moz-user-select: none;
+        -webkit-user-drag: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        pointer-events: none;
+    }
 
-.main-page-container  {
-  display: table;
-  width: 100%;
-  padding: 0px 1px 0px 1px;
-}
+    .main-page-container  {
+        display: table;
+        width: 100%;
+        padding: 0px 1px 0px 1px;
+    }
 
-.main-page-container-rows  {
-  display: table-row;
-}
+    .main-page-container-rows  {
+        display: table-row;
+    }
 
-.cells {
-  display: table-cell;
-}
+    .cells {
+        display: table-cell;
+    }
 
 
-/* ...................................... */
-.divbtn {
-  height: 265px;
-  display: table;
-  margin-top: 10px;
-  cursor:pointer;
-  box-shadow: 10px 10px 5px #888888;
-}
+    /* ...................................... */
+    .divbtn {
+        height: 265px;
+        display: table;
+        margin-top: 10px;
+        cursor:pointer;
+        box-shadow: 10px 10px 5px #888888;
+    }
 
-.icons {
-  width: 160px;
-  height: 160px;
-  margin-top: 10%;
-  text-align: middle;
-}
+    .icons {
+        width: 160px;
+        height: 160px;
+        margin-top: 10%;
+        text-align: center;
+    }
 
-.divbtn p {
-  font-weight: bold;
-}
+    .divbtn p {
+        font-weight: bold;
+    }
 
-.btncells {
-  width: 25%;
-  text-align: center;
-}
+    .btncells {
+        width: 25%;
+        text-align: center;
+    }
 
-.small-icons {
-  width: 100px;
-  height: 100px;
-}
+    .small-icons {
+        width: 100px;
+        height: 100px;
+    }
 
-.header .cells {
-  vertical-align: middle; 
-  padding-right: 5px;
-}
+    .header .cells {
+        vertical-align: middle;
+        padding-right: 5px;
+    }
 
-#scan {
-  background-color: lightgrey;
-  border-style: solid;
-  border-width: 1px;
-  font-size: 80px;
-  margin-bottom: 6px;
-  width: 44%;
-}
+    #scan {
+        background-color: lightgrey;
+        border-style: solid;
+        border-width: 1px;
+        font-size: 80px;
+        margin-bottom: 6px;
+        width: 44%;
+    }
 
-.header .icons {
-  width: 100px;
-  height: 100px;
-}
+    .header .icons {
+        width: 100px;
+        height: 100px;
+    }
 
-/* ...................................... */
+    /* ...................................... */
 </style>
 
 <%= render :partial => 'header' %>
@@ -89,89 +89,90 @@ img {
 
 <div class="main-page-container">
 
-<div class="main-page-container-rows">
-    <!-- loop -->
-  <div class="cells btncells">
-    <div class="divbtn" style="background-color:#6b6b6b;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/user/list'" >
+    <div class="main-page-container-rows">
+        <!-- loop -->
+        <div class="cells btncells">
+            <div class="divbtn" style="background-color:#6b6b6b;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/user/list'" >
         <span class="icons">
           <%=image_tag("icons/cloud-users-128.png", class: 'icons')%>
-          <p>Ogwiritsa Onse</p>
+            <p>Ogwiritsa Onse</p>
         </span>
-    </div>
-  </div>
-  <!-- endloop -->
+            </div>
+        </div>
+        <!-- endloop -->
 
-  <!-- loop -->
-  <div class="cells btncells">
-    <%username = session[:user]['username']%>
-    <div class="divbtn" style="background-color:#43b51f;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/change_password/<%=username%>'" >
+        <!-- loop -->
+        <div class="cells btncells">
+            <%username = session[:user]['username']%>
+            <div class="divbtn" style="background-color:#43b51f;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/change_password/<%=username%>'" >
         <span class="icons">
           <%=image_tag("icons/change-password.png", class: 'icons')%>
-          <p style="color: black;">Sithani mawu a Chinsisi</p>
+            <p style="color: black;">Sithani mawu a Chinsisi</p>
         </span>
-    </div>
-  </div>
-  <!-- endloop -->
-  
-  <!-- loop -->
-  <div class="cells btncells">
-    <%if session[:user]['role'] == 'admin'%>
-    <div class="divbtn" style="background-color:#00aeef;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/user/new'" >
+            </div>
+        </div>
+        <!-- endloop -->
+
+        <!-- loop -->
+        <div class="cells btncells">
+            <%if session[:user]['role'] == 'admin'%>
+                <div class="divbtn" style="background-color:#00aeef;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/user/new'" >
         <span class="icons">
           <%=image_tag("icons/register.png", class: 'icons')%>
-          <p>Wonjezani Ogwiritsa</p>
+            <p>Wonjezani Ogwiritsa</p>
         </span>
-    </div>
-    <%end%>
-  </div>
-  <!-- endloop -->
-  
-  <!-- loop -->
-  <div class="cells btncells">
-    <%if session[:user]['role'] == 'admin'%>
-      <div class="divbtn" style="background-color:#f58d00;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/user/list'" >
-    <%else%>
-      <div class="divbtn" style="background-color:#f58d00;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/user/edit/<%=username%>'" >
-    <%end%>
-        <span class="icons">
+                </div>
+            <%end%>
+        </div>
+        <!-- endloop -->
+
+        <!-- loop -->
+        <div class="cells btncells">
+            <%if session[:user]['role'] == 'admin'%>
+                <div class="divbtn" style="background-color:#f58d00;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/user/list'" >
+            <%else%>
+                <div class="divbtn" style="background-color:#f58d00;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/user/edit/<%=username%>'" >
+            <%end%>
+            <span class="icons">
           <%=image_tag("icons/demographic.png", class: 'icons')%>
-          <p>Sinthani Za Ogwiritsa</p>
+                <p>Sinthani Za Ogwiritsa</p>
         </span>
-    </div>
-  </div>
-  <!-- endloop -->
-</div>
+            </div>
+            </div>
+            <!-- endloop -->
+        </div>
 
-<div class="main-page-container-rows">
-  <!-- loop -->
-  <div class="cells btncells">
-  </div>
-  <!-- endloop -->
+        <div class="main-page-container-rows">
+            <!-- loop -->
+            <div class="cells btncells">
+            </div>
+            <!-- endloop -->
 
-  <!-- loop -->
-  <div class="cells btncells">
-  </div>
-  <!-- endloop -->
+            <!-- loop -->
+            <div class="cells btncells">
+            </div>
+            <!-- endloop -->
 
-  <!-- loop -->
-  <div class="cells btncells">
-  </div>
-  <!-- endloop -->
+            <!-- loop -->
+            <div class="cells btncells">
+            </div>
+            <!-- endloop -->
 
-    <!-- loop -->
-  <div class="cells btncells">
-    <div class="divbtn" style="background-color: #4682b4;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/'" >
+            <!-- loop -->
+            <div class="cells btncells">
+                <div class="divbtn" style="background-color: #4682b4;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/'" >
         <span class="icons">
           <%=image_tag("icons/gohome.png", class: 'icons')%>
-          <p>Bwelerani</p>
+            <p>Bwelerani</p>
         </span>
+                </div>
+            </div>
+            <!-- endloop -->
+
+        </div>
+
+
     </div>
-  </div>
-  <!-- endloop -->
-
-</div>
-
-
 </div>
 
 <%= render :partial => 'home/footer' %>
