@@ -159,33 +159,24 @@
         </tr>
         </thead>
         <tbody>
-        <%
-            total = 0
-            (@stats || {}).each do |stat, count|%>
+        <% (@stats || {}).each do |stat, count| %>
             <tr>
-                <th style="text-align: left;">
-                    <%=stat.gsub('_',' ').titleize%>
-                </th>
+                <% if stat == 'total_census' %>
+                    <th style="text-align: left; background-color: lightgray">
+                        <%=stat.gsub('_',' ').titleize%>
+                    </th>
+                <% else %>
+                    <th style="text-align: left;">
+                        <%=stat.gsub('_',' ').titleize%>
+                    </th>
+                <% end %>
                 <td style="text-align: left;">
                     <a href="/drill_down/bloomberg_union?outcome=<%=stat%>"><%=count%></a>
                 </td>
             </tr>
-        <%
-            total +=  count
-            end%>
-
-        <tfoot>
-        <tr style="background-color: lightgrey;">
-            <td style="text-align: left;">
-                Total
-            </td>
-            <td>
-                <%#=total < 1 ? '0' : total%>
-            </td>
-        </tr>
-        </tfoot>
+        <% end %>
         </tbody>
-        </table>
+    </table>
 
 
 </div>
