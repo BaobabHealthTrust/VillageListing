@@ -162,7 +162,7 @@ class ReportController < ApplicationController
 		end
 
 		data = RestClient.post(uri,paramz)
-	
+		
 		unless data.blank?
 			@people = JSON.parse(data)
 		else

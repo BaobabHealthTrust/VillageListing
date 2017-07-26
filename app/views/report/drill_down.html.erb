@@ -136,7 +136,7 @@
             <th>Dzina La Bambo</th>
             <th>Mkazi/Mwamuna</th>
             <th>Tsiku Lobadwa</th>
-            <% if params['outcome'].nil? %>
+            <% if params['outcome'].nil? && params['parameter'] != 'deaths' %>
                 <th>Boma Lakwawo</th>
             <% else %>
                 <th>Tsiku Lomwalira</th>
