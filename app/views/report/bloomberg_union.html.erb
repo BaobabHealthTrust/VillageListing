@@ -173,7 +173,9 @@
                         <%=stat.gsub('_',' ').titleize%>
                     </th>
                     <td style="text-align: left;">
-                        <a href="/drill_down/bloomberg_union?outcome=<%=stat%>"><%=count%></a>
+                        <a href="/drill_down/bloomberg_union?parameter=<%=stat%>&month_period=<%= params[:month_period] %>">
+                            <%=count%>
+                        </a>
                     </td>
                 <% end %>
             </tr>
