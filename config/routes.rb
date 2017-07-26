@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
 	
-  get 'news/index'
-
+	get 'news/index'
+	
 	get 'main/index'
 	
 	##################### people ######################
@@ -47,7 +47,9 @@ Rails.application.routes.draw do
 	post '/ta_population_tabulation' => 'report#ta_population_tabulation'
 	get '/village_outcomes' => 'report#village_outcome'
 	get '/death_outcomes' => 'report#death_outcome'
+	get '/monthly_select' => 'report#monthly_select'
 	get '/bloomberg_union' => 'report#bloomberg_union'
+	post '/bloomberg_union' => 'report#bloomberg_union'
 	post '/village_population_birth_year' => 'report#village_population_birth_year'
 	get '/report/village_population_per_ta'
 	post '/report/village_population_per_ta'
@@ -221,8 +223,8 @@ Rails.application.routes.draw do
 	get "/api/ping"
 	get "/api/dashboard"
 	
-    # news
-    get '/news' => 'news#index'
+	# news
+	get '/news' => 'news#index'
 	#End of APIs
 	root 'home#index'
 end

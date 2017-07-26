@@ -27,14 +27,17 @@ class ReportController < ApplicationController
 	
 	end
 	
+	def monthly_select
+		@months = Date::MONTHNAMES
+	end
+	
 	def bloomberg_union
 		
-		@report_title = 'Bloomberg Monthly'
-		
+		@report_title = 'Bloomberg Union Monthly'
 		server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
 		uri = "http://#{server_address}/population_stats.json/"
 		paramz = {district: session[:user]['district'], ta: session[:user]['ta'],
-		          stat: 'bloomberg_union'}
+		          stat: 'bloomberg_union', month_period: params[:month_period]}
 		
 		data = RestClient.post(uri,paramz)
 		

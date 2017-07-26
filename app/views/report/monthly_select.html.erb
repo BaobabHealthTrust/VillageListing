@@ -1,0 +1,22 @@
+<script>
+	var tt_cancel_destination = "/report/index";
+</script>
+
+<style>
+    .inputFrameClass {
+        height: 85%;
+    }
+
+    .options {
+        height: 88%;
+    }
+
+</style>
+
+<%=form_tag "/bloomberg_union" do%>
+    <%= select_tag 'month_period',
+                   options_for_select(@months, []),
+                   :helpText => "Select which month of #{Date.today.year} to report" ,
+                   :tt_onload => "$('keyboard').style.display = 'none'",
+                   :multiple => false %>
+<%end%>
