@@ -163,7 +163,7 @@
             <tr>
                 <% if stat == 'total_census' %>
                     <th style="text-align: left; background-color: lightgray">
-                        <%=stat.gsub('_',' ').titleize%> (as of today (<%= Date.today %>))
+                        <%=stat.gsub('_',' ').titleize%> as of today (<%= Date.today %>)
                     </th>
                     <td style="text-align: left; background-color: lightgray">
                         <a href="/drill_down/bloomberg_union?outcome=<%=stat%>"><%=count%></a>
