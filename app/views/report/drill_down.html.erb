@@ -1,3 +1,7 @@
+<script>
+	var tt_cancel_destination = "/monthly_select";
+</script>
+
 <style>
 
     body {
@@ -151,7 +155,13 @@
         <%total_people = 0
           (@people || []).each_with_index do |person, i|%>
             <tr>
-                <td><%=person['person'] rescue 'Not assigned'%></td>
+                <td>
+                    <% if person['person'].present? %>
+                        <%=person['person'] rescue 'Not assigned'%>
+                    <% elsif person['_id'].present? %>
+                        <%= person['_id'] %>
+                    <% end %>
+                </td>
                 <td><%=person['person_record']['names']['given_name'] rescue 'N/A' %></td>
                 <td><%=person['person_record']['names']['family_name'] rescue 'N/A' %></td>
                 <td><%=person['person_record']['gender'] rescue 'N/A' %></td>

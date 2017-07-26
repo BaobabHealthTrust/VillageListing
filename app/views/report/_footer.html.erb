@@ -23,7 +23,14 @@
 <div id="footer">
 
     <div id="buttons" class="buttons" style="top: 0px;">
-        <button style="margin: 5px 0px 0px; min-width: 190px; float: left;" class="blue" onclick="document.location='/report/index'"><span>Bwelera</span></button>
+        <% if params[:parameter].present? %>
+            <button style="margin: 5px 0px 0px; min-width: 190px; float: left;" class="blue" onclick="document.location='/monthly_select'">
+                <span>Back</span>
+            </button>
+        <% else %>
+            <button style="margin: 5px 0px 0px; min-width: 190px; float: left;" class="blue" onclick="document.location='/report/index'"><span>Bwelera</span></button>
+        <% end %>
+
         <% if @report_title == 'Bloomberg Union Monthly' %>
             <button style="margin: 5px 0px 0px; min-width: 190px; float: right;" class="green" onclick="tableToCSV();">
                 <span>Download CSV</span>
