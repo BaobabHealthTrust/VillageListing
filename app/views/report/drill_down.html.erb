@@ -147,7 +147,9 @@
             <% else %>
                 <th>Tsiku Lomwalira</th>
             <% end %>
-            <th>TA Wakwawo</th>
+            <th>
+                Date of Registration
+            </th>
             <th>Mudzi Wakwawo</th>
         </tr>
         </thead>
@@ -175,7 +177,7 @@
                         <%= person['outcome_date'].to_date.strftime('%d/%b/%Y') %>
                     </td>
                 <% end %>
-                <td><%=person['person_record']['addresses']['home_ta'] rescue 'N/A' %></td>
+                <td><%=person['person_record']['created_at'].to_date.strftime('%d/%b/%Y') rescue 'N/A' %></td>
                 <td><%=person['person_record']['addresses']['home_village'] rescue 'N/A' %></td>
             </tr>
         <%total_people = i
