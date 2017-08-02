@@ -418,6 +418,8 @@ class ReportController < ApplicationController
 		
 		patient_age += (estimate && birth_date.month == 7 && birth_date.day == 1  &&
 				today.month < birth_date.month && person['created_at'].to_date.year == today.year) ? 1 : 0
+		
+		return patient_age.to_i
 	end
 	
 	def get_tornado_age_group(person)
