@@ -6,20 +6,35 @@ module DDE2Service
 		default_password = dde_connection['default_password']
 		dde_username = dde_connection['dde_username']
 		dde_password = dde_connection['dde_password']
+		dde_user_validation = dde_connection['dde_user_validation']
 		application_name = dde_connection['application_name']
 		site_code = dde_connection['site_code']
 		
 		return {'server': dde_server, 'default_username': default_username,
-		        'default_password': default_password, 'username': dde_username,
-		        'password': dde_password, 'application_name': application_name, 'site_code': site_code}
+		        'default_password': default_password, 'dde_username': dde_username,
+		        'dde_password': dde_password, 'dde_user_validation': dde_user_validation,
+		        'application_name': application_name, 'site_code': site_code}
 	end
 	
-	def self.dde_authenticate(dde)
-		if dde[:username].nil?
-			payload_params = {'username': dde[:default_username], 'password': dde[:default_password]}
-		else
-			payload_params = {'username': dde[:username], 'password': dde[:password]}
+	def self.dde_admin_authenticate(dde)
+		payload_params = {'username': dde[:default_username], 'password': dde[:default_password]}
+		
+		response = RestClient.post "#{dde[:server]}/v1/authenticate", payload_params.to_json,
+		                           content_type: :json
+		
+		data = JSON.parse(response)['data']
+		
+		dde_token = data['token']
+		
+		File.open("#{Rails.root}/tmp/token",'w') do |token|
+			token.write(dde_token)
 		end
+		
+		return data
+	end
+	
+	def self.dde_user_authenticate(dde)
+		payload_params = {'username': dde[:dde_username], 'password': dde[:dde_password]}
 		
 		response = RestClient.post "#{dde[:server]}/v1/authenticate", payload_params.to_json,
 		                           content_type: :json
@@ -51,7 +66,7 @@ module DDE2Service
 	end
 	
 	def self.add_dde_user(dde, token)
-		payload_params = {'username': dde[:username], 'password': dde[:password], 'application': dde[:application_name],
+		payload_params = {'username': dde[:dde_username], 'password': dde[:dde_password], 'application': dde[:application_name],
 		                  'site_code': dde[:site_code], 'token': token}
 		response = RestClient.put"#{dde[:server]}/v1/add_user", payload_params.to_json,
 		                         content_type: :json

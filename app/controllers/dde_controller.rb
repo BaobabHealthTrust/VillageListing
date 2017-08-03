@@ -7,14 +7,24 @@ class DdeController < ApplicationController
 	# -- Based on RSpec tests ----
 	
 	def dde_authenticate
+		
 		dde = DDE2Service.dde_settings
-		returned_token = DDE2Service.dde_authenticate(dde)
+		
+		if dde[:dde_user_validation] == false
+			returned_token = DDE2Service.dde_admin_authenticate(dde)
+			redirection_path = '/add_dde_user'
+		else
+			returned_token = DDE2Service.dde_user_authenticate(dde)
+			redirection_path = '/'
+		end
+		
 		dde_token = returned_token['token']
 		
 		File.open("#{Rails.root}/tmp/token",'w') do |token|
 			token.write(dde_token)
 		end
-		redirect_to '/' and return
+		
+		redirect_to '/'
 	end
 	
 	def add_dde_user
@@ -23,7 +33,12 @@ class DdeController < ApplicationController
 		}
 		dde = DDE2Service.dde_settings
 		returned_token = DDE2Service.add_dde_user(dde, dde_token)
-
+		
+		File.open("#{Rails.root}/tmp/token",'w') do |token|
+			token.write(returned_token)
+		end
+		
+		redirect_to '/'
 	end
 	
 	def check_dde_token
@@ -986,17 +1001,19 @@ A35,76,0,2,2,2,N,"#{patient_bean.national_id} #{patient_bean.birthdate}(#{patien
 		target = "update" if target.blank?
 		
 		if !@json.blank?
-			if secure?
-				url = "https://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/process_confirmation"
-				outcome_url = "https://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/add_place_of_birth"
-			else
-				url = "http://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/process_confirmation"
-				outcome_url = "http://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/add_place_of_birth"
-			end
-			@results = RestClient.post(url, :person => @json, :content_type => 'application/json', :target => target, :accept => :json)
-			json = JSON.parse(@results)
-			data = {:national_id => json["national_id"], :place_of_birth => @json["place_of_birth"]}
-			outcome_status = RestClient.post(outcome_url, :person => data.to_json, :content_type => "application/json")
+			# if secure?
+			# 	url = "https://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/process_confirmation"
+			# 	outcome_url = "https://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/add_place_of_birth"
+			# else
+			# 	url = "http://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/process_confirmation"
+			# 	outcome_url = "http://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/add_place_of_birth"
+			# end
+			# @results = RestClient.post(url, :person => @json, :content_type => 'application/json', :target => target, :accept => :json)
+			
+			@results = DDE2Service.add_patient(@json)
+			# json = JSON.parse(@results)
+			# data = {:national_id => json["national_id"], :place_of_birth => @json["place_of_birth"]}
+			# outcome_status = RestClient.post(outcome_url, :person => data.to_json, :content_type => "application/json")
 		end
 		
 		render :text => @results
@@ -1212,7 +1229,7 @@ A35,76,0,2,2,2,N,"#{patient_bean.national_id} #{patient_bean.birthdate}(#{patien
 		@settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] # rescue {}
 		
 		result = DDE2Service.search_by_name_and_gender(given_name, family_name, gender)
-		
+		# render text: result.to_json and return
 		if result == 'No Content'
 			# add person
 			results = DDE2Service.add_patient(json)
@@ -1221,6 +1238,7 @@ A35,76,0,2,2,2,N,"#{patient_bean.national_id} #{patient_bean.birthdate}(#{patien
 			print_and_redirect('/people/national_id_label_relation', '/people') and return if (json['print_barcode'] rescue false)
 			redirect_to '/' and return
 		else
+			@results = JSON.parse(result.body)
 			render :layout => 'ts'
 		end
 	
