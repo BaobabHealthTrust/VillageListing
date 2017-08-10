@@ -82,7 +82,7 @@ P1\n)
 	
 	def formatted_dde_object
 		dde_object = session[:dde_object]
-		
+		dde_object = dde_object['data']
 		national_id = dde_object["_id"]
 		national_id = dde_object["national_id"] if national_id.blank?
 		

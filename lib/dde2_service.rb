@@ -71,7 +71,15 @@ module DDE2Service
 		response = RestClient.put"#{dde[:server]}/v1/add_user", payload_params.to_json,
 		                         content_type: :json
 		
-		return response
+		data = JSON.parse(response)['data']
+		
+		dde_token = data['token']
+		
+		File.open("#{Rails.root}/tmp/token",'w') do |token|
+			token.write(dde_token)
+		end
+		
+		return data
 	end
 	
 	def self.search_by_identifer(identifier, token)
@@ -83,6 +91,8 @@ module DDE2Service
 				when 200
 					'Success'
 					return response
+				when 201
+					'Created'
 				when 204
 					'No Content'
 				when 401

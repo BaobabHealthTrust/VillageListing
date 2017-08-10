@@ -32,10 +32,13 @@ class DdeController < ApplicationController
 			token.read
 		}
 		dde = DDE2Service.dde_settings
+		
 		returned_token = DDE2Service.add_dde_user(dde, dde_token)
 		
+		dde_token = returned_token['token']
+		
 		File.open("#{Rails.root}/tmp/token",'w') do |token|
-			token.write(returned_token)
+			token.write(dde_token)
 		end
 		
 		redirect_to '/'
@@ -108,8 +111,6 @@ class DdeController < ApplicationController
 		print_and_redirect("/people/national_id_label", "/people") and return if (json["print_barcode"] rescue false)
 		
 		redirect_to "/people"
-		
-		redirect_to "/clinic" and return
 	
 	end
 	
@@ -669,7 +670,7 @@ class DdeController < ApplicationController
 		
 		@dontstop = false
 		
-		if result == 'Success'
+		if result == 'Success' || 'Created'
 			result = result #JSON.parse(JSON.parse(@results)[0])
 			session[:dde_object] = result
 			redirect_to ("/people") and return
@@ -1172,21 +1173,16 @@ A35,76,0,2,2,2,N,"#{patient_bean.national_id} #{patient_bean.birthdate}(#{patien
 				"gender" => params["gender"]
 		}
 		
-		if !search_hash["names"]["given_name"].blank? and !search_hash["names"]["family_name"].blank? and !search_hash["gender"].blank? # and result.length < pagesize
+		if !search_hash["names"]["given_name"].blank? and !search_hash["names"]["family_name"].blank? and !search_hash["gender"].blank?
 			
 			pagesize += pagesize - result.length
-			if secure?
-				url = "https://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/ajax_process_data"
-			else
-				url = "http://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/ajax_process_data"
-			end
-			remote = RestClient.post(url, {:person => search_hash, :page => page, :pagesize => pagesize}, {:accept => :json})
+			
+			remote = DDE2Service.search_by_name_and_gender(params['given_name'], params['family_name'], params['gender'])
 			
 			json = JSON.parse(remote)
 			
-			json.each do |person|
-				
-				entry = JSON.parse(person)
+			json['data']['hits'].each do |person|
+				entry = person
 				
 				entry["application"] = "#{settings["application_name"]}"
 				entry["site_code"] = "#{settings["site_code"]}"
