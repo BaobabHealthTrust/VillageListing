@@ -82,11 +82,15 @@ P1\n)
 	
 	def formatted_dde_object
 		dde_object = session[:dde_object]
-		#dde_object = dde_object[:data] || dde_object
-		dde_object = JSON.parse(dde_object)['data']['hits'][0] rescue dde_object['data']
+		
+		if dde_object['message'] == 'Created'
+			dde_object = dde_object['data']
+		else
+			dde_object = JSON.parse(dde_object)['data']['hits'][0] rescue dde_object
+		end
+		
 		national_id = dde_object["_id"]
 		national_id = dde_object["national_id"] if national_id.blank?
-		
 		given_name = dde_object["names"]["given_name"]
 		middle_name = dde_object["names"]["middle_name"]
 		maiden_name = dde_object["names"]["maiden_name"]
@@ -97,9 +101,9 @@ P1\n)
 		formatted_birthdate = birthdate.to_date.strftime("%d/%b/%Y") rescue birthdate
 		
 		current_residence = dde_object["addresses"]["current_residence"]
-		current_village = dde_object["addresses"]["current_village"]
-		current_ta = dde_object["addresses"]["current_ta"]
-		current_district = dde_object["addresses"]["current_district"]
+		current_village = session[:user]['village']  #dde_object["addresses"]["current_village"]
+		current_ta = session[:user]['ta'] #dde_object["addresses"]["current_ta"]
+		current_district = session[:user]['district'] #dde_object["addresses"]["current_district"]
 		
 		home_village = dde_object["addresses"]["home_village"]
 		home_ta = dde_object["addresses"]["home_ta"]

@@ -670,7 +670,7 @@ class DdeController < ApplicationController
 		
 		@dontstop = false
 		
-		if result == 'Success' || 'Created'
+		if result == 'Success' || result == 'Created'
 			result = result #JSON.parse(JSON.parse(@results)[0])
 			session[:dde_object] = result
 			redirect_to ("/people") and return
@@ -1222,10 +1222,12 @@ A35,76,0,2,2,2,N,"#{patient_bean.national_id} #{patient_bean.birthdate}(#{patien
 		
 		@json = json
 		
+		
 		@settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] # rescue {}
 		
 		result = DDE2Service.search_by_name_and_gender(given_name, family_name, gender)
 		# render text: result.to_json and return
+		
 		if result == 'No Content'
 			# add person
 			results = DDE2Service.add_patient(json)
