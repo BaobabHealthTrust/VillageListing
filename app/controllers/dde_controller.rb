@@ -674,6 +674,10 @@ class DdeController < ApplicationController
 			result = result #JSON.parse(JSON.parse(@results)[0])
 			session[:dde_object] = result
 			redirect_to ("/people") and return
+		elsif JSON.parse(result.body)['status'] == 200
+			result = JSON.parse(result.body)['data']['hits'][0] #monkey code (to be reviewed for redo later on)
+			session[:dde_object] = result
+			redirect_to ("/people") and return
 		elsif result == 'No Content'
 			redirect_to "/patient_not_found/#{(@json["national_id"] || @json["_id"])}" and return
 		end
@@ -924,13 +928,15 @@ A35,76,0,2,2,2,N,"#{patient_bean.national_id} #{patient_bean.birthdate}(#{patien
 		result = []
 		
 		if !person.blank?
-			if secure?
-				url = "https://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/ajax_process_data"
-			else
-				url = "http://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/ajax_process_data"
-			end
+			# if secure?
+			# 	url = "https://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/ajax_process_data"
+			# else
+			# 	url = "http://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/ajax_process_data"
+			# end
+			#
+			# results = RestClient.post(url, {:person => person, :page => params[:page]}, {:accept => :json})
 			
-			results = RestClient.post(url, {:person => person, :page => params[:page]}, {:accept => :json})
+			results = DDE2Service.advanced_patient_search(person[:names]['given_name'], person[:names]['family_name'], person[:gender], person[:birthdate], person[:addresses]['home_district'])
 			
 			result = JSON.parse(results)
 			
@@ -983,11 +989,11 @@ A35,76,0,2,2,2,N,"#{patient_bean.national_id} #{patient_bean.birthdate}(#{patien
 			
 			end
 			
-			result = result.to_json
+			result = results.to_json
 		
 		end
 		
-		render :text => result
+		render :text => result.to_json
 	end
 	
 	def process_confirmation
@@ -1011,7 +1017,7 @@ A35,76,0,2,2,2,N,"#{patient_bean.national_id} #{patient_bean.birthdate}(#{patien
 			# end
 			# @results = RestClient.post(url, :person => @json, :content_type => 'application/json', :target => target, :accept => :json)
 			
-			@results = DDE2Service.add_patient(@json)
+			@results = DDE2Service.add_patient(@json, session[:user])
 			# json = JSON.parse(@results)
 			# data = {:national_id => json["national_id"], :place_of_birth => @json["place_of_birth"]}
 			# outcome_status = RestClient.post(outcome_url, :person => data.to_json, :content_type => "application/json")
@@ -1222,15 +1228,13 @@ A35,76,0,2,2,2,N,"#{patient_bean.national_id} #{patient_bean.birthdate}(#{patien
 		
 		@json = json
 		
-		
 		@settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] # rescue {}
 		
 		result = DDE2Service.search_by_name_and_gender(given_name, family_name, gender)
-		# render text: result.to_json and return
 		
 		if result == 'No Content'
 			# add person
-			results = DDE2Service.add_patient(json)
+			results = DDE2Service.add_patient(json, session[:user])
 			@results = JSON.parse(results.body)
 			session[:dde_object] = @results['data']
 			print_and_redirect('/people/national_id_label_relation', '/people') and return if (json['print_barcode'] rescue false)

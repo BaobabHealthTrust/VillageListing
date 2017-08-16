@@ -129,8 +129,34 @@ module DDE2Service
 		return response
 	end
 	
-	def self.add_patient(dde_object)
+	def self.advanced_patient_search(given_name, family_name, gender, birthdate, home_district)
 		token = self.get_token
+		dde = self.dde_settings
+		dde_target = self.dde_target('advanced_patient_search')
+		payload_params = {'given_name': given_name, 'family_name': family_name, 'gender': gender, 'birthdate': birthdate,
+		                  'home_district': 'home_district','token': token}
+		
+		response = RestClient.post(dde_target, payload_params.to_json, content_type: :json) {
+				|response, request, result, &block|
+			case response.code
+				when 200
+					'Success'
+					return response
+				when 204
+					'No Content'
+				when 401
+					'Unauthorised'
+				else
+					response.return!(&block)
+			end
+		}
+		
+		return response
+	end
+	
+	def self.add_patient(dde_object, current_details=[])
+		token = self.get_token
+		
 		dde_object = {
 				'given_name': dde_object['names']['given_name'],
 		        'family_name': dde_object['names']['family_name'],
@@ -138,14 +164,15 @@ module DDE2Service
 				'gender': (dde_object['gender']=='F'?'Female':'Male'),
 		        'birthdate': dde_object['birthdate'].gsub('/','-').to_date.strftime("%Y-%m-%d"),
 		        'birthdate_estimated': dde_object['birthdate_estimated'],
-				'current_village': dde_object['addresses']['current_village'],
-				'current_ta': dde_object['addresses']['current_ta'],
-				'current_district': dde_object['addresses']['current_district'],
+				'current_village': current_details['village'],
+				'current_ta': current_details['ta'],
+				'current_district': current_details['district'],
 		        'home_village': dde_object['addresses']['home_village'],
 		        'home_ta': dde_object['addresses']['home_ta'],
 		        'home_district': dde_object['addresses']['home_district'],
 		        'token': token
 		}
+		
 		dde_target = self.dde_target('add_patient')
 		payload_params = dde_object
 		
@@ -165,6 +192,8 @@ module DDE2Service
 				dde_target = "#{dde[:server]}/v1/search_by_identifier/#{identifier}/#{token}"
 			when 'add_patient'
 				dde_target = "#{dde[:server]}/v1/add_patient"
+			when 'advanced_patient_search'
+				dde_target = "#{dde[:server]}/v1/advanced_patient_search"
 		end
 		return dde_target
 	end
