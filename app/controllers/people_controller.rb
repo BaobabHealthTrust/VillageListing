@@ -19,7 +19,6 @@ class PeopleController < ApplicationController
 	
 	def national_id_label
 		patient_bean = formatted_dde_object
-		raise patient_bean.inspect
 		national_id = patient_bean.national_id.downcase.gsub("-", "_")
 		print_string = patient_national_id_label(patient_bean)
 		send_data(print_string,:type=>"application/label; charset=utf-8", :stream=> false,
