@@ -1,3 +1,6 @@
+require "rest-client"
+require "#{Rails.root}/lib/dde2_service"
+
 class PeopleController < ApplicationController
 	skip_before_action :verify_authenticity_token
 	
@@ -322,9 +325,12 @@ P1\n)
 		else
 			url = "http://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/process_confirmation"
 		end
-		result = RestClient.post(url, {:person => person, :target => "update"})
 		
-		json = JSON.parse(result) rescue {}
+		#raise person.inspect
+		result = DDE2Service.update_patient(person, session[:user])
+		# result = RestClient.post(url, {:person => person, :target => "update"})
+		
+		json = JSON.parse(result.body)['data'] rescue {}
 		
 		if (json["patient"]["identifiers"] rescue "").class.to_s.downcase == "hash"
 			

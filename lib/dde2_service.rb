@@ -183,8 +183,51 @@ module DDE2Service
 		return response
 	end
 	
+	def self.update_patient(dde_object, current_details=[])
+		token = self.get_token
+		
+		dde_object = {
+				'npid': dde_object['national_id'],
+				'given_name': dde_object['names']['given_name'],
+				'family_name': dde_object['names']['family_name'],
+				'middle_name': dde_object['names']['middle_name'],
+				'gender': (dde_object['gender']=='F'?'Female':'Male'),
+				'birthdate': dde_object['birthdate'].gsub('/','-').to_date.strftime("%Y-%m-%d"),
+				'birthdate_estimated': dde_object['birthdate_estimated'],
+				'current_village': current_details['village'],
+				'current_ta': current_details['ta'],
+				'current_district': current_details['district'],
+				'home_village': dde_object['addresses']['home_village'],
+				'home_ta': dde_object['addresses']['home_ta'],
+				'home_district': dde_object['addresses']['home_district'],
+				'token': token
+		}
+		
+		dde_target = self.dde_target('update_patient')
+		payload_params = dde_object
+		
+		response = RestClient.post(dde_target, payload_params.to_json, content_type: :json) {
+				|response, request, result, &block|
+			case response.code
+				when 200
+					'Success'
+					return response
+				when 204
+					'No Content'
+				when 401
+					'Unauthorised'
+				else
+					response.return!(&block)
+			end
+		}
+		
+		return response
+	end
+	
 	def self.dde_target(path, identifier=nil, token=self.get_token)
+		
 		dde = self.dde_settings
+		
 		case path
 			when 'search_by_name_and_gender'
 				dde_target = "#{dde[:server]}/v1/search_by_name_and_gender"
@@ -194,7 +237,10 @@ module DDE2Service
 				dde_target = "#{dde[:server]}/v1/add_patient"
 			when 'advanced_patient_search'
 				dde_target = "#{dde[:server]}/v1/advanced_patient_search"
+			when 'update_patient'
+				dde_target = "#{dde[:server]}/v1/update_patient"
 		end
+		
 		return dde_target
 	end
 end
