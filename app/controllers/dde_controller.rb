@@ -783,13 +783,15 @@ class DdeController < ApplicationController
 				:site_code => site_code
 		}
 		
-		relation_results = DDE2Service.update_patient(session[:dde_object], session[:user], people[:secondary], relation)
-		
+		redirect_to :controller => 'people', :action => 'update_demographics', :secondary_person => people[:secondary], :relationship_type => relation
+		# relation_results = DDE2Service.update_patient(session[:dde_object], session[:user], people[:secondary], relationship_type = relation)
+		# raise relation_results.to_json.inspect
 		#relation_results = RestClient.post(relation_url, {:people => people}, {:accept => :json})
-		redirect_to("/people") and return
+		#redirect_to("/people") and return
 	end
 	
 	def retrieve_relations
+		
 		settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] rescue {}
 		if secure?
 			retrieve_relation_url = "https://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/retrieve_relations"

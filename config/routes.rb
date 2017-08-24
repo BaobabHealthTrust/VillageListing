@@ -172,6 +172,8 @@ Rails.application.routes.draw do
 	post'/search' => 'dde#search_name'
 	
 	get '/people/edit_demographics'
+
+    get '/people/update_demographics'
 	post '/people/update_demographics'
 	#map.new_patient '/new_patient', :controller => 'dde', :action => 'new_patient'
 	get '/dde/new_patient'

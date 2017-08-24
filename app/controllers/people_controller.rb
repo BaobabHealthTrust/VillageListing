@@ -239,7 +239,6 @@ P1\n)
 	end
 	
 	def update_demographics
-		
 		patient_bean = formatted_dde_object
 		@settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] rescue {}
 		
@@ -326,9 +325,9 @@ P1\n)
 		end
 		
 		#raise person.inspect
-		result = DDE2Service.update_patient(person, session[:user])
+		result = DDE2Service.update_patient(person, session[:user], params[:secondary_person], params[:relationship_type])
 		# result = RestClient.post(url, {:person => person, :target => "update"})
-		
+	
 		json = JSON.parse(result.body)['data'] rescue {}
 		
 		if (json["patient"]["identifiers"] rescue "").class.to_s.downcase == "hash"

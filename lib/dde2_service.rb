@@ -203,8 +203,8 @@ module DDE2Service
 				'token': token
 		}
 		
-		if !relation.nil?
-			dde_object['relationship'] = {
+		unless relation.nil?
+			dde_object['relationships'] = {
 					"#{relation}": secondary_person['npid']
 			}
 		end
