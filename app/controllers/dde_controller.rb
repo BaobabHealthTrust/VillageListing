@@ -765,6 +765,7 @@ class DdeController < ApplicationController
 	end
 	
 	def create_relation
+		
 		relation = params[:relation]
 		settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] rescue {}
 		site_code = settings["site_code"] rescue ''
@@ -775,8 +776,16 @@ class DdeController < ApplicationController
 			relation_url = "http://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/create_relation"
 		end
 		
-		people = {:primary => session[:dde_object], :secondary => JSON.parse(session[:secondary_person]), :relationship_type => relation, :site_code => site_code}
-		relation_results = RestClient.post(relation_url, {:people => people}, {:accept => :json})
+		people = {
+				:primary => session[:dde_object],
+				:secondary => JSON.parse(session[:secondary_person]),
+				:relationship_type => relation,
+				:site_code => site_code
+		}
+		
+		relation_results = DDE2Service.update_patient(session[:dde_object], session[:user], people[:secondary], relation)
+		
+		#relation_results = RestClient.post(relation_url, {:people => people}, {:accept => :json})
 		redirect_to("/people") and return
 	end
 	

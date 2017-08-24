@@ -183,7 +183,7 @@ module DDE2Service
 		return response
 	end
 	
-	def self.update_patient(dde_object, current_details=[])
+	def self.update_patient(dde_object, current_details=[], secondary_person=[], relation=nil)
 		token = self.get_token
 		
 		dde_object = {
@@ -202,6 +202,12 @@ module DDE2Service
 				'home_district': dde_object['addresses']['home_district'],
 				'token': token
 		}
+		
+		if !relation.nil?
+			dde_object['relationship'] = {
+					"#{relation}": secondary_person['npid']
+			}
+		end
 		
 		dde_target = self.dde_target('update_patient')
 		payload_params = dde_object
