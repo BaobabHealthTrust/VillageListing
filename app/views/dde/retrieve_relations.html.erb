@@ -240,30 +240,29 @@
             </thead>
 
             <% @relatives.each do |relative| %>
-                <% #raise relative.inspect %>
                 <tr>
                     <td style="border-left: 1px dotted #415772; border-right: 1px dotted #415772;
                             padding: 10px; font-size: 24px; border-bottom: 1px solid; ">
-                        <%=  relative["_id"] %>
+                        <%=  relative[1]["_id"] %>
                     </td>
                     <td style="border-right: 1px dotted #415772; padding: 10px; font-size: 24px;
                             border-bottom: 1px solid; ">
-                        <%=  relative["names"]["given_name"] %>
+                        <%=  relative[1]["names"]["given_name"] %>
                     </td>
                     <td style="border-right: 1px dotted #415772; padding: 10px; font-size: 24px;
                             border-bottom: 1px solid; ">
-                        <%=  relative["names"]["family_name"] %>
+                        <%=  relative[1]["names"]["family_name"] %>
                     </td>
                     <td style="border-right: 1px dotted #415772; padding: 10px; font-size: 24px;
                             border-bottom: 1px solid; ">
-                        <%=  relative["addresses"]["current_village"] %>
+                        <%=  relative[1]["addresses"]["current_village"] %>
                     </td>
                     <td style="border-right: 1px dotted #415772; padding: 10px; font-size: 24px;
                             border-bottom: 1px solid; ">
-                        <%= relative["relationship_type"] %>
+                        <%= relative[1]["relationship_type"] %>
                     </td>
                     <td style="border-bottom: 1px solid;">
-                        <button national_id="<%= relative["_id"] %>" onclick="printNationalID(this)"
+                        <button national_id="<%= relative[1]["_id"] %>" onclick="printNationalID(this)"
                                 class="button button_green" style="float: right;  height: 60px; width: 100%; border-radius: 8px;" onclick="window.location = '#'">
                             Dindani Chiphaso
                         </button>

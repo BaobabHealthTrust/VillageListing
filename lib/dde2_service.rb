@@ -236,6 +236,8 @@ module DDE2Service
 		result = self.search_by_identifer(npid, token)
 		person = JSON.parse(result)
 		relations = person['data']['hits'][0]['relations']
+		
+		return relations
 	end
 	
 	def self.dde_target(path, identifier=nil, token=self.get_token)

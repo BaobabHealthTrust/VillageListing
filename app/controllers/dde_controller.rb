@@ -793,18 +793,30 @@ class DdeController < ApplicationController
 	def retrieve_relations
 		npid = params[:npid]
 		
-		settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] rescue {}
-		
-		#@relatives = JSON.parse(RestClient.post(retrieve_relation_url, {:person => session[:dde_object]}, {:accept => :json}))
-		
-		@relatives = DDE2Service.retrieve_relations(npid)
+		relations = DDE2Service.retrieve_relations(npid)
 		
 		@national_id_hash = {}
-		@relatives.each do |relative|
-			national_id = relative["_id"]
-			@national_id_hash[national_id] = relative
+		
+		relations.each do |relation|
+			relation_type = relation[0]
+			national_id = relation[1]
+			token = DDE2Service.get_token
+			
+			result = DDE2Service.search_by_identifer(national_id, token)
+			person = JSON.parse(result)
+			relations = person['data']['hits']
+			
+			relations.each do |relation|
+				next if relation['npid'] != national_id
+				if relation['npid'] == national_id
+					relation['relationship_type'] = relation_type
+					@national_id_hash[national_id] = relation
+				end
+			end
+			
 		end
-	
+		
+		@relatives = @national_id_hash
 	end
 	
 	def relationships
@@ -819,7 +831,7 @@ class DdeController < ApplicationController
 		          :filename=>"#{national_id}.lbl", :disposition => "inline")
 	end
 	
-	###########################LABEL #############################################
+	########################### LABEL #############################################
 	
 	def patient_national_id_label_relation(patient_bean)
 		print_string = %Q(
