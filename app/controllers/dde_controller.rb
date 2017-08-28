@@ -791,15 +791,14 @@ class DdeController < ApplicationController
 	end
 	
 	def retrieve_relations
+		npid = params[:npid]
 		
 		settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] rescue {}
-		if secure?
-			retrieve_relation_url = "https://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/retrieve_relations"
-		else
-			retrieve_relation_url = "http://#{settings["dde_username"]}:#{settings["dde_password"]}@#{settings["dde_server"]}/retrieve_relations"
-		end
 		
-		@relatives = JSON.parse(RestClient.post(retrieve_relation_url, {:person => session[:dde_object]}, {:accept => :json}))
+		#@relatives = JSON.parse(RestClient.post(retrieve_relation_url, {:person => session[:dde_object]}, {:accept => :json}))
+		
+		@relatives = DDE2Service.retrieve_relations(npid)
+		
 		@national_id_hash = {}
 		@relatives.each do |relative|
 			national_id = relative["_id"]

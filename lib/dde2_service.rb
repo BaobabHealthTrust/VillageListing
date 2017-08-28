@@ -82,7 +82,7 @@ module DDE2Service
 		return data
 	end
 	
-	def self.search_by_identifer(identifier, token)
+	def self.search_by_identifer(identifier, token=nil)
 		dde = self.dde_settings
 		dde_target = "#{dde[:server]}/v1/search_by_identifier/#{identifier}/#{token}"
 		
@@ -228,6 +228,14 @@ module DDE2Service
 		}
 		
 		return response
+	end
+	
+	def self.retrieve_relations(npid)
+		dde = self.dde_settings
+		token = self.get_token
+		result = self.search_by_identifer(npid, token)
+		person = JSON.parse(result)
+		relations = person['data']['hits'][0]['relations']
 	end
 	
 	def self.dde_target(path, identifier=nil, token=self.get_token)

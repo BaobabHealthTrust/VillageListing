@@ -14,7 +14,7 @@ class PeopleController < ApplicationController
 		@patient_bean = formatted_dde_object
 		
 		@patient_bean = OpenStruct.new @patient_bean #Making the keys accessible by a dot operator
-	
+		
 	end
 	
 	def national_id_label
