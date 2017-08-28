@@ -324,10 +324,8 @@ P1\n)
 			url = "http://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/process_confirmation"
 		end
 		
-		#raise person.inspect
 		result = DDE2Service.update_patient(person, session[:user], params[:secondary_person], params[:relationship_type])
-		# result = RestClient.post(url, {:person => person, :target => "update"})
-	
+		
 		json = JSON.parse(result.body)['data'] rescue {}
 		
 		if (json["patient"]["identifiers"] rescue "").class.to_s.downcase == "hash"

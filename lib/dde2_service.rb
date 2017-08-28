@@ -204,7 +204,7 @@ module DDE2Service
 		}
 		
 		unless relation.nil?
-			dde_object['relationships'] = {
+			dde_object['relations'] = {
 					"#{relation}": secondary_person['npid']
 			}
 		end
@@ -223,7 +223,7 @@ module DDE2Service
 				when 401
 					'Unauthorised'
 				else
-					response.return!(&block)
+					response
 			end
 		}
 		
