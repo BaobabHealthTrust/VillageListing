@@ -95,10 +95,10 @@
             color: #FFFFFF;
             line-height: 40px;
             line-width: 40px;
-            position: absolute;
-            right: 10px;
+            position: fixed;
+            right: 70px;
             text-align: center;
-            top: 10px;
+            top: 70px;
             width: 35px;
             font-size: 50px;
             text-decoration: none;
@@ -123,14 +123,22 @@
         #article_holder{
             height: 70%;
             width: 90%;
-            overflow-y:auto;
-            overflow-x:hidden;
+            overflow-y: auto;
+            overflow-x: hidden;
             border-radius: 10px;
             border: 1px solid ghostwhite;
             font-size: 24px;
             padding: 20px;
         }
         #article_content{}
+        #modal_content{
+            padding: 10px;
+            border: 1px black solid;
+            border-top: none;
+            border-bottom: none ;
+            border-radius: 5px;
+            top: 0;
+        }
     </style>
 
     <!-- === Add this (rss2json) script === -->
@@ -200,7 +208,7 @@
 						ul.appendChild(li);
 
 						var article_content = document.getElementById('article_content');
-						article_content.innerHTML = '<div id="modal_title"><h1>' + title + '</h1></div>' + content;
+						article_content.innerHTML = '<div id="modal_title"><h1>' + title + '</h1></div>' + '<div id="modal_content">' + content + '</div>';
 
 					}
 				}
