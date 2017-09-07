@@ -41,6 +41,15 @@ class DdeController < ApplicationController
 			token.write(dde_token)
 		end
 		
+		yml_file = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] rescue {}
+		yml_file['dde_user_validation'] = 'true'
+		
+		File.open('data.yml','w') do |h|
+			h.write yml_file['default'].to_yaml
+		end
+		
+		File.open(("#{Rails.root}/config/dde_connection.yml"), 'w') {|f| f.write yml_file.to_yaml }
+		
 		redirect_to '/'
 	end
 	
