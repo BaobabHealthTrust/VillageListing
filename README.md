@@ -52,21 +52,10 @@ SYSTEM DEPENDENCIES
 
 	and follow it's README. (Make sure you are in the 'development' branch)
 
-2. DDE2
+2. DDE3.0
 
 	Village Listing depends on DDE 2 (village_listing_api branch) for Sites, and National ID allocation.
 	Make sure you have this application running alongside.
-	For more info, clone as a separate application from;
-
-		http:
-
-			https://github.com/BaobabHealthTrust/DDE2.git
-
-		ssh:
-	
-			git@github.com:BaobabHealthTrust/DDE2.git
-
-	and follow it's README. (Make sure you are in the 'village_listing_api' branch)
 
 CONFIGURATION
 -------------
@@ -84,7 +73,7 @@ CONFIGURATION
 
 	Open the file with your favourite editor and set the following attributes;
 
-		dde_server, dde_username, dde_password, site_code
+		dde_server, dde_username, dde_password, site_code (if there is need to change the defaults)
 
 	dde_server is the url with port on which DDE 2 Application is running on. 
 	dde_username and dde_password is the username and password respectively to which couchdb is configured.
