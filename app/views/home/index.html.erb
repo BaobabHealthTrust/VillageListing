@@ -168,15 +168,17 @@
       </div-->
     <!--</div>-->
     <!-- endloop -->
-    <div class="cells btncells">
- 
-        <!--<span>
-          <div class="baby_count">
-            <span>20</span>
+      <%
+          yml_file = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] rescue {}
+      %>
+      <div class="cells btncells">
+          <div class="divbtn" style="background-color:red;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/add_dde_user'" >
+        <span>
+          <img src='assets/icons/Logout.png' class='x-icons'  />
+          <p>Add User</p>
+        </span>
           </div>
-        </span>-->
-
-    </div>
+      </div>
     <!-- loop -->
     <div class="cells btncells">
       <div class="divbtn" style="background-color:red;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/logout'" >
