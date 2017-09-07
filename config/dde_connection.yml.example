@@ -1,8 +1,11 @@
 default: &default
   application_name: registration
   dde_server: 127.0.0.1:3000
-  dde_username: admin
+  default_username: admin
+  default_password: admin
+  dde_username: evruser
   dde_password: password
+  dde_user_validation: false
   site_code: TST
   secure_connection: false
   help_base_url: http://127.0.0.1:3001/
