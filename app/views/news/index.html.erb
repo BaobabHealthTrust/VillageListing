@@ -154,15 +154,12 @@
 		 */
 		function initialize() {
 
-			var feed = new google.feeds.Feed("http://mwnation.com/section/chichewa/feed");
-			/** This can be used for passing all parameters
-			 var feed = new google.feeds.Feed("https://news.ycombinator.com/rss",{
-				api_key : '0000000000000000000000000000000000000000',
-				count : 5,
-				order_by : 'title',
+			var feed = new google.feeds.Feed("http://mwnation.com/section/chichewa/feed",{
+				api_key : 's2do8no3mdlxsfwkgpb8i4ntnflfdl07w9wwvxk7',
+				order_by : 'pubDate',
 				order_dir : 'asc'
 			});
-			 */
+
 			feed.load(function(result) {
 				if (result.error) {
 				} else {
@@ -176,13 +173,18 @@
 
 					container.appendChild(ul);
 
+					var news_objects = {};
+
 					for (var i = 0; i < result.feed.entries.length; i++) {
 						var entry = result.feed.entries[i];
 						var title = entry.title;
 						var content = entry.content;
+						news_objects[i] = entry;
 
 						var li = document.createElement('li');
 						li.className = 'title';
+						li.id = 'news_item_'+i;
+						li.setAttribute('onclick', 'loadModal(this.id)');
 						li.style.padding = "20px";
 						li.style.fontSize = "24px";
 						li.style.textDecoration = 'none';
@@ -195,7 +197,7 @@
 						}
 
 						var link = document.createElement('a')
-						link.setAttribute('href', '#showArticle');
+						//link.setAttribute('href', '#showArticle');
 						link.className = 'title';
 						link.style.padding = "20px";
 						link.style.fontSize = "24px";
@@ -215,6 +217,10 @@
 			});
 		}
 
+		function loadModal(element) {
+			alert(element);
+        };
+
 		google.setOnLoadCallback(initialize);
 
     </script>
@@ -230,8 +236,6 @@
         </div>
     </div>
 </div>
-
-
 
 <!-- Controls -->
 <div class="row-button-print">
