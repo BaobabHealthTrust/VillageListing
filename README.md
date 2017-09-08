@@ -83,4 +83,10 @@ CONFIGURATION
 
 RUN APPLICATION !!!
 ------------------
+When the application is running, login and before anything else, click "AUTHENTICATE DDE USER" button to add and authenticate the dde user eligible to undertake application functions.
+
+
+AND THEN....!!!
+
+
 Yeay...!!! We all Good. :-) 
