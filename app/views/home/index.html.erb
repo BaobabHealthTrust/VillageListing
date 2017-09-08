@@ -82,12 +82,16 @@
 </style>
 
 <%= render :partial => 'header' %>
-
+<%
+    yml_file = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] rescue {}
+    dde_user_validation = yml_file['dde_user_validation']
+%>
 
 <div class="main-page-container">
 
   <div class="main-page-container-rows">
     <!-- loop -->
+    <%  if dde_user_validation == true %>
     <div class="cells btncells">
       <div class="divbtn" style="background-color: #415772;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/dde/find_by_national_id'" >
         <span>
@@ -131,7 +135,7 @@
     </div>
     <!-- endloop -->
 
-
+    <% end %>
   </div>
 
 
@@ -169,15 +173,13 @@
     <!--</div>-->
     <!-- endloop -->
       <%
-          yml_file = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] rescue {}
-          dde_user_validation = yml_file['dde_user_validation']
           if dde_user_validation == false
       %>
           <div class="cells btncells">
               <div class="divbtn" style="background-color: #008080;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/add_dde_user'" >
             <span>
               <img src='assets/icons/register.png' class='x-icons'  />
-              <p>Add User</p>
+              <p>Authenticate DDE User</p>
             </span>
               </div>
           </div>
