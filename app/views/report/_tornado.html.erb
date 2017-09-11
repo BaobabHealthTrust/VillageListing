@@ -141,7 +141,7 @@
                         labels: {
                             //format: '{value:,.0f}',
                             formatter: function() {
-                                return Math.abs(this.value);
+                                return Highcharts.numberFormat(Math.abs(this.value), 0);
                             },
                             style: {
                                 color: 'black',

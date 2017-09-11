@@ -332,6 +332,9 @@ class ReportController < ApplicationController
 			unless data.blank?
 				@stats = {}
 				data = JSON.parse(data)
+				File.open("tornado_aug_30.json","w") do |fil|
+					fil.write(RestClient.post(uri,paramz))
+				end
 				(data).each do |person|
 					village_name = person['addresses']['current_village']
 					next unless @selected_villages.include?(village_name.squish.capitalize)
@@ -431,7 +434,7 @@ class ReportController < ApplicationController
 		
 		return 'Unknown' if person['gender'].blank? || person['birthdate'].blank?
 		gender = person['gender']
-		age = get_age(person)
+		age = get_age(person).to_i
 		if age <= 4
 			cat = categories[0]
 		elsif age > 4 and age <= 9
