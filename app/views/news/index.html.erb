@@ -141,6 +141,7 @@
         }
     </style>
 
+    <%= javascript_include_tag 'jquery-3.2.1.min'  %>
     <!-- === Add this (rss2json) script === -->
     <script type="text/javascript" src="https://rss2json.com/gfapi.js"></script>
 
@@ -184,7 +185,7 @@
 						var li = document.createElement('li');
 						li.className = 'title';
 						li.id = 'news_item_'+i;
-						li.setAttribute('onclick', 'loadModal(this.id)');
+						li.setAttribute('onclick', 'this.innerHTML=');
 						li.style.padding = "20px";
 						li.style.fontSize = "24px";
 						li.style.textDecoration = 'none';
@@ -218,7 +219,22 @@
 		}
 
 		function loadModal(element) {
-			alert(element);
+			$('ul').on('click', 'li', function() {
+				$('#showArticle');
+
+//				var show_article = document.createElement('div');
+//				show_article.className = 'modalDialog';
+//
+//				    var article_holder = document.createElement('div');
+//
+//				        var article_content = document.createElement('div');
+//				        article_content.innerHTML = element;
+//
+//				        article_holder.appendChild(article_content);
+//				        show_article.appendChild(article_holder);
+//
+//				        document.getElementById('feed').appendChild(show_article);
+			});
         };
 
 		google.setOnLoadCallback(initialize);
