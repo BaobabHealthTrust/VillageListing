@@ -139,6 +139,10 @@
             border-radius: 5px;
             top: 0;
         }
+        a {
+            color: black;
+            text-decoration: none;
+        }
     </style>
 
     <%= javascript_include_tag 'jquery-3.2.1.min'  %>
@@ -185,7 +189,9 @@
 						var li = document.createElement('li');
 						li.className = 'title';
 						li.id = 'news_item_'+i;
-						li.setAttribute('onclick', 'this.innerHTML=');
+						li.article_title = title;
+						li.article_content = content;
+						li.setAttribute('onclick', 'loadModal(this.article_title,this.article_content)');
 						li.style.padding = "20px";
 						li.style.fontSize = "24px";
 						li.style.textDecoration = 'none';
@@ -198,7 +204,7 @@
 						}
 
 						var link = document.createElement('a')
-						//link.setAttribute('href', '#showArticle');
+						link.setAttribute('href', '#showArticle');
 						link.className = 'title';
 						link.style.padding = "20px";
 						link.style.fontSize = "24px";
@@ -210,32 +216,17 @@
 						li.appendChild(link);
 						ul.appendChild(li);
 
-						var article_content = document.getElementById('article_content');
-						article_content.innerHTML = '<div id="modal_title"><h1>' + title + '</h1></div>' + '<div id="modal_content">' + content + '</div>';
-
 					}
 				}
 			});
 		}
 
-		function loadModal(element) {
+		function loadModal(title, content) {
 			$('ul').on('click', 'li', function() {
-				$('#showArticle');
-
-//				var show_article = document.createElement('div');
-//				show_article.className = 'modalDialog';
-//
-//				    var article_holder = document.createElement('div');
-//
-//				        var article_content = document.createElement('div');
-//				        article_content.innerHTML = element;
-//
-//				        article_holder.appendChild(article_content);
-//				        show_article.appendChild(article_holder);
-//
-//				        document.getElementById('feed').appendChild(show_article);
+				var article_content = document.getElementById('article_content');
+				article_content.innerHTML = '<div id="modal_title"><h1>' + title + '</h1></div>' + '<div id="modal_content">' + content + '</div>';
 			});
-        };
+		};
 
 		google.setOnLoadCallback(initialize);
 
