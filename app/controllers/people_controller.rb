@@ -344,7 +344,7 @@ P1\n)
 		
 		session[:dde_object] = json
 		
-		redirect_to "/people" and return
+		redirect_to "/demographics" and return
 	
 	end
 	
@@ -357,10 +357,39 @@ P1\n)
 		
 		@patient_bean = formatted_dde_object
 		
+		patient_bean = formatted_dde_object
+		
+		@settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] rescue {}
+		
+		dob = (patient_bean.birthdate.to_date.strftime("%Y-%m-%d") rescue nil)
+		estimate = patient_bean.birthdate_estimated == true ? true : false
+		
+		if !(params[:person][:birth_month] rescue nil).blank? and (params[:person][:birth_month] rescue nil).to_s.downcase == "unknown"
+			dob = "#{params[:person][:birth_year]}-07-01"
+			dob = Date.parse(dob).strftime("??/???/%Y")
+			estimate = true
+		end
+		
+		if !(params[:person][:birth_day] rescue nil).blank? and (params[:person][:birth_month] rescue nil).to_s.downcase == "unknown"
+			dob = "#{params[:person][:birth_year]}-#{"%02d" % params[:person][:birth_month].to_i}-15"
+			dob = Date.parse(dob).strftime("??/%b/%Y")
+			estimate = true
+		end
+		
+		if !(params[:person][:birth_month] rescue nil).blank? and (params[:person][:birth_month] rescue nil).to_s.downcase != "unknown" and !(params[:person][:birth_day] rescue nil).blank? and (params[:person][:birth_day] rescue nil).to_s.downcase != "unknown" and !(params[:person][:birth_year] rescue nil).blank? and (params[:person][:birth_year] rescue nil).to_s.downcase != "unknown"
+			dob = "#{params[:person][:birth_year]}-#{"%02d" % params[:person][:birth_month].to_i}-#{"%02d" % params[:person][:birth_day].to_i}"
+			dob = Date.parse(dob).strftime("%d/%b/%Y")
+			estimate = false
+		end
+		
+		
+		if (params[:person][:attributes]["citizenship"] == "Other" rescue false)
+			params[:person][:attributes]["citizenship"] = params[:person][:attributes]["race"]
+		end
+		
 		if request.post?
 			
 			dde_server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
-			url = "http://#{dde_server_address}/population_stats"
 			outcome_paramz = {}
 			
 			if params[:outcome]['outcome'].match(/adasamuka/i)
@@ -376,7 +405,6 @@ P1\n)
 				params[:outcome]['outcome'] = "Died"
 			end
 			
-			
 			outcome_paramz['outcome'] = {outcome: params[:outcome]['outcome'],
 			                             year: params[:outcome_year],month: params[:outcome_month],
 			                             day: params[:outcome_day], transfering_location: location_paramz,
@@ -384,8 +412,88 @@ P1\n)
 			}
 			
 			outcome_paramz['stat'] = 'update_outcome' ; outcome_paramz['identifier'] = params[:person]['identifier']
-			result = RestClient.post(url, outcome_paramz)
-			redirect_to '/people'
+			
+			if params[:outcome]['outcome'] == "Died"
+				death_year = outcome_paramz['outcome'][:year]
+				death_month = Date::MONTHNAMES.index(outcome_paramz['outcome'][:month])
+				death_day = outcome_paramz['outcome'][:day]
+				death_date = "#{death_year}-#{death_month.to_i}-#{death_day}"
+				died = true
+			end
+			
+			person = {
+					"national_id" => patient_bean.national_id,
+					"application" => "#{@settings["application_name"]}",
+					"site_code" => "#{@settings["site_code"]}",
+					"return_path" => "http://#{request.host_with_port}/process_result",
+					"patient_id" => (nil),
+					"patient_update" => true,
+					"names" =>
+							{
+									"family_name" => (!(params[:person][:names][:family_name] rescue nil).blank? ? (params[:person][:names][:family_name] rescue nil) : (patient_bean.last_name rescue nil)),
+									"given_name" => (!(params[:person][:names][:given_name] rescue nil).blank? ? (params[:person][:names][:given_name] rescue nil) : (patient_bean.first_name rescue nil)),
+									"middle_name" => (!(params[:person][:names][:middle_name] rescue nil).blank? ? (params[:person][:names][:middle_name] rescue nil) : (patient_bean.middle_name rescue nil)),
+									"maiden_name" => (!(params[:person][:names][:family_name2] rescue nil).blank? ? (params[:person][:names][:family_name2] rescue nil) : (patient_bean.maiden_name rescue nil))
+							},
+					"gender" => (!params["gender"].blank? ? params["gender"] : (patient_bean.sex rescue nil)),
+					"person_attributes" => {
+							"occupation" => (!(params[:person][:attributes][:occupation] rescue nil).blank? ? (params[:person][:attributes][:occupation] rescue nil) :
+									patient_bean.occupation),
+							
+							"cell_phone_number" => (!(params[:person][:attributes][:cell_phone_number] rescue nil).blank? ? (params[:person][:attributes][:cell_phone_number] rescue nil) :
+									patient_bean.cell_phone_number),
+							
+							"home_phone_number" => (!(params[:person][:attributes][:home_phone_number] rescue nil).blank? ? (params[:person][:attributes][:home_phone_number] rescue nil) :
+									patient_bean.home_phone_number),
+							
+							"office_phone_number" => (!(params[:person][:attributes][:office_phone_number] rescue nil).blank? ? (params[:person][:attributes][:office_phone_number] rescue nil) :
+									patient_bean.office_phone_number),
+							
+							"country_of_residence" => (!(params[:person][:attributes][:country_of_residence] rescue nil).blank? ? (params[:person][:attributes][:country_of_residence] rescue nil) :
+									patient_bean.country_of_residence),
+							
+							"citizenship" => (!(params[:person][:attributes][:citizenship] rescue nil).blank? ? (params[:person][:attributes][:citizenship] rescue nil) :
+									patient_bean.citizenship)
+					},
+					"birthdate" => dob,
+					"patient" => {
+							"identifiers" => patient_bean.identifiers
+					},
+					"birthdate_estimated" => estimate,
+					"dead" => died,
+					"death_date" => death_date,
+					"addresses" => {
+							"current_residence" => (!(params[:person][:addresses][:address1]  rescue nil).blank? ? (params[:person][:addresses][:address1] rescue nil) : patient_bean.current_residence),
+							"current_village" => (!(params[:person][:addresses][:city_village] rescue nil).blank? ? (params[:person][:addresses][:city_village] rescue nil) : patient_bean.current_village),
+							"current_ta" => (!(params[:person][:addresses][:township_division] rescue nil).blank? ? (params[:person][:addresses][:township_division] rescue nil) : patient_bean.current_ta),
+							"current_district" => (!(params[:person][:addresses][:state_province] rescue nil).blank? ? (params[:person][:addresses][:state_province] rescue nil) : patient_bean.current_district),
+							"home_village" => (!(params[:person][:addresses][:neighborhood_cell] rescue nil).blank? ? (params[:person][:addresses][:neighborhood_cell] rescue nil) : patient_bean.home_village),
+							"home_ta" => (!(params[:person][:addresses][:county_district] rescue nil).blank? ? (params[:person][:addresses][:county_district] rescue nil) : patient_bean.home_ta),
+							"home_district" => (!(params[:person][:addresses][:address2] rescue nil).blank? ? (params[:person][:addresses][:address2] rescue nil) : patient_bean.home_district)
+					}
+			}
+			
+			result = DDE2Service.update_patient(person, session[:user], params[:secondary_person], params[:relationship_type])
+			
+			json = JSON.parse(result.body)['data'] rescue {}
+			
+			if (json["patient"]["identifiers"] rescue "").class.to_s.downcase == "hash"
+				
+				tmp = json["patient"]["identifiers"]
+				
+				json["patient"]["identifiers"] = []
+				
+				tmp.each do |key, value|
+					
+					json["patient"]["identifiers"] << {key => value}
+				
+				end
+			
+			end
+			
+			session[:dde_object] = json
+			
+			redirect_to "/people" and return
 		end
 	end
 
