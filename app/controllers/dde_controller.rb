@@ -803,7 +803,7 @@ class DdeController < ApplicationController
 		
 		@national_id_hash = {}
 		
-		relations.each do |relation|
+		(relations || []).each do |relation|
 			relation_type = relation[0]
 			national_id = relation[1]
 			token = DDE2Service.get_token
@@ -882,14 +882,14 @@ A35,76,0,2,2,2,N,"#{patient_bean.national_id} #{patient_bean.birthdate}(#{patien
 		identifiers = []
 		identifiers = dde_object["patient"]["identifiers"] unless dde_object["patient"].blank?
 		
-		home_phone_number = dde_object["person_attributes"]["home_phone_number"]
-		cell_phone_number = dde_object["person_attributes"]["cell_phone_number"]
-		office_phone_number = dde_object["person_attributes"]["office_phone_number"]
+		home_phone_number = dde_object["person_attributes"]["home_phone_number"] rescue nil
+		cell_phone_number = dde_object["person_attributes"]["cell_phone_number"] rescue nil
+		office_phone_number = dde_object["person_attributes"]["office_phone_number"] rescue nil
 		
-		race = dde_object["person_attributes"]["race"]
-		occupation = dde_object["person_attributes"]["occupation"]
-		citizenship = dde_object["person_attributes"]["citizenship"]
-		country_of_residence = dde_object["person_attributes"]["country_of_residence"]
+		race = dde_object["person_attributes"]["race"] rescue nil
+		occupation = dde_object["person_attributes"]["occupation"] rescue nil
+		citizenship = dde_object["person_attributes"]["citizenship"] rescue nil
+		country_of_residence = dde_object["person_attributes"]["country_of_residence"] rescue nil
 =begin
   #################### Code to pull person outcome from the DDE ############################
   dde_server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue "raise dde_server_address not set in dde_connection.yml"
