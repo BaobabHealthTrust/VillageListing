@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
 	
 	get 'news/index'
-	
+	post 'news/index'	
 	get 'main/index'
 	
 	##################### people ######################
