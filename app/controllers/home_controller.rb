@@ -41,5 +41,25 @@ class HomeController < ApplicationController
     @settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]
     secure = @settings["secure_connection"] rescue false
   end
+
+  def query
+    ip_address = request.remote_ip
+    query_ip_address = 'http://192.168.21.254:3000'  #"http://NEWS_APP_IP_ADDRESS:NEWS_APP_PORT"
+    query_news_path = "/api/news_feed?ip_address=" + ip_address
+    path = query_ip_address + query_news_path
+    result = RestClient.get(path)
+    json = JSON.parse(result)
+    json["ip_address"] = ip_address
+    render :text => json.to_json
+  end
+
+  def log
+    ip_address = request.remote_ip
+    query_ip_address = 'http://192.168.21.254:3000'  #"http://NEWS_APP_IP_ADDRESS:NEWS_APP_PORT"
+    query_news_path = "/api/log?news_id=" + params["news_id"] + "&category=" + params["category"] + "&ip_address=" + ip_address
+    path = query_ip_address + query_news_path
+    result = RestClient.get(path)
+    render :text => result.to_json
+  end
   
 end
