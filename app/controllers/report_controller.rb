@@ -28,6 +28,7 @@ class ReportController < ApplicationController
 	end
 	
 	def monthly_select
+		@years = ['2018','2017', '2016', '2015'] # to make these dynamic
 		@months = Date::MONTHNAMES
 	end
 	
@@ -37,7 +38,7 @@ class ReportController < ApplicationController
 		server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
 		uri = "http://#{server_address}/population_stats.json/"
 		paramz = {district: session[:user]['district'], ta: session[:user]['ta'],
-		          stat: 'bloomberg_union', month_period: params[:month_period]}
+		          stat: 'bloomberg_union', month_period: params[:month_period], year: params[:year]}
 		
 		data = RestClient.post(uri,paramz)
 		
