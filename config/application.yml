@@ -15,7 +15,7 @@ development:
   gvh: Mtema
   ta: Mtema
   district: lilongwe
-  news.app.reader.url: http://192.168.21.254:3000
+  news.app.url: http://localhost:8000
 
 test: &TEST
   user.management.url: http://localhost:3004
