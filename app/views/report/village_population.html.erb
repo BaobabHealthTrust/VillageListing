@@ -138,7 +138,7 @@
             <th>Dzina La Bambo</th>
             <th>Mkazi/Mwamuna</th>
             <th>Tsiku Lobadwa</th>
-            <th>Boma Lakwawo</th>
+            <th>Tsiku Lolembedwa</th>
             <th>TA Wakwawo</th>
             <th>Mudzi Wakwawo</th>
         </tr>
@@ -152,7 +152,7 @@
                 <td><%=person['names']['family_name']%></td>
                 <td><%=person['gender']%></td>
                 <td><%=(person['birthdate'].to_date.strftime('%d/%b/%Y') rescue 'N/A')%></td>
-                <td><%=person['addresses']['home_district']%></td>
+                <td><%=person['created_at'].to_date.strftime('%d/%b/%Y') rescue 'N/A' %></td>
                 <td><%=person['addresses']['home_ta']%></td>
                 <td><%=person['addresses']['home_village']%></td>
             </tr>

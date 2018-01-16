@@ -125,7 +125,7 @@ class ReportController < ApplicationController
 		data = RestClient.post(uri,paramz)
 		unless data.blank?
 			@people = JSON.parse(data)
-			File.open("#{Rails.root}/#{village}.json","w") do |f|
+			File.open("mzumazi.json","w") do |f|
 				f.write(data)
 			end
 			Kernel.system "node #{Rails.root}/json2csv.js > #{Rails.root}/#{village}.csv"
