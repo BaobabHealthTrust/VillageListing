@@ -148,8 +148,9 @@
 
     <%= javascript_include_tag 'jquery-3.2.1.min'  %>
     <!-- === Add this (rss2json) script === -->
-    <script type="text/javascript" src="https://rss2json.com/gfapi.js"></script>
+    <!--<script type="text/javascript" src="https://rss2json.com/gfapi.js"></script>-->
 
+    <!--
     <script type="text/javascript">
 
 		google.load("feeds", "1");
@@ -228,11 +229,49 @@
 		google.setOnLoadCallback(initialize);
 
     </script>
+    -->
 
 </head>
 <body>
 
 <div id="feed" class="feed-body">
+    <!--var li = document.createElement('li');-->
+    <!--if (i % 2 == 0) {-->
+    <!--li.style.backgroundColor = 'lightgrey';-->
+    <!--}-->
+    <!--else {-->
+    <!--li.style.backgroundColor = 'ghostwhite';-->
+    <!--}-->
+    <!-- Get news articles -->
+    <ul style="padding: 0px; list-style: none; width: 100%; margin: 0px;">
+        <% i = 0 %>
+        <% (@news || []).each do |article| %>
+            <!--
+            article.category = 'local_news' || 'sports_news'
+            -->
+            <% if i % 2 == 0 %>
+                <li class="<% article.title %>" id="<% article.id %>" data-article-title="<% article.title %>"
+                    data-article-content="<% article.body %>" onclick="loadModal('<%= article.title %>','<%= article.body %>')"
+                    style="padding: 20px; font-size: 24px; text-decoration: none; background-color: lightgray;
+                            border-bottom: 1px dotted rgba(204,204,204,1)"
+                >
+            <% else %>
+                <li class="<% article.title %>" id="<% article.id %>" data-article-title="<% article.title %>"
+                    data-article-content="<% article.body %>" onclick="loadModal('<%= article.title %>','<%= article.body %>')"
+                    style="padding: 20px; font-size: 24px; text-decoration: none; background-color: ghostwhite;
+                            border-bottom: 1px dotted rgba(204,204,204,1)"
+                >
+            <% end %>
+                <a class="title" href="#showArticle" style="padding: 20px; font-size: 24px; border-bottom: 1px dotted
+                        rgba(204,204,204,1); text-decoration: none">
+                    <%= article.title %>
+                </a>
+            </li>
+            <% i += 1 %>
+        <% end %>
+    </ul>
+
+    <!-- Modal -->
     <div id="showArticle" class="modalDialog">
         <div id="article_holder">
             <a href="#close" title="Close" class="close">X</a>
@@ -250,6 +289,14 @@
 </div>
 
 <script type="text/javascript">
+
+    function loadModal(title, content) {
+		$('ul').on('click', 'li', function() {
+			var article_content = document.getElementById('article_content');
+			article_content.innerHTML = '<div id="modal_title"><h1>' + title + '</h1></div>' + '<div id="modal_content">' + content + '</div>';
+		});
+	};
+
 	document.getElementsByClassName('button-cancel').onclick = 'window.location("/")';
 </script>
 <!-- //-->
