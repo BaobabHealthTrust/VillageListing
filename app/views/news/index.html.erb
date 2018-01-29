@@ -147,117 +147,24 @@
     </style>
 
     <%= javascript_include_tag 'jquery-3.2.1.min'  %>
-    <!-- === Add this (rss2json) script === -->
-    <!--<script type="text/javascript" src="https://rss2json.com/gfapi.js"></script>-->
-
-    <!--
-    <script type="text/javascript">
-
-		google.load("feeds", "1");
-
-		function initialize() {
-
-			var feed = new google.feeds.Feed("http://mwnation.com/section/chichewa/feed",{
-				api_key : 's2do8no3mdlxsfwkgpb8i4ntnflfdl07w9wwvxk7',
-				order_by : 'pubDate',
-				order_dir : 'desc'
-			});
-
-			feed.load(function(result) {
-				if (result.error) {
-				} else {
-					var container = document.getElementById("feed");
-
-					var ul = document.createElement("ul");
-					ul.style.padding = "0px";
-					ul.style.listStyle = "none";
-					ul.style.width = "100%";
-					ul.style.margin = "0px";
-
-					container.appendChild(ul);
-
-					var news_objects = {};
-
-					for (var i = 0; i < result.feed.entries.length; i++) {
-						var entry = result.feed.entries[i];
-						var title = entry.title;
-						var content = entry.content;
-						news_objects[i] = entry;
-
-						var li = document.createElement('li');
-						li.className = 'title';
-						li.id = 'news_item_'+i;
-						li.article_title = title;
-						li.article_content = content;
-						li.setAttribute('onclick', 'loadModal(this.article_title,this.article_content)');
-						li.style.padding = "20px";
-						li.style.fontSize = "24px";
-						li.style.textDecoration = 'none';
-						li.style.borderBottom = "1px dotted rgba(204,204,204,1)";
-						if (i % 2 == 0) {
-							li.style.backgroundColor = 'lightgrey';
-						}
-						else {
-							li.style.backgroundColor = 'ghostwhite';
-						}
-
-						var link = document.createElement('a')
-						link.setAttribute('href', '#showArticle');
-						link.className = 'title';
-						link.style.padding = "20px";
-						link.style.fontSize = "24px";
-						link.style.borderBottom = "1px dotted rgba(204,204,204,1)";
-						link.style.textDecoration = 'none';
-
-						var title_text = document.createTextNode(title);
-						link.appendChild(title_text);
-						li.appendChild(link);
-						ul.appendChild(li);
-
-					}
-				}
-			});
-		}
-
-		function loadModal(title, content) {
-			$('ul').on('click', 'li', function() {
-				var article_content = document.getElementById('article_content');
-				article_content.innerHTML = '<div id="modal_title"><h1>' + title + '</h1></div>' + '<div id="modal_content">' + content + '</div>';
-			});
-		};
-
-		google.setOnLoadCallback(initialize);
-
-    </script>
-    -->
 
 </head>
 <body>
 
 <div id="feed" class="feed-body">
-    <!--var li = document.createElement('li');-->
-    <!--if (i % 2 == 0) {-->
-    <!--li.style.backgroundColor = 'lightgrey';-->
-    <!--}-->
-    <!--else {-->
-    <!--li.style.backgroundColor = 'ghostwhite';-->
-    <!--}-->
-    <!-- Get news articles -->
     <ul style="padding: 0px; list-style: none; width: 100%; margin: 0px;">
         <% i = 0 %>
         <% (@news || []).each do |article| %>
-            <!--
+            <!-- to be filtered in correctly
             article.category = 'local_news' || 'sports_news'
             -->
             <% if i % 2 == 0 %>
-                <li class="<% article.title %>" id="<% article.id %>" data-article-title="<% article.title %>"
-                    data-article-content="<% article.body %>" onclick="loadModal('<%= article.title %>','<%= article.body %>')"
+                <li class="<% article.title %>" id="<% article.id %>" onclick="loadModal('<%= article.title %>','<%= Mysql.escape_string(article.body) %>')"
                     style="padding: 20px; font-size: 24px; text-decoration: none; background-color: lightgray;
                             border-bottom: 1px dotted rgba(204,204,204,1)"
                 >
             <% else %>
-                <li class="<% article.title %>" id="<% article.id %>" data-article-title="<% article.title %>"
-                    data-article-content="<% article.body %>" onclick="loadModal('<%= article.title %>','<%= article.body %>')"
+                <li class="<% article.title %>" id="<% article.id %>" onclick="loadModal('<%= article.title %>','<%= Mysql.escape_string(article.body) %>')"
                     style="padding: 20px; font-size: 24px; text-decoration: none; background-color: ghostwhite;
                             border-bottom: 1px dotted rgba(204,204,204,1)"
                 >
@@ -289,15 +196,12 @@
 </div>
 
 <script type="text/javascript">
-
     function loadModal(title, content) {
 		$('ul').on('click', 'li', function() {
 			var article_content = document.getElementById('article_content');
-			article_content.innerHTML = '<div id="modal_title"><h1>' + title + '</h1></div>' + '<div id="modal_content">' + content + '</div>';
+			article_content.innerHTML = "<div id='modal_title'><h1>" + title + "</h1></div>" + "<div id='modal_content'>" + content + "</div>";
 		});
 	};
-
-	document.getElementsByClassName('button-cancel').onclick = 'window.location("/")';
 </script>
 <!-- //-->
 </body>
