@@ -38,7 +38,7 @@ gem 'pushpad'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-gem 'rest-client', '2.0.0' #'1.6.3'
+gem 'rest-client', '2.0.1' #'1.6.3'
 
 # Access an IRB console on exception pages or by using <%= console %> in views
 gem 'web-console', '~> 2.0', group: :development

@@ -316,6 +316,7 @@ P1\n)
 		else
 			url = "http://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/process_confirmation"
 		end
+		
 		result = RestClient.post(url, {:person => person, :target => "update"})
 		
 		json = JSON.parse(result) rescue {}
@@ -336,7 +337,7 @@ P1\n)
 		
 		session[:dde_object] = json
 		
-		redirect_to "/people" and return
+		redirect_to "/demographics" and return
 	
 	end
 	
