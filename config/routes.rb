@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
 	
 	get 'news/index'
-	post 'news/index' => 'home#index' # for redirecting from News(bad practise. to be redone)
+	post 'news/index' => 'home#index' # for redirecting from News(bad practice. to be redone)
 	
 	get 'main/index'
 	

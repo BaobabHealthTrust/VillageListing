@@ -248,29 +248,7 @@
         if (dob_day.match(/^$/)) {
             dob_day = null;
         }
-        /*
-         if (dob_year == null || String(dob_year).toLowerCase() == "unknown") {
-         var yr = (new Date()).getFullYear() - parseInt(__$("age_estimate").value);
 
-         dob = yr + "-07-05";
-         dob_est = true;
-         } else if ((dob_year != null && String(dob_year).toLowerCase() != "unknown") && (dob_month == null || String(dob_month).toLowerCase() == "unknown")) {
-         dob = dob_year + "-07-10";
-         dob_est = true;
-         } else if ((dob_year != null && String(dob_year).toLowerCase() != "unknown") &&
-         (dob_month != null && String(dob_month).toLowerCase() != "unknown") &&
-         (dob_day == null || String(dob_day).toLowerCase() == "unknown")) {
-         dob = dob_year + "-" + padZeros(dob_month, 2) + "-15";
-         dob_est = true;
-         } else {
-         dob = dob_year + "-" + padZeros(dob_month, 2) + "-" + padZeros(dob_day, 2);
-         dob_est = false;
-         }
-
-
-         //json.birthdate = dob;
-
-         */
         dob_est = false;
 
         if (dob_month != null && String(dob_month).toLowerCase() == "unknown"){

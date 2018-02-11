@@ -38,6 +38,10 @@ gem 'pushpad'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+
+# add gem 'roo' to read stylesheet files.
+gem 'roo', '~> 2.7.0'
+
 gem 'rest-client', '2.0.1' #'1.6.3'
 
 # Access an IRB console on exception pages or by using <%= console %> in views
