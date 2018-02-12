@@ -38,6 +38,7 @@ gem 'pushpad'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+gem 'couchrest_model'
 
 # add gem 'roo' to read stylesheet files.
 gem 'roo', '~> 2.7.0'

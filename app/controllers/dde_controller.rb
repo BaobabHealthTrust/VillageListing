@@ -1194,9 +1194,12 @@ A35,76,0,2,2,2,N,"#{patient_bean.national_id} #{patient_bean.birthdate}(#{patien
 			url = "http://#{(@settings["dde_username"])}:#{(@settings["dde_password"])}@#{(@settings["dde_server"])}/ajax_process_data"
 		end
 		
-		@results = RestClient.post(url, {"person" => params["person"]})
+		@results = RestClient.post(url, {"person" => params["person"]}, content_type: :json){
+			|response, request, result, &block|
+			response
+		}
 		
-		raise @results.inspect
+		@response = JSON.parse(@results)
 		
 		if params["notfound"]
 			
