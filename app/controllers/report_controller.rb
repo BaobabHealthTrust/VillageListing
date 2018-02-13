@@ -6,6 +6,7 @@ class ReportController < ApplicationController
 	end
 	
 	def user_data_entry
+		@report_title = 'User Data Entry Report'
 		@user_tracker = UserTracker.all
 		
 		render :layout => false
