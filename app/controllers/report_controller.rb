@@ -5,6 +5,11 @@ class ReportController < ApplicationController
 		render :layout => false
 	end
 	
+	def user_data_entry
+		@user_tracker = UserTracker.all
+		
+		render :layout => false
+	end
 	
 	def death_outcome
 		
