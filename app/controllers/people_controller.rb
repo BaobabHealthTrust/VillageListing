@@ -5,13 +5,23 @@ class PeopleController < ApplicationController
 	end
 	
 	def show
+		
 		session.delete(:secondary_person)
 		redirect_to ("/") and return if session[:dde_object].blank?
 		
 		@patient_bean = formatted_dde_object
 		
 		@patient_bean = OpenStruct.new @patient_bean #Making the keys accessible by a dot operator
-	
+		
+		# creating a tracker --------------------------------------------------------------------------
+		user_tracker = UserTracker.find_by_person_tracker("#{@patient_bean.national_id}")
+		
+		if user_tracker.blank?
+			UserTracker.create(person_tracker: @patient_bean.national_id,
+			                   username: session[:user]['username'])
+		else
+			# skip if tracker already available and not needed to update else update
+		end
 	end
 	
 	def national_id_label
@@ -316,6 +326,7 @@ P1\n)
 		else
 			url = "http://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/process_confirmation"
 		end
+		
 		result = RestClient.post(url, {:person => person, :target => "update"})
 		
 		json = JSON.parse(result) rescue {}
@@ -336,7 +347,7 @@ P1\n)
 		
 		session[:dde_object] = json
 		
-		redirect_to "/people" and return
+		redirect_to "/demographics" and return
 	
 	end
 	

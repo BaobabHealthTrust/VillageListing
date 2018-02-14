@@ -1,217 +1,217 @@
 <style>
 
-body {
-  -webkit-user-select: none;  /* Chrome all / Safari all */
-  -moz-user-select: none;     /* Firefox all */
-  -ms-user-select: none;      /* IE 10+ */
-  user-select: none;          /* Likely future */ 
-}
+    body {
+        -webkit-user-select: none;  /* Chrome all / Safari all */
+        -moz-user-select: none;     /* Firefox all */
+        -ms-user-select: none;      /* IE 10+ */
+        user-select: none;          /* Likely future */
+    }
 
-img {
-  user-drag: none; 
-  user-select: none;
-  -moz-user-select: none;
-  -webkit-user-drag: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  pointer-events: none;
-}
+    img {
+        user-drag: none;
+        user-select: none;
+        -moz-user-select: none;
+        -webkit-user-drag: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        pointer-events: none;
+    }
 
-.main-page-container  {
-  display: table;
-  width: 100%;
-  padding: 0px 1px 0px 1px;
-}
+    .main-page-container  {
+        display: table;
+        width: 100%;
+        padding: 0px 1px 0px 1px;
+    }
 
-.main-page-container-rows  {
-  display: table-row;
-}
+    .main-page-container-rows  {
+        display: table-row;
+    }
 
-.cells {
-  display: table-cell;
-}
-
-
-/* ...................................... */
-.divbtn {
-  height: 265px;
-  display: table;
-  margin-top: 10px;
-  cursor:pointer;
-}
-
-.icons {
-  width: 160px;
-  height: 160px;
-  margin-top: 10%;
-  text-align: middle;
-}
-
-.divbtn p {
-  font-weight: bold;
-}
-
-.btncells {
-  width: 25%;
-  text-align: center;
-}
-
-.small-icons {
-  width: 100px;
-  height: 100px;
-}
-
-.header .cells {
-  vertical-align: middle; 
-  padding-right: 5px;
-}
-
-#scan {
-  background-color: lightgrey;
-  border-style: solid;
-  border-width: 1px;
-  font-size: 80px;
-  margin-bottom: 6px;
-  width: 44%;
-}
-
-.header .icons {
-  width: 100px;
-  height: 100px;
-}
-
-/* ...................................... */
-
-.people {
-  padding-top: 10px;
-}
-
-.people th {
-  border-style: solid;
-  border-width: 1px;
-  text-align: left;
-}
-
-.people td {
-  border-style: solid;
-  border-width: 1px;
-  text-align: left;
-}
+    .cells {
+        display: table-cell;
+    }
 
 
-.table-container {
-  height: 82%;
-  overflow: auto;
-}
+    /* ...................................... */
+    .divbtn {
+        height: 265px;
+        display: table;
+        margin-top: 10px;
+        cursor:pointer;
+    }
 
-/* datatable ....................... */
-#results_info,  #results_filter {
-  display: none;
-}
+    .icons {
+        width: 160px;
+        height: 160px;
+        margin-top: 10%;
+        text-align: middle;
+    }
 
-tfoot tr {
-  background-color: lightgrey;
-}
+    .divbtn p {
+        font-weight: bold;
+    }
 
-/* datatable ....................... */
+    .btncells {
+        width: 25%;
+        text-align: center;
+    }
 
-.links {
-  width: 150px;
-  background: blue !important;
-  line-height: 55px;
-   text-decoration: none;
-}
+    .small-icons {
+        width: 100px;
+        height: 100px;
+    }
+
+    .header .cells {
+        vertical-align: middle;
+        padding-right: 5px;
+    }
+
+    #scan {
+        background-color: lightgrey;
+        border-style: solid;
+        border-width: 1px;
+        font-size: 80px;
+        margin-bottom: 6px;
+        width: 44%;
+    }
+
+    .header .icons {
+        width: 100px;
+        height: 100px;
+    }
+
+    /* ...................................... */
+
+    .people {
+        padding-top: 10px;
+    }
+
+    .people th {
+        border-style: solid;
+        border-width: 1px;
+        text-align: left;
+    }
+
+    .people td {
+        border-style: solid;
+        border-width: 1px;
+        text-align: left;
+    }
+
+
+    .table-container {
+        height: 82%;
+        overflow: auto;
+    }
+
+    /* datatable ....................... */
+    #results_info,  #results_filter {
+        display: none;
+    }
+
+    tfoot tr {
+        background-color: lightgrey;
+    }
+
+    /* datatable ....................... */
+
+    .links {
+        background: #415772 !important;
+        line-height: 50px;
+        text-decoration: none;
+        border: 1px solid #2e6da4;
+    }
 </style>
 
 <%= render :partial => 'header' %>
 
-<%=javascript_include_tag "DataTables/jquery" %>                          
-<%=javascript_include_tag "DataTables/prototype" %>                          
+<%=javascript_include_tag "DataTables/jquery" %>
+<%=javascript_include_tag "DataTables/prototype" %>
 <script>jQuery.noConflict();</script>
 <%=javascript_include_tag "DataTables/jquery.dataTables.min" %>
 
-<%= stylesheet_link_tag "DataTables/demo_table_jui" %>                                     
-<%= stylesheet_link_tag "DataTables/jquery.dataTables" %>                                     
+<%= stylesheet_link_tag "DataTables/demo_table_jui" %>
+<%= stylesheet_link_tag "DataTables/jquery.dataTables" %>
 
 
 <div class="table-container">
 
-<div class="table-container">
+    <div class="table-container">
 
-<table class="people" style="width:99%;" id="results">
-  <thead>
-    <tr>
-      <th>Dzina la chinsisi</th>
-      <th>Dzina loyamba</th>
-      <th>Dzina la bambo</th>
-      <th>Mkazi/Mwamuna</th>
-      <th>Boma la lakwawo</th>
-      <th>TA wakwawo</th>
-      <th>Mudzi wakwawo</th>
-      <%if session[:user]['role'] == 'admin'%>
-        <th>&nbsp;</th>
-      <%end%>
-    </tr>
-  </thead>
-  <tbody>
-  <%total_people = 0
-  (@users || []).each_with_index do |person, i|%>
-  <tr>
-    <td><%=person['username']%></td>
-    <td><%=person['first_name']%></td>
-    <td><%=person['last_name']%></td>
-    <td><%=person['gender']%></td>
-    <td><%=person['district']%></td>
-    <td><%=person['ta']%></td>
-    <td><%=person['village']%></td>
-    <%if session[:user]['role'] == 'admin'%>
-    <td style="text-align: center;">
-      <a href="/change_password/<%=person['username']%>" class="btn links">Sinthani Mawu a Chinsisi</a>&nbsp;|&nbsp;
-      <a href="/user/edit/<%=person['username']%>" class="btn links">Sinthani dzina</a>
-    </td>
-    <%end%>
-  </tr>
-  <%total_people = i
-  end
-  if @users.length > 0%>
-  <tfoot>
-    <tr>
-      <td style="border-right:0px;">Athu Onse</td>
-      <td style="border-width:1px 0px 1px 0px;"></td>
-      <td style="border-width:1px 0px 1px 0px;"></td>
-      <td style="border-width:1px 0px 1px 0px;"></td>
-      <td style="border-left:0px; border-right:0px;"></td>
-      <td style="border-width:1px 1px 1px 0px;"></td>
-      <%if session[:user]['role'] == 'admin'%>
-        <td style="border-width:1px 1px 1px 0px;"></td>
-      <%end%>
-      <td style="border-width:1px 1px 1px 1px;"><%=(total_people+1)%></td>
-    </tr>
-   </tfoot>
-   <%end%>
-  </tbody>
-</table>
+        <table class="people" style="width:99%;" id="results">
+            <thead>
+            <tr>
+                <th>Dzina la chinsisi</th>
+                <th>Dzina loyamba</th>
+                <th>Dzina la bambo</th>
+                <th>Mkazi/Mwamuna</th>
+                <th>Boma la lakwawo</th>
+                <th>TA wakwawo</th>
+                <th>Mudzi wakwawo</th>
+                <%if session[:user]['role'] == 'admin'%>
+                    <th>&nbsp;</th>
+                <%end%>
+            </tr>
+            </thead>
+            <tbody>
+            <%total_people = 0
+              (@users || []).each_with_index do |person, i|%>
+                <tr>
+                    <td><%=person['username']%></td>
+                    <td><%=person['first_name']%></td>
+                    <td><%=person['last_name']%></td>
+                    <td><%=person['gender']%></td>
+                    <td><%=person['district']%></td>
+                    <td><%=person['ta']%></td>
+                    <td><%=person['village']%></td>
+                    <%if session[:user]['role'] == 'admin'%>
+                        <td style="text-align: center;">
+                            <a href="/change_password/<%=person['username']%>" class="btn links">Sinthani Mawu a Chinsisi</a>&nbsp;|&nbsp;
+                            <a href="/user/edit/<%=person['username']%>" class="btn links">Sinthani dzina</a>
+                        </td>
+                    <%end%>
+                </tr>
+            <%total_people = i
+              end
+              if @users.length > 0%>
+                <tfoot>
+                <tr>
+                    <td style="border-right:0px;">Anthu Onse</td>
+                    <td style="border-width:1px 0px 1px 0px;"></td>
+                    <td style="border-width:1px 0px 1px 0px;"></td>
+                    <td style="border-width:1px 0px 1px 0px;"></td>
+                    <td style="border-left:0px; border-right:0px;"></td>
+                    <td style="border-width:1px 1px 1px 0px;"></td>
+                    <%if session[:user]['role'] == 'admin'%>
+                        <td style="border-width:1px 1px 1px 0px;"></td>
+                    <%end%>
+                    <td style="border-width:1px 1px 1px 1px;"><%=(total_people+1)%></td>
+                </tr>
+                </tfoot>
+            <%end%>
+            </tbody>
+            </table>
 
-</div>
+    </div>
 
-<%= render :partial => 'footer' %>
+    <%= render :partial => 'footer' %>
 
-<script>                                                                        
-  dataT();                   
-  
-  function dataT(){          
-    table = jQuery('#results').dataTable();                                                  
-    setF();
-  }
+    <script>
+		dataT();
 
-  function setF() {
-    try {
-      sel = document.getElementsByName('results_length')[0];
-      sel.innerHTML = "<option value='<%=total_people%>'><%=total_people%></option>";
-      document.getElementById('results_length').style.display = "none";
-      document.getElementById('results').style.display = "width:99%;height: 82%;";
-    }catch(e) {};
-  }
+		function dataT(){
+			table = jQuery('#results').dataTable();
+			setF();
+		}
 
-</script>
-  
+		function setF() {
+			try {
+				sel = document.getElementsByName('results_length')[0];
+				sel.innerHTML = "<option value='<%=total_people%>'><%=total_people%></option>";
+				document.getElementById('results_length').style.display = "none";
+				document.getElementById('results').style.display = "width:99%;height: 82%;";
+			}catch(e) {};
+		}
+
+    </script>
+

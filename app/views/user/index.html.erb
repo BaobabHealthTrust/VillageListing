@@ -92,10 +92,10 @@
     <div class="main-page-container-rows">
         <!-- loop -->
         <div class="cells btncells">
-            <div class="divbtn" style="background-color:#6b6b6b;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/user/list'" >
+            <div class="divbtn" style="background-color: #415772;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/user/list'" >
         <span class="icons">
           <%=image_tag("icons/cloud-users-128.png", class: 'icons')%>
-            <p>Ogwiritsa Onse</p>
+            <p style="color: lightgrey;">Ogwiritsa Onse</p>
         </span>
             </div>
         </div>
@@ -104,10 +104,10 @@
         <!-- loop -->
         <div class="cells btncells">
             <%username = session[:user]['username']%>
-            <div class="divbtn" style="background-color:#43b51f;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/change_password/<%=username%>'" >
+            <div class="divbtn" style="background-color: #415772;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/change_password/<%=username%>'" >
         <span class="icons">
           <%=image_tag("icons/change-password.png", class: 'icons')%>
-            <p style="color: black;">Sithani mawu a Chinsisi</p>
+            <p style="color: lightgrey;">Sithani mawu a Chinsisi</p>
         </span>
             </div>
         </div>
@@ -116,10 +116,10 @@
         <!-- loop -->
         <div class="cells btncells">
             <%if session[:user]['role'] == 'admin'%>
-                <div class="divbtn" style="background-color:#00aeef;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/user/new'" >
+                <div class="divbtn" style="background-color: #415772;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/user/new'" >
         <span class="icons">
           <%=image_tag("icons/register.png", class: 'icons')%>
-            <p>Wonjezani Ogwiritsa</p>
+            <p style="color: lightgrey;"p>Wonjezani Ogwiritsa</p>
         </span>
                 </div>
             <%end%>
@@ -129,13 +129,13 @@
         <!-- loop -->
         <div class="cells btncells">
             <%if session[:user]['role'] == 'admin'%>
-                <div class="divbtn" style="background-color:#f58d00;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/user/list'" >
+                <div class="divbtn" style="background-color: #415772;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/user/list'" >
             <%else%>
-                <div class="divbtn" style="background-color:#f58d00;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/user/edit/<%=username%>'" >
+                <div class="divbtn" style="background-color: #415772;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/user/edit/<%=username%>'" >
             <%end%>
             <span class="icons">
           <%=image_tag("icons/demographic.png", class: 'icons')%>
-                <p>Sinthani Za Ogwiritsa</p>
+                <p style="color: lightgrey;"p>Sinthani Za Ogwiritsa</p>
         </span>
             </div>
             </div>
@@ -160,7 +160,7 @@
 
             <!-- loop -->
             <div class="cells btncells">
-                <div class="divbtn" style="background-color: #4682b4;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/'" >
+                <div class="divbtn" style="background-color:red;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/'" >
         <span class="icons">
           <%=image_tag("icons/gohome.png", class: 'icons')%>
             <p>Bwelerani</p>

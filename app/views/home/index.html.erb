@@ -1,84 +1,84 @@
 <style>
 
-  body {
-    -webkit-user-select: none;  /* Chrome all / Safari all */
-    -moz-user-select: none;     /* Firefox all */
-    -ms-user-select: none;      /* IE 10+ */
-    user-select: none;          /* Likely future */
-  }
+    body {
+        -webkit-user-select: none;  /* Chrome all / Safari all */
+        -moz-user-select: none;     /* Firefox all */
+        -ms-user-select: none;      /* IE 10+ */
+        user-select: none;          /* Likely future */
+    }
 
-  img {
-    user-drag: none;
-    user-select: none;
-    -moz-user-select: none;
-    -webkit-user-drag: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    pointer-events: none;
-  }
+    img {
+        user-drag: none;
+        user-select: none;
+        -moz-user-select: none;
+        -webkit-user-drag: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        pointer-events: none;
+    }
 
-  .main-page-container  {
-    display: table;
-    width: 100%;
-    padding: 0px 1px 0px 1px;
-  }
+    .main-page-container  {
+        display: table;
+        width: 100%;
+        padding: 0px 1px 0px 1px;
+    }
 
-  .main-page-container-rows  {
-    display: table-row;
-  }
+    .main-page-container-rows  {
+        display: table-row;
+    }
 
-  .cells {
-    display: table-cell;
-  }
+    .cells {
+        display: table-cell;
+    }
 
 
-  /* ...................................... */
-  .divbtn {
-    height: 265px;
-    display: table;
-    margin-top: 10px;
-    cursor:pointer;
-    box-shadow: 10px 10px 5px #888888;
-  }
+    /* ...................................... */
+    .divbtn {
+        height: 265px;
+        display: table;
+        margin-top: 10px;
+        cursor:pointer;
+        box-shadow: 10px 10px 5px #888888;
+    }
 
-  .icons {
-    width: 160px;
-    height: 160px;
-    margin-top: 10%;
-    text-align: middle;
-  }
+    .icons {
+        width: 160px;
+        height: 160px;
+        margin-top: 10%;
+        text-align: middle;
+    }
 
-  .divbtn p {
-    font-weight: bold;
-  }
+    .divbtn p {
+        font-weight: bold;
+    }
 
-  .btncells {
-    width: 25%;
-    text-align: center;
-  }
+    .btncells {
+        width: 25%;
+        text-align: center;
+    }
 
-  .header .cells {
-    vertical-align: middle;
-    padding-right: 5px;
-  }
+    .header .cells {
+        vertical-align: middle;
+        padding-right: 5px;
+    }
 
-  #scan {
-    background-color: lightgrey;
-    border-style: solid;
-    border-width: 1px;
-    font-size: 80px;
-    margin-bottom: 6px;
-    width: 44%;
-  }
+    #scan {
+        background-color: lightgrey;
+        border-style: solid;
+        border-width: 1px;
+        font-size: 80px;
+        margin-bottom: 6px;
+        width: 44%;
+    }
 
-  .btncells .x-icons {
-    width: 160px;
-    height: 160px;
-    margin-top: 10%;
-    text-align: middle;
-  }
+    .btncells .x-icons {
+        width: 160px;
+        height: 160px;
+        margin-top: 10%;
+        text-align: middle;
+    }
 
-  /* ...................................... */
+    /* ...................................... */
 </style>
 
 <%= render :partial => 'header' %>
@@ -86,125 +86,126 @@
 
 <div class="main-page-container">
 
-  <div class="main-page-container-rows">
-    <!-- loop -->
-    <div class="cells btncells">
-      <div class="divbtn" style="background-color: #415772;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/dde/find_by_national_id'" >
+    <div class="main-page-container-rows">
+        <!-- loop -->
+        <div class="cells btncells">
+            <div class="divbtn" style="background-color: #415772;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/dde/find_by_national_id'" >
         <span>
           <img src='assets/icons/barcode.png' class='x-icons'  />
           <p style="color: lightgrey;">Fufuzani ndi Nambala</p>
         </span>
-      </div>
-    </div>
-    <!-- endloop -->
+            </div>
+        </div>
+        <!-- endloop -->
 
-    <!-- loop -->
-    <div class="cells btncells">
-      <div class="divbtn" style="background-color: #415772;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/dde/search'" >
+        <!-- loop -->
+        <div class="cells btncells">
+            <div class="divbtn" style="background-color: #415772;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/dde/search'" >
         <span>
           <img src='assets/icons/search.png' class='x-icons'  />
           <p style="color: lightgrey;">Fufuzani/Lembetsani Dzina</p>
         </span>
-      </div>
-    </div>
-    <!-- endloop -->
+            </div>
+        </div>
+        <!-- endloop -->
 
-    <!-- loop -->
-    <div class="cells btncells">
-      <div class="divbtn" style="background-color: #415772;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/report/index'" >
+        <!-- loop -->
+        <div class="cells btncells">
+            <div class="divbtn" style="background-color: #415772;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/report/index'" >
         <span>
           <img src='assets/icons/reports.png' class='x-icons'  />
           <p style="color: lightgrey;">Malipoti</p>
         </span>
-      </div>
-    </div>
-    <!-- endloop -->
+            </div>
+        </div>
+        <!-- endloop -->
 
-    <!-- loop -->
-    <div class="cells btncells">
-      <div class="divbtn" style="background-color: #415772;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/admin'" >
+        <!-- loop -->
+        <div class="cells btncells">
+            <div class="divbtn" style="background-color: #415772;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/admin'" >
         <span>
           <img src='assets/icons/Admin.png' class='x-icons'  />
           <p style="color: lightgrey;">Ntchito Zina</p>
         </span>
-      </div>
+            </div>
+        </div>
+        <!-- endloop -->
+
+
     </div>
-    <!-- endloop -->
 
 
-  </div>
+    <div class="main-page-container-rows">
+        <!-- loop -->
+        <div class="cells btncells">
+            <!--div class="divbtn" style="background-color: #ffff1a;border: 1px solid #2e6da4; width: 99%;" onclick="document.location='/house_keeping'" >
+              <span>
+                <img src='assets/icons/schedule.png' class='x-icons'  />
+                <p>Set date</p>
+              </span>
+            </div-->
+        </div>
+        <!-- endloop -->
 
-
-  <div class="main-page-container-rows">
-    <!-- loop -->
-    <div class="cells btncells">
-      <!--div class="divbtn" style="background-color: #ffff1a;border: 1px solid #2e6da4; width: 99%;" onclick="document.location='/house_keeping'" >
-        <span>
-          <img src='assets/icons/schedule.png' class='x-icons'  />
-          <p>Set date</p>
+        <!-- loop -->
+        <div class="cells btncells">
+            <!--div class="divbtn" style="background-color: #008080;border: 1px solid #2e6da4; width: 99%;" onclick="document.location='/'" >
+                <span>
+                  <img src='assets/icons/config.png' class='x-icons'  />
+                  <p style="color: white;">Properties</p>
+                </span>
+            </div-->
+        </div>
+        <!-- endloop -->
+        <!-- loop -->
+        <% if @role.match(/admin/i) %>
+            <div class="cells btncells">
+                <div class="divbtn" style="background-color: #008080;border: 1px solid #2e6da4; width: 95%;" onclick='document.location="/user_data_entry"'>
+        <span class="icons">
+          <img src='/assets/icons/stats.png' class='icons'  />
+          <p style="color: white;">User Data Entry</p>
         </span>
-      </div-->
-    </div>
-    <!-- endloop -->
-
-    <!-- loop -->
-    <div class="cells btncells">
-      <!--div class="divbtn" style="background-color: #008080;border: 1px solid #2e6da4; width: 99%;" onclick="document.location='/'" >
-          <span>
-            <img src='assets/icons/config.png' class='x-icons'  />
-            <p style="color: white;">Properties</p>
-          </span>
-      </div-->
-    </div>
-    <!-- endloop -->
-
-    <!-- loop -->
-    <!--<div class="cells btncells">-->
-      <!--div class="divbtn" style="background-color: #008000;border: 1px solid #2e6da4; width: 99%;" onclick="document.location='/patient/districts'" >
-        <span>
-          <img src='assets/icons/stats.png' class='x-icons'  />
-          <p style="color: white;">Current patient statistics</p>
-        </span>
-      </div-->
-    <!--</div>-->
-    <!-- endloop -->
-    <div class="cells btncells">
- 
-        <!--<span>
-          <div class="baby_count">
-            <span>20</span>
-          </div>
-        </span>-->
-
-    </div>
-    <!-- loop -->
-    <div class="cells btncells">
-      <div class="divbtn" style="background-color:red;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/logout'" >
+                </div>
+            </div>
+        <% else %>
+            <div class="cells btncells">
+                <!--div class="divbtn" style="background-color: #008080;border: 1px solid #2e6da4; width: 99%;" onclick="document.location='/'" >
+                    <span>
+                      <img src='assets/icons/config.png' class='x-icons'  />
+                      <p style="color: white;">Properties</p>
+                    </span>
+                </div-->
+            </div>
+        <% end %>
+        <!-- endloop -->
+        <!-- loop -->
+        <div class="cells btncells">
+            <div class="divbtn" style="background-color:red;border: 1px solid #2e6da4; width: 95%;" onclick="document.location='/logout'" >
         <span>
           <img src='assets/icons/Logout.png' class='x-icons'  />
           <p>Tsilizani Kalembetsa</p>
         </span>
-      </div>
+            </div>
+        </div>
+        <!-- endloop -->
+
+
     </div>
-    <!-- endloop -->
-
-
-  </div>
 
 
 </div>
 
 <%= render :partial => 'footer' %>
 <%= form_tag("/dde/process_scan_data", "method" => 'post', "enctype" => 'multipart/form-data',
-  "id" => 'dde-home', "class" => "form-horizontal", "autocomplete" => "off", "role" => "form", "novalidate" => "novalidate") do %>
+             "id" => 'dde-home', "class" => "form-horizontal", "autocomplete" => "off", "role" => "form", "novalidate" => "novalidate") do %>
 
-  <textarea id="person" name="person" style="display: none;" condition="false"></textarea>
+    <textarea id="person" name="person" style="display: none;" condition="false"></textarea>
 
 <% end %>
 
 <script type="text/javascript">
 
-  var json = <%= raw  ({
+	var json = <%= raw  ({
   "national_id" => nil,
   "application" => "#{@settings["application_name"]}",
   "site_code" => "#{@settings["site_code"]}",
@@ -242,36 +243,36 @@
   }
 }).to_json %>;
 
-<% if !@settings["dde_username"].blank? %>
+	<% if !@settings["dde_username"].blank? %>
 
-    function ajaxRequest(id){
-      var url = "/process_data/" + id;
+	function ajaxRequest(id){
+		var url = "/process_data/" + id;
 
-      var httpRequest = new XMLHttpRequest();
-      httpRequest.onreadystatechange = function() {
-        handleAjaxRequest(httpRequest);
-      };
-      try {
-        httpRequest.open("GET", url, true);
-        httpRequest.send(null);
-      } catch(e){
-      }
-    }
+		var httpRequest = new XMLHttpRequest();
+		httpRequest.onreadystatechange = function() {
+			handleAjaxRequest(httpRequest);
+		};
+		try {
+			httpRequest.open("GET", url, true);
+			httpRequest.send(null);
+		} catch(e){
+		}
+	}
 
-    function handleAjaxRequest(aXMLHttpRequest){
-      if (!aXMLHttpRequest) return;
+	function handleAjaxRequest(aXMLHttpRequest){
+		if (!aXMLHttpRequest) return;
 
-      if (aXMLHttpRequest.readyState == 4 && (aXMLHttpRequest.status == 200 ||
-        aXMLHttpRequest.status == 304)) {
+		if (aXMLHttpRequest.readyState == 4 && (aXMLHttpRequest.status == 200 ||
+				aXMLHttpRequest.status == 304)) {
 
-        var result = aXMLHttpRequest.responseText;
+			var result = aXMLHttpRequest.responseText;
 
-        document.getElementById("person").innerHTML = result;
+			document.getElementById("person").innerHTML = result;
 
-        document.getElementById("dde-home").submit();
+			document.getElementById("dde-home").submit();
 
-      }
-    }
+		}
+	}
 
-<% end %>
+	<% end %>
 </script>
