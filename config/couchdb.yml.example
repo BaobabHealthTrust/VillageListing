@@ -1,0 +1,16 @@
+development: &development
+  protocol: 'http'
+  host: localhost
+  port: 5984
+  prefix: village_listing
+  suffix: development
+  username: username
+  password: password
+  district: Lilongwe
+  ta: Mtema
+  village: Mtema
+
+test:
+  <<: *development
+  suffix: test
+
