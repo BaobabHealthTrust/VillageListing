@@ -5,7 +5,6 @@ class PeopleController < ApplicationController
 	end
 	
 	def show
-		
 		session.delete(:secondary_person)
 		redirect_to ("/") and return if session[:dde_object].blank?
 		
@@ -16,11 +15,13 @@ class PeopleController < ApplicationController
 		# creating a tracker --------------------------------------------------------------------------
 		user_tracker = UserTracker.find_by_person_tracker("#{@patient_bean.national_id}")
 		
-		if user_tracker.blank?
-			UserTracker.create(person_tracker: @patient_bean.national_id,
-			                   username: session[:user]['username'])
-		else
-			# skip if tracker already available and not needed to update else update
+		if session[:dde_object]['return_path'] != nil
+			if user_tracker.blank?
+				UserTracker.create(person_tracker: @patient_bean.national_id,
+				                   username: session[:user]['username'])
+			else
+				# skip if tracker already available and not needed to update else update
+			end
 		end
 	end
 	
