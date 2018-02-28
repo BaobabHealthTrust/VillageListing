@@ -56,6 +56,18 @@ class DdeController < ApplicationController
 		
 		json = JSON.parse(params['person']) rescue {}
 		
+		# creating a tracker --------------------------------------------------------------------------
+		user_tracker = UserTracker.find_by_person_tracker("#{json['national_id']}")
+		
+		if !json['national_id'].nil?
+			if user_tracker.blank?
+				UserTracker.create(person_tracker: json['national_id'],
+				                   username: session[:user]['username'])
+			else
+				# skip if tracker already available and not needed to update else update
+			end
+		end
+		
 		session[:dde_object] = json
 		
 		print_and_redirect("/people/national_id_label", "/people") and return if (json["print_barcode"] rescue false)
