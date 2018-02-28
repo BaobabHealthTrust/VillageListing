@@ -12,17 +12,6 @@ class PeopleController < ApplicationController
 		
 		@patient_bean = OpenStruct.new @patient_bean #Making the keys accessible by a dot operator
 		
-		# creating a tracker --------------------------------------------------------------------------
-		user_tracker = UserTracker.find_by_person_tracker("#{@patient_bean.national_id}")
-		
-		if session[:dde_object]['return_path'] != nil
-			if user_tracker.blank?
-				UserTracker.create(person_tracker: @patient_bean.national_id,
-				                   username: session[:user]['username'])
-			else
-				# skip if tracker already available and not needed to update else update
-			end
-		end
 	end
 	
 	def national_id_label
