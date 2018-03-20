@@ -17,7 +17,7 @@ development:
   ta: Mtema
   district: lilongwe
   news.app.reader.url: http://192.168.21.254:3000
-  app_gateway: true
+  app_gateway: false
 
 test: &TEST
   user.management.url: http://localhost:3004
