@@ -19,14 +19,19 @@ class UserTracker < CouchRest::Model::Base
 		
 		view :by_person_tracker,
 		     :map => "function(doc) {
-					if((doc['type'] == 'UserTracker')) {
+					if(doc['type'] == 'UserTracker') {
 						emit(doc.person_tracker, 1);
 					}
 			 }"
 		
 		view :by_updated_at
 		
-		view :by_created_at
+		view :by_created_at,
+			 :map => "function(doc) {
+					if(doc['type'] == 'UserTracker'){
+						emit(doc.created_at, 1)
+					}
+			 }"
 	end
 
 end

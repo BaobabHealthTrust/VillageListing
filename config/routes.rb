@@ -72,6 +72,7 @@ Rails.application.routes.draw do
 	post '/drill_down/:report_type' => 'report#drill_down'
 	
 	get '/user_data_entry' => 'report#user_data_entry'
+	post '/user_data_entry' => 'report#user_data_entry'
 	##################### report end ######################
 	
 	get '/query', :controller => 'home', :action => 'query'

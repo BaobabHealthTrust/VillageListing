@@ -6,9 +6,22 @@ class ReportController < ApplicationController
 	end
 	
 	def user_data_entry
-		@report_title = 'User Data Entry Report'
-		@user_tracker = UserTracker.all
+	  	passed_year = params[:year]
+		# Date::ABBR_MONTHNAMES.index("Jun") for abbreviations
+	  	passed_month = Date::MONTHNAMES.index(params[:month_period])
+	  	date_key = DateTime.new(passed_year.to_i, passed_month.to_i,1)
+	  	start_key = date_key.beginning_of_month
+		end_key = date_key.end_of_month
 		
+		@report_table_caption = "(#{start_key.to_datetime.strftime('%d-%B-%Y')} - #{end_key.to_datetime.strftime('%d-%B-%Y')})"
+		@report_title = 'User Data Entry Report'
+		@user_tracker = UserTracker.by_created_at.startkey(start_key).endkey(end_key)
+		
+		# (@user_tracker.all || []).each do |user_tracker|
+		#
+		#   next if user_tracker.person_tracker == 'sample_tracker'
+		#   raise People.find(user_tracker.person_tracker).inspect
+		# end
 		render :layout => false
 	end
 	
@@ -36,6 +49,9 @@ class ReportController < ApplicationController
 	def monthly_select
 		@years = ['2018','2017', '2016', '2015'] # to make these dynamic
 		@months = Date::MONTHNAMES
+	  	
+	  	@form_action_url = params[:report_type]
+	  	
 	end
 	
 	def bloomberg_union
