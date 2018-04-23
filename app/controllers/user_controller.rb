@@ -15,7 +15,13 @@ class UserController < ApplicationController
   def portal
     settings = YAML.load_file("#{Rails.root}/config/application.yml") rescue {}
     @new_app_path = settings["#{Rails.env}"]["news.app.reader.url"]
-    render :layout => false
+    
+    if settings["#{Rails.env}"]['app_gateway'] == true
+      return_url = settings['app_gateway_settings']['app_gateway_url']
+      redirect_to return_url and return
+    else
+      render :layout => false
+    end
   end
 
   def logout

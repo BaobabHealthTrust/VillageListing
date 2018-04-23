@@ -7,6 +7,7 @@ production:
   gvh: Mtema
   ta: Mtema
   district: lilongwe
+  app_gateway: false
 
 development:
   user.management.url: http://localhost:5000
@@ -16,6 +17,7 @@ development:
   ta: Mtema
   district: lilongwe
   news.app.reader.url: http://192.168.21.254:3000
+  app_gateway: false
 
 test: &TEST
   user.management.url: http://localhost:3004
@@ -52,3 +54,6 @@ dde_vh:
   threshold: 5
   gvh: Mtema
   vh: Mtema
+
+app_gateway_settings:
+  app_gateway_url: http://192.168.6.171:3000

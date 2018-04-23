@@ -13,7 +13,7 @@
 
 </style>
 
-<%=form_tag "/bloomberg_union" do%>
+<%=form_tag @form_action_url do%>
     <%= select_tag 'year',
                    options_for_select(@years, []),
                    :helpText => 'Select which year to report',
