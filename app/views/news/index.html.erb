@@ -159,7 +159,7 @@
             article.category = 'local_news' || 'sports_news'
             -->
             <% if i % 2 == 0 %>
-                <li class="<% article.title %>" id="<% article.id %>" onclick="loadModal('<%= article.title %>','<%= raw article.body %>')"
+                <li class="<% article.title %>" id="<% article.id %>" onclick="loadModal('<%= article.title %>','<%= Mysql.escape_string(article.body) %>')"
                     style="padding: 20px; font-size: 24px; text-decoration: none; background-color: lightgray;
                             border-bottom: 1px dotted rgba(204,204,204,1)"
                 >
