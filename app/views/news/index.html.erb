@@ -164,7 +164,7 @@
                             border-bottom: 1px dotted rgba(204,204,204,1)"
                 >
             <% else %>
-                <li class="<% article.title %>" id="<% article.id %>" onclick="loadModal('<%= article.title %>','<%= Mysql.escape_string(article.body) %>')"
+                <li class="<% article.title %>" id="<% article.id %>" onclick="loadModal('<%= article.title %>','<%= article.body.html_safe %>')"
                     style="padding: 20px; font-size: 24px; text-decoration: none; background-color: ghostwhite;
                             border-bottom: 1px dotted rgba(204,204,204,1)"
                 >
