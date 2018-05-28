@@ -72,7 +72,12 @@ class HomeController < ApplicationController
     if params[:mode] == 'enable'
       # render view to set date for back-data entry
     elsif params[:mode] == 'reset'
-      #redirect to path to remove back_data_entry_date in session
+      #remove back_data_entry_date in session and redirect to Home
+      session.delete(:back_data_entry_date)
+      redirect_to '/'
+    elsif request.post?
+      session[:back_data_entry_date] = params[:back_data_entry_date]
+      redirect_to '/' and return
     end
 	end
 

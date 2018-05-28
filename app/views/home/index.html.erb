@@ -151,10 +151,10 @@
       <% if @role.match(/admin/i) %>
         <% if session[:back_data_entry_date].present? %>
           <div class="cells btncells">
-            <div class="divbtn" style="background-color: #008080;border: 1px solid #2e6da4; width: 95%;" onclick='document.location="/back_data_entry?mode=reset"'>
+            <div class="divbtn" style="background-color: red;border: 1px solid #2e6da4; width: 95%;" onclick='document.location="/back_data_entry?mode=reset"'>
                 <span class="icons">
                   <img src='/assets/icons/stats.png' class='icons'/>
-                  <p style="color: white;">Reset Back-Data Entry</p>
+                  <p>Reset Back-Data Entry</p>
                 </span>
             </div>
           </div>

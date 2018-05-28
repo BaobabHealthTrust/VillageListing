@@ -8,20 +8,20 @@ Set back data entry
   <meta charset="UTF-8">
   <title></title>
   <script>
-      tstCurrentDate = "2016-10-20";
+      tstCurrentDate = new Date();
   </script>
   <script type="text/javascript" language="javascript" src="lib/javascripts/touchScreenToolkit.js" defer  ></script>
 </head>
 <body>
 <div id="content">
-  <form  action='' method="post">
+  <%= form_tag '/back_data_entry', method: :post do %>
     <table style="margin: auto;">
       <tr>
         <td>
           Date:
         </td>
         <td>
-          <input type="text" id="date" name="date" value="" field_type="date"
+          <input type="text" id="date" name="back_data_entry_date" value="" field_type="date"
                  helpText="Date" format="dd/mmm/yyyy" />
         </td>
         <td>
@@ -32,7 +32,7 @@ Set back data entry
         </td>
       </tr>
     </table>
-  </form>
+  <% end %>
 </div>
 
 <script>

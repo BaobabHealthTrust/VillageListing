@@ -19,6 +19,7 @@ Rails.application.routes.draw do
 	##################### home ######################
 	get '/' => 'home#index'
   get '/back_data_entry' => 'home#back_data_entry'
+  post '/back_data_entry' => 'home#back_data_entry'
 	##################### home end ######################
 	
 	##################### user ######################
