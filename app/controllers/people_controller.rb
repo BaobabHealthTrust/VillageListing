@@ -233,10 +233,12 @@ P1\n)
 	def update_demographics
 		
 		patient_bean = formatted_dde_object
+
 		@settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] rescue {}
 		
 		dob = (patient_bean.birthdate.to_date.strftime("%Y-%m-%d") rescue nil)
 		estimate = patient_bean.birthdate_estimated == true ? true : false
+		
 		
 		if !(params[:person][:birth_month] rescue nil).blank? and (params[:person][:birth_month] rescue nil).to_s.downcase == "unknown"
 			dob = "#{params[:person][:birth_year]}-07-01"
@@ -314,6 +316,7 @@ P1\n)
 		if secure?
 			url = "https://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/process_confirmation"
 		else
+			
 			url = "http://#{@settings["dde_username"]}:#{@settings["dde_password"]}@#{@settings["dde_server"]}/process_confirmation"
 		end
 		
@@ -324,7 +327,7 @@ P1\n)
 		if (json["patient"]["identifiers"] rescue "").class.to_s.downcase == "hash"
 			
 			tmp = json["patient"]["identifiers"]
-			
+				
 			json["patient"]["identifiers"] = []
 			
 			tmp.each do |key, value|
