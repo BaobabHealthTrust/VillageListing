@@ -148,7 +148,6 @@
         <!-- endloop -->
 
       <!-- loop -->
-      <% if @role.match(/admin/i) %>
         <% if session[:back_data_entry_date].present? %>
           <div class="cells btncells">
             <div class="divbtn" style="background-color: red;border: 1px solid #2e6da4; width: 95%;" onclick='document.location="/back_data_entry?mode=reset"'>
@@ -168,16 +167,6 @@
             </div>
           </div>
         <% end %>
-      <% else %>
-        <div class="cells btncells">
-          <!--div class="divbtn" style="background-color: #008080;border: 1px solid #2e6da4; width: 99%;" onclick="document.location='/'" >
-              <span>
-                <img src='assets/icons/config.png' class='x-icons'  />
-                <p style="color: white;">Properties</p>
-              </span>
-          </div-->
-        </div>
-      <% end %>
       <!-- endloop -->
         <!-- loop -->
         <% if @role.match(/admin/i) %>
