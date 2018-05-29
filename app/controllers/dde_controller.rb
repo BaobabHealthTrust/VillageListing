@@ -966,7 +966,9 @@ A35,76,0,2,2,2,N,"#{patient_bean.national_id} #{patient_bean.birthdate}(#{patien
 	end
 	
 	def process_confirmation
-		
+
+		#params["person"]["created_by"] = session[:user]
+		#params.require(:person).permit(:body).merge(created_by: session[:user])
 		@json = params[:person] rescue {}
 		@results = []
 		
@@ -975,6 +977,8 @@ A35,76,0,2,2,2,N,"#{patient_bean.national_id} #{patient_bean.birthdate}(#{patien
 		target = params[:target]
 		
 		target = "update" if target.blank?
+
+		target == "update" ? params["person"]["updated_by"] = session[:user]["username"] : params["person"]["creator"] = session[:user]["username"]
 		
 		if !@json.blank?
 			if secure?
@@ -1096,6 +1100,7 @@ A35,76,0,2,2,2,N,"#{patient_bean.national_id} #{patient_bean.birthdate}(#{patien
 		redirect_to "/" and return if !params[:create].blank? and params[:create] == "false"
 	
 	end
+
 	def relation_search
 		pagesize = 3
 		page = (params[:page] || 1)
