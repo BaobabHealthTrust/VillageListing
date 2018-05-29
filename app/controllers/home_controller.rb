@@ -76,7 +76,7 @@ class HomeController < ApplicationController
       session.delete(:back_data_entry_date)
       redirect_to '/'
     elsif request.post?
-      session[:back_data_entry_date] = params[:back_data_entry_date]
+      session[:back_data_entry_date] = params[:back_data_entry_date].to_date.strftime("%Y-%m-%d %H:%M:%S %Z")
       redirect_to '/' and return
     end
 	end
