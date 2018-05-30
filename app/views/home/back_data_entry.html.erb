@@ -1,0 +1,50 @@
+<!--
+Set back data entry
+-->
+
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+  <script>
+      tstCurrentDate = new Date();
+  </script>
+  <script type="text/javascript" language="javascript" src="lib/javascripts/touchScreenToolkit.js" defer  ></script>
+</head>
+<body>
+<div id="content">
+  <%= form_tag '/back_data_entry', method: :post do %>
+    <table style="margin: auto;">
+      <tr>
+        <td>
+          Date:
+        </td>
+        <td>
+          <input type="text" id="date" name="back_data_entry_date" value="" field_type="date"
+                 helpText="Date" format="dd/mmm/yyyy" />
+        </td>
+        <td>
+          Date estimate:
+        </td>
+        <td>
+          <input type="hidden" id="estimated" name="estimated" value="0" />
+        </td>
+      </tr>
+    </table>
+  <% end %>
+</div>
+
+<script>
+
+    if(document.getElementById("date")) {
+
+        document.getElementById("date").setAttribute("maxdate", (new Date((new Date()).setDate((new Date()).getDate() - 1))));
+
+        document.getElementById("date").setAttribute("mindate", (new Date((new Date()).setDate((new Date()).getDate() - 100))));
+
+    }
+
+</script>
+</body>
+</html>

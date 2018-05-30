@@ -68,4 +68,17 @@ class HomeController < ApplicationController
 		render :text => result.to_json
 	end
 
+	def back_data_entry
+    if params[:mode] == 'enable'
+      # render view to set date for back-data entry
+    elsif params[:mode] == 'reset'
+      #remove back_data_entry_date in session and redirect to Home
+      session.delete(:back_data_entry_date)
+      redirect_to '/'
+    elsif request.post?
+      session[:back_data_entry_date] = params[:back_data_entry_date].to_date.strftime("%Y-%m-%d %H:%M:%S %Z")
+      redirect_to '/' and return
+    end
+	end
+
 end

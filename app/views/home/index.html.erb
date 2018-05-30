@@ -146,19 +146,40 @@
             </div-->
         </div>
         <!-- endloop -->
-
-        <!-- loop -->
-        <div class="cells btncells">
-            <!--div class="divbtn" style="background-color: #008080;border: 1px solid #2e6da4; width: 99%;" onclick="document.location='/'" >
-                <span>
-                  <img src='assets/icons/config.png' class='x-icons'  />
-                  <p style="color: white;">Properties</p>
+      <% if session[:user]['role'] == 'admin' %>
+      <!-- loop -->
+        <% if session[:back_data_entry_date].present? %>
+          <div class="cells btncells">
+            <div class="divbtn" style="background-color: red;border: 1px solid #2e6da4; width: 95%;" onclick='document.location="/back_data_entry?mode=reset"'>
+                <span class="icons">
+                  <img src='/assets/icons/stats.png' class='icons'/>
+                  <p>Reset Back-Data Entry</p>
                 </span>
-            </div-->
+            </div>
+          </div>
+        <% else %>
+          <div class="cells btncells">
+            <div class="divbtn" style="background-color: #008080;border: 1px solid #2e6da4; width: 95%;" onclick='document.location="/back_data_entry?mode=enable"'>
+                <span class="icons">
+                  <img src='/assets/icons/stats.png' class='icons'/>
+                  <p style="color: white;">Enable Back-Data Entry</p>
+                </span>
+            </div>
+          </div>
+        <% end %>
+      <!-- endloop -->
+      <% else %>
+        <div class="cells btncells">
+          <!--div class="divbtn" style="background-color: #008080;border: 1px solid #2e6da4; width: 99%;" onclick="document.location='/'" >
+              <span>
+                <img src='assets/icons/config.png' class='x-icons'  />
+                <p style="color: white;">Properties</p>
+              </span>
+          </div-->
         </div>
-        <!-- endloop -->
+      <% end %>
         <!-- loop -->
-        <% if @role.match(/admin/i) %>
+        <% if session[:user]['role'] == 'admin' %>
             <div class="cells btncells">
                 <div class="divbtn" style="background-color: #008080;border: 1px solid #2e6da4; width: 95%;" onclick='document.location="/monthly_select?report_type=user_data_entry"'>
         <span class="icons">
