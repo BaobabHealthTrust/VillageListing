@@ -172,6 +172,18 @@
                 end %>
                 <% loop += 1 %>
             <% end %>
+            <%
+              #hardcoded for Union April Data May report. To be removed
+              (@sydow.all || []).each do |sydow|
+                admin_count += 1
+              end
+              (@bht.all || []).each do |sydow|
+                admin_count += 1
+              end
+              (@max.all || []).each do |sydow|
+                admin_count += 1
+              end
+            %>
             <tr>
                 <td style="text-align: left;">
                     BHT Staff / Admin
