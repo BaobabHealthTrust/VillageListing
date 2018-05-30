@@ -23,13 +23,6 @@ class UserTracker < CouchRest::Model::Base
 						emit(doc.person_tracker, 1);
 					}
 			 }"
-
-		view :by_username,
-				 :map => "function(doc) {
-					if(doc['type'] == 'UserTracker') {
-						emit(doc.username, 1);
-					}
-			 }"
 		
 		view :by_updated_at
 		
