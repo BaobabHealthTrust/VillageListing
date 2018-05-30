@@ -504,5 +504,4 @@ class ReportController < ApplicationController
 		end
 	
 	end
-
 end
