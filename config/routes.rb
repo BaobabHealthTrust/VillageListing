@@ -63,6 +63,7 @@ Rails.application.routes.draw do
 	post '/report/village_selection_per_ta_data'
 	get '/report/village_selector'
 	post '/report/village_selector'
+	get '/report/list_users'
 	
 	get '/tornado' => 'report#tornado'
 	post '/tornado' => 'report#tornado'

@@ -5,6 +5,16 @@ class ReportController < ApplicationController
 		render :layout => false
 	end
 	
+	def get_user_details(id)
+		    
+	    params = {role: id}
+	    server_address = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
+	    uri = "http://#{server_address}/user_details/"
+	    
+	    result = JSON.parse(RestClient.post(uri,params, :content_type => "application/json"))
+        return result
+	end
+
 	def user_data_entry
 	  	passed_year = params[:year]
 		# Date::ABBR_MONTHNAMES.index("Jun") for abbreviations
@@ -16,7 +26,7 @@ class ReportController < ApplicationController
 		@report_table_caption = "(#{start_key.to_datetime.strftime('%d-%B-%Y')} - #{end_key.to_datetime.strftime('%d-%B-%Y')})"
 		@report_title = 'User Data Entry Report'
 		@user_tracker = UserTracker.by_created_at.startkey(start_key).endkey(end_key)
-		
+		#raise @user_tracker.inspect
 		# (@user_tracker.all || []).each do |user_tracker|
 		#
 		#   next if user_tracker.person_tracker == 'sample_tracker'
@@ -75,6 +85,21 @@ class ReportController < ApplicationController
 		
 		render :layout => false
 	
+	end
+
+	def list_users
+       
+       if(params['user_group']== 'users')
+
+         @res = get_user_details('Onthandizira')
+
+       else
+
+       	 @res = get_user_details('admin')
+
+       end
+
+		render :layout => false
 	end
 	
 	def village_outcome
@@ -170,6 +195,8 @@ class ReportController < ApplicationController
 			when 'bloomberg_union'
 				parameter = params[:parameter]
 				@report_title = "Bloomberg Union (#{parameter.gsub('_',' ').titleize})"
+			when 'user_data_entry'
+				parameter = params[:parameter]
 		end
 		
 		village = session[:user]['village']

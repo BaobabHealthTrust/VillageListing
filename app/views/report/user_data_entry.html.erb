@@ -177,7 +177,7 @@
                     BHT Staff / Admin
                 </td>
                 <td>
-                    <%= admin_count %>
+                    <a href="/report/list_users?parameter=month_period=<%=params[:month_period] %>&year=<%=params[:year] %>&month=<%=params[:month_period]%>&user_group=admins"><%= admin_count %></a
                 </td>
             </tr>
             <tr>
@@ -185,7 +185,7 @@
                     Community Users
                 </td>
                 <td>
-                    <%= community_count %>
+                    <a href="/report/list_users?parameter=month_period=<%=params[:month_period] %>&year=<%=params[:year] %>&month=<%=params[:month_period]%>&user_group=users"><%= community_count %></a>
                 </td>
             </tr>
         </tbody>
@@ -193,7 +193,7 @@
                <tr style="background-color: lightgrey;">
                    <td style="text-align: left;">Total</td>
                    <td>
-                       <%= loop %>
+                       <a href="/drill_down/user_data_entry"><%= loop %></a>
                    </td>
                </tr>
         </tfoot>

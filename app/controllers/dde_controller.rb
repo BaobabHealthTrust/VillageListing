@@ -967,8 +967,6 @@ A35,76,0,2,2,2,N,"#{patient_bean.national_id} #{patient_bean.birthdate}(#{patien
 	
 	def process_confirmation
 
-		#params["person"]["created_by"] = session[:user]
-		#params.require(:person).permit(:body).merge(created_by: session[:user])
 		@json = params[:person] rescue {}
 		@results = []
 		
