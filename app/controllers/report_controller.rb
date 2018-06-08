@@ -6,7 +6,7 @@ class ReportController < ApplicationController
 	end
 	
 	def get_user_details(id)
-		    
+		  
 	    params = {role: id}
 	    server_address = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
 	    uri = "http://#{server_address}/user_details/"
@@ -15,7 +15,18 @@ class ReportController < ApplicationController
         return result
 	end
 
+	def get_user_role(userid)
+ 
+		params = {username: userid}
+	    server_address = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
+	    uri = "http://#{server_address}/user_role/"
+        result = JSON.parse(RestClient.post(uri,params, :content_type => "application/json"))
+
+        return result[0]['role']
+	end
+
 	def user_data_entry
+
 	  	passed_year = params[:year]
 		# Date::ABBR_MONTHNAMES.index("Jun") for abbreviations
 	  	passed_month = Date::MONTHNAMES.index(params[:month_period])
@@ -26,12 +37,15 @@ class ReportController < ApplicationController
 		@report_table_caption = "(#{start_key.to_datetime.strftime('%d-%B-%Y')} - #{end_key.to_datetime.strftime('%d-%B-%Y')})"
 		@report_title = 'User Data Entry Report'
 		@user_tracker = UserTracker.by_created_at.startkey(start_key).endkey(end_key)
-		#raise @user_tracker.inspect
-		# (@user_tracker.all || []).each do |user_tracker|
-		#
-		#   next if user_tracker.person_tracker == 'sample_tracker'
-		#   raise People.find(user_tracker.person_tracker).inspect
-		# end
+
+        @res = []
+
+		(@user_tracker.all || []).each do |user_tracker|
+		
+		   next if user_tracker.person_tracker == 'sample_tracker'
+		   @res << {username: user_tracker.username,role: get_user_role(user_tracker.username)}
+		end
+        
 		render :layout => false
 	end
 	

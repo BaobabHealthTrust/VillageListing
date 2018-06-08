@@ -163,9 +163,9 @@
                 admin_count = 0 # to record total count of record entered by admin/bht staff
                 community_count = 0 # to record total count of records entered by community users
 
-               (@user_tracker.all || []).each do |user_tracker| %>
-                    <% next if user_tracker.username == 'sample_username' %>
-                <% if user_tracker.username == 'admin'
+               (@res || []).each do |user_tracker| %>
+                    <% next if user_tracker['username'] == 'sample_username' %>
+                <% if user_tracker['username'] == 'admin'
                     admin_count += 1
                 else
                     community_count += 1
