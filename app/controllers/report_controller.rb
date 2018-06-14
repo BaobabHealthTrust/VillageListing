@@ -17,11 +17,69 @@ class ReportController < ApplicationController
 		@report_title = 'User Data Entry Report'
 		@user_tracker = UserTracker.by_created_at.startkey(start_key).endkey(end_key)
 
-		# (@user_tracker.all || []).each do |user_tracker|
-		#
-		#   next if user_tracker.person_tracker == 'sample_tracker'
-		#   raise People.find(user_tracker.person_tracker).inspect
+		# for new registations
+		# for births
+		# for deaths 
+		        
+        results = {}
+        results['births'] = {}
+        results['deaths'] = {}
+		results['counts'] = {}
+		
+		@settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] rescue {}
+
+        #######################  Pull new births #######################
+
+        url = "http://#{(@settings["dde_username"])}:#{(@settings["dde_password"])}@#{(@settings["dde_server"])}/retrieve_births_month"
+        
+        new_births = JSON.parse(RestClient.post(url, {
+			"start_date" => start_key.to_date.strftime("%Y/%m/%d").to_s,
+			"end_date" => end_key.to_date.strftime("%Y/%m/%d").to_s
+			})
+		)
+													  
+		@births = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+
+        new_births.each do |new_birth|
+            births_index = new_birth["birthdate"].to_date.strftime("%d").to_i
+			@births[births_index + 1] = @births[births_index + 1] + 1
+        end
+		####################### End pulling new deaths ###################
+
+		#######################  Pull new registrations #######################
+
+		url = "http://#{(@settings["dde_username"])}:#{(@settings["dde_password"])}@#{(@settings["dde_server"])}/retrieve_new_registrations"
+		new_registrations = JSON.parse(RestClient.post(url, {
+			"start_date" => start_key.to_date.strftime("%Y-%m-%d").to_s,
+			"end_date" => end_key.to_date.strftime("%Y-%m-%d").to_s,
+			"current_district" => session[:user]['district'],
+			"current_ta" => session[:user]['ta']
+			})
+		)
+
+		@registrations = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+
+		new_registrations.each do |new_registration|
+			registrations_index = new_registration["created_at"].to_date.strftime("%d").to_i
+			@registrations[registrations_index + 1] = @registrations[registrations_index + 1] + 1
+		end
+		####################### End pulling new registrations ###################
+
+		#######################  Pull Deaths #######################
+		# server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
+		# uri = "http://#{server_address}/population_stats.json/"
+		# paramz = {district: session[:user]['district'], ta: session[:user]['ta'],
+		#           stat: 'current_death_outcomes', village: session[:user]['village']}
+
+		# data = RestClient.post(uri,paramz)
+
+		# unless data.blank?
+		# 	@stats = JSON.parse(data)
+		# else
+		# 	@stats = []
 		# end
+		####################### End pulling Deaths ###################
+
 		render :layout => false
 	end
 
@@ -66,9 +124,6 @@ class ReportController < ApplicationController
 
 		unless data.blank?
 			@stats = JSON.parse(data)
-			File.open("bloomberg_union.json","w") do |f|
-				f.write(@stats)
-			end
 		else
 			@stats = []
 		end
