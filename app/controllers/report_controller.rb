@@ -42,9 +42,11 @@ class ReportController < ApplicationController
 
         new_births.each do |new_birth|
             births_index = new_birth["birthdate"].to_date.strftime("%d").to_i
-			@births[births_index + 1] = @births[births_index + 1] + 1
-        end
-		####################### End pulling new deaths ###################
+			@births[births_index + 1] = @births[births_index + 1] + 1 rescue 0
+		end
+
+		@total_births = @births.inject(0){|sum,x| sum + x }
+		####################### End pulling new births ###################
 
 		#######################  Pull new registrations #######################
 
@@ -61,8 +63,10 @@ class ReportController < ApplicationController
 
 		new_registrations.each do |new_registration|
 			registrations_index = new_registration["created_at"].to_date.strftime("%d").to_i
-			@registrations[registrations_index + 1] = @registrations[registrations_index + 1] + 1
+			@registrations[registrations_index + 1] = @registrations[registrations_index + 1] + 1 rescue 0
 		end
+
+		@total_new_registrations = @registrations.inject(0){|sum,x| sum + x }
 		####################### End pulling new registrations ###################
 
 		#######################  Pull Deaths #######################
