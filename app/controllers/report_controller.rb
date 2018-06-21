@@ -117,20 +117,64 @@ class ReportController < ApplicationController
 	end
 
 	def bloomberg_union
+		passed_year = params[:year]
+		# Date::ABBR_MONTHNAMES.index("Jun") for abbreviations
+	  	passed_month = Date::MONTHNAMES.index(params[:month_period])
+	  	date_key = DateTime.new(passed_year.to_i, passed_month.to_i,1)
+	  	start_key = date_key.beginning_of_month
+		end_key = date_key.end_of_month
 
-		@report_title = 'Bloomberg Union Monthly'
-		server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
-		uri = "http://#{server_address}/population_stats.json/"
-		paramz = {district: session[:user]['district'], ta: session[:user]['ta'],
-		          stat: 'bloomberg_union', month_period: params[:month_period], year: params[:year]}
+		@report_table_caption = "(#{start_key.to_datetime.strftime('%d-%B-%Y')} - #{end_key.to_datetime.strftime('%d-%B-%Y')})"
+		@report_title = 'Bloomberg Monthly'
+		@user_tracker = UserTracker.by_created_at.startkey(start_key).endkey(end_key)
 
-		data = RestClient.post(uri,paramz)
+		# for new registations
+		# for births
+		# for deaths 
+		        
+        results = {}
+        results['births'] = {}
+        results['deaths'] = {}
+		results['counts'] = {}
+		
+		@settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] rescue {}
 
-		unless data.blank?
-			@stats = JSON.parse(data)
-		else
-			@stats = []
+        #######################  Pull new births #######################
+
+        url = "http://#{(@settings["dde_username"])}:#{(@settings["dde_password"])}@#{(@settings["dde_server"])}/retrieve_births_month"
+        
+        new_births = JSON.parse(RestClient.post(url, {
+			"start_date" => start_key.to_date.strftime("%Y/%m/%d").to_s,
+			"end_date" => end_key.to_date.strftime("%Y/%m/%d").to_s
+			})
+		)
+													  
+		@births = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+
+        new_births.each do |new_birth|
+            births_index = new_birth["birthdate"].to_date.strftime("%d").to_i
+			@births[births_index + 1] = @births[births_index + 1] + 1 rescue 0
 		end
+
+		@total_births = @births.inject(0){|sum,x| sum + x }
+		####################### End pulling new births ###################
+
+
+		#######################  Pull Deaths #######################
+		url = "http://#{(@settings["dde_username"])}:#{(@settings["dde_password"])}@#{(@settings["dde_server"])}/retrieve_deaths"
+
+        month_deaths = JSON.parse(RestClient.post(url, {
+			"start_date" => start_key.to_date.strftime("%Y-%m-%d").to_s,
+			"end_date" => end_key.to_date.strftime("%Y-%m-%d").to_s
+			})
+		)
+											
+        month_deaths.each do |new_birth|
+            
+		end
+
+		@total_month_deaths = month_deaths.count
+		####################### End pulling Deaths ###################
 
 		render :layout => false
 

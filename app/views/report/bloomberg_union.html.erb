@@ -149,42 +149,55 @@
 <%=javascript_include_tag "toCSV/jQueryTable2CSV" %>
 
 <div class="table-container">
-
     <table class="people" style="width: 99%; height: 90px;" id="search_results">
+        <caption>
+            <strong>
+                <%= @report_table_caption %>
+            </strong>
+        </caption>
         <thead>
-        <tr>
-            <th style="text-align: center;" colspan="2">
-                (<%= params[:month_period] %> - <%= params[:year] %> )
-            </th>
-        </tr>
+            <tr>
+                <th style="text-align: left;">Stats</th>
+                <th>Count</th>
+            </tr>
         </thead>
         <tbody>
-        <% (@stats || {}).each do |stat, count| %>
             <tr>
-                <% if stat == 'total_census' %>
-                    <th style="text-align: left; background-color: lightgray">
-                        <%=stat.gsub('_',' ').titleize%> as of today (<%= Date.today %>)
-                    </th>
-                    <td style="text-align: left; background-color: lightgray">
-                        <a href="/drill_down/bloomberg_union?outcome=<%=stat%>"><%=count%></a>
-                    </td>
-                <% else %>
-                    <th style="text-align: left;">
-                        <%=stat.gsub('_',' ').titleize%>
-                    </th>
-                    <td style="text-align: left;">
-                        <a href="/drill_down/bloomberg_union?parameter=<%=stat%>&month_period=<%= params[:month_period] %>">
-                            <%=count%>
-                        </a>
-                    </td>
-                <% end %>
+                <td style="text-align: left;">
+                    Births
+                </td>
+                <td style="text-align: right;">
+                    <a href="/drill_down/bloomberg_union?outcome=<%#=stat%>">
+                        <%= @total_births %>
+                    </a>
+                </td>
             </tr>
-        <% end %>
+            <tr>
+                <td style="text-align: left;">
+                    Deaths
+                </td>
+                <td style="text-align: right;">
+                    <a href="/drill_down/bloomberg_union?parameter=<%#=stat%>&month_period=<%#= params[:month_period] %>">
+                        <%= @total_month_deaths %>
+                    </a>
+                </td>
+            </tr>
         </tbody>
+        <tfoot>
+            <tr style="background-color: lightgrey;">
+                <td style="text-align: left;">
+                    Total Census
+                </td>
+                <td style="text-align: right;">
+                    <a href="/drill_down/bloomberg_union?parameter=<%#=stat%>&month_period=<%#= params[:month_period] %>">
+                        <%= 0 %>
+                    </a>
+                </td>
+            </tr>
+        </tfoot>
     </table>
-
-
 </div>
+
 <%= render :partial => 'footer' %>
 
 <script>
