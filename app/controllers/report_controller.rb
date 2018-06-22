@@ -1,10 +1,9 @@
 class ReportController < ApplicationController
-	
 	def index
 		@role = session[:user]["role"]
 		render :layout => false
 	end
-	
+
 	def user_data_entry
 	  	passed_year = params[:year]
 		# Date::ABBR_MONTHNAMES.index("Jun") for abbreviations
@@ -12,111 +11,170 @@ class ReportController < ApplicationController
 	  	date_key = DateTime.new(passed_year.to_i, passed_month.to_i,1)
 	  	start_key = date_key.beginning_of_month
 		end_key = date_key.end_of_month
-		
+
 		@report_table_caption = "(#{start_key.to_datetime.strftime('%d-%B-%Y')} - #{end_key.to_datetime.strftime('%d-%B-%Y')})"
 		@report_title = 'User Data Entry Report'
 		@user_tracker = UserTracker.by_created_at.startkey(start_key).endkey(end_key)
+
+		# for new registations
+		# for births
+		# for deaths 
+		        
+        results = {}
+        results['births'] = {}
+        results['deaths'] = {}
+		results['counts'] = {}
 		
-		# (@user_tracker.all || []).each do |user_tracker|
-		#
-		#   next if user_tracker.person_tracker == 'sample_tracker'
-		#   raise People.find(user_tracker.person_tracker).inspect
+		@settings = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env] rescue {}
+
+        #######################  Pull new births #######################
+
+        url = "http://#{(@settings["dde_username"])}:#{(@settings["dde_password"])}@#{(@settings["dde_server"])}/retrieve_births_month"
+        
+        new_births = JSON.parse(RestClient.post(url, {
+			"start_date" => start_key.to_date.strftime("%Y/%m/%d").to_s,
+			"end_date" => end_key.to_date.strftime("%Y/%m/%d").to_s
+			})
+		)
+													  
+		@births = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+
+        new_births.each do |new_birth|
+            births_index = new_birth["birthdate"].to_date.strftime("%d").to_i
+			@births[births_index + 1] = @births[births_index + 1] + 1 rescue 0
+        end
+
+	@total_births = @births.inject(0){|sum,x| sum + x }
+		####################### End pulling new births ###################
+
+		#######################  Pull new registrations #######################
+
+		url = "http://#{(@settings["dde_username"])}:#{(@settings["dde_password"])}@#{(@settings["dde_server"])}/retrieve_new_registrations"
+		new_registrations = JSON.parse(RestClient.post(url, {
+			"start_date" => start_key.to_date.strftime("%Y-%m-%d").to_s,
+			"end_date" => end_key.to_date.strftime("%Y-%m-%d").to_s,
+			"current_district" => session[:user]['district'],
+			"current_ta" => session[:user]['ta']
+			})
+		)
+
+		@registrations = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+
+		new_registrations.each do |new_registration|
+			registrations_index = new_registration["created_at"].to_date.strftime("%d").to_i
+			@registrations[registrations_index + 1] = @registrations[registrations_index + 1] + 1 rescue 0
+		end
+
+		@total_new_registrations = @registrations.inject(0){|sum,x| sum + x }
+		####################### End pulling new registrations ###################
+
+		#######################  Pull Deaths #######################
+		# server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
+		# uri = "http://#{server_address}/population_stats.json/"
+		# paramz = {district: session[:user]['district'], ta: session[:user]['ta'],
+		#           stat: 'current_death_outcomes', village: session[:user]['village']}
+
+		# data = RestClient.post(uri,paramz)
+
+		# unless data.blank?
+		# 	@stats = JSON.parse(data)
+		# else
+		# 	@stats = []
 		# end
+		####################### End pulling Deaths ###################
+
 		render :layout => false
 	end
-	
+
 	def death_outcome
-		
+
 		@report_title = 'Zotsatira za omwalira'
-		
+
 		server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
 		uri = "http://#{server_address}/population_stats.json/"
 		paramz = {district: session[:user]['district'], ta: session[:user]['ta'],
 		          stat: 'current_death_outcomes', village: session[:user]['village']}
-		
+
 		data = RestClient.post(uri,paramz)
-		
+
 		unless data.blank?
 			@stats = JSON.parse(data)
 		else
 			@stats = []
 		end
-		
+
 		render :layout => false
-	
+
 	end
-	
+
 	def monthly_select
 		@years = ['2018','2017', '2016', '2015'] # to make these dynamic
 		@months = Date::MONTHNAMES
-	  	
+
 	  	@form_action_url = params[:report_type]
-	  	
+
 	end
-	
+
 	def bloomberg_union
-		
+
 		@report_title = 'Bloomberg Union Monthly'
 		server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
 		uri = "http://#{server_address}/population_stats.json/"
 		paramz = {district: session[:user]['district'], ta: session[:user]['ta'],
 		          stat: 'bloomberg_union', month_period: params[:month_period], year: params[:year]}
-		
+
 		data = RestClient.post(uri,paramz)
-		
+
 		unless data.blank?
 			@stats = JSON.parse(data)
-			File.open("bloomberg_union.json","w") do |f|
-				f.write(@stats)
-			end
 		else
 			@stats = []
 		end
-		
+
 		render :layout => false
-	
+
 	end
-	
+
 	def village_outcome
-		
+
 		@report_title = 'Zotsatira zonse' #Village outcome stats
-		
+
 		server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
 		uri = "http://#{server_address}/population_stats.json/"
 		paramz = {district: session[:user]['district'], ta: session[:user]['ta'],
 		          stat: 'current_village_outcomes', village: session[:user]['village']}
 		data = RestClient.post(uri,paramz)
-		
+
 		unless data.blank?
 			@stats = JSON.parse(data)
 		else
 			@stats = []
 		end
-		
+
 		render :layout => false
 	end
-	
+
 	def village_population_birth_year
 		@report_title = "Chiwerengero cha m'mudzi/midzi"#'Village people list'
-		
+
 		server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
-		
+
 		@selected_villages = []
 		params[:ta]['villages'].each do |village|
 			@selected_villages << village.squish.capitalize
 		end
-		
+
 		uri = "http://#{server_address}/population_stats.json/"
 		paramz = {district: session[:user]['district'], ta: session[:user]['ta'], stat: 'ta_population_tabulation'}
 		data = RestClient.post(uri,paramz)
-		
+
 		@start_birthdate = "#{params[:person]['birth_year_start']}-#{params[:person]['birth_month_start']}-01".to_date rescue nil
 		@end_birthdate = "#{params[:person]['birth_year_end']}-#{params[:person]['birth_month_end']}-01".to_date.end_of_month rescue nil
-		
+
 		if @start_birthdate.blank? || @end_birthdate.blank?
 			redirect_to '/' and return
 		end
-		
+
 		unless data.blank?
 			@people = []
 			data = JSON.parse(data)
@@ -131,16 +189,16 @@ class ReportController < ApplicationController
 		else
 			@people = []
 		end
-		
+
 		render :layout => false
 	end
-	
+
 	def village_population
-		
+
 		@report_title = "Chiwerengero cha m'mudzi"#'Village people list'
-		
+
 		village = session[:user]['village']
-		
+
 		server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
 		uri = "http://#{server_address}/population_stats.json/"
 		paramz = {district: session[:user]['district'], ta: session[:user]['ta'],
@@ -148,7 +206,8 @@ class ReportController < ApplicationController
 		data = RestClient.post(uri,paramz)
 		unless data.blank?
 			@people = JSON.parse(data)
-			File.open("mzumazi.json","w") do |f|
+
+			File.open("#{Rails.root}/#{village}.json","w") do |f|
 				f.write(data)
 			end
 			Kernel.system "node #{Rails.root}/json2csv.js > #{Rails.root}/#{village}.csv"
@@ -156,10 +215,10 @@ class ReportController < ApplicationController
 			@people = []
 		end
 		@report_generation_path = "/village_population?run=true"
-		
+
 		render :layout => false
 	end
-	
+
 	def drill_down
 		@report_title = ''
 		report_type = params[:report_type]
@@ -171,11 +230,11 @@ class ReportController < ApplicationController
 				parameter = params[:parameter]
 				@report_title = "Bloomberg Union (#{parameter.gsub('_',' ').titleize})"
 		end
-		
+
 		village = session[:user]['village']
 		server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
 		uri = "http://#{server_address}/population_stats.json/"
-		
+
 		if outcome
 			paramz = {district: session[:user]['district'], ta: session[:user]['ta'],
 			          stat: 'current_district_ta_village_outcome_cause', village: village, outcome: outcome}
@@ -185,17 +244,17 @@ class ReportController < ApplicationController
 		end
 
 		data = RestClient.post(uri,paramz)
-		
+
 		unless data.blank?
 			@people = JSON.parse(data)
 		else
 			@people = []
 		end
 		@report_generation_path = "/village_population?run=true"
-		
+
 		render :layout => false
 	end
-	
+
 	def ta_population_tabulation
 		@selected_villages = []
 		params[:ta]['villages'].each do |village|
@@ -203,12 +262,12 @@ class ReportController < ApplicationController
 		end
 		@report_title = "Chiwerengero cha T/A"#'TA villages (citizen counts)'
 		@report_generation_path = []
-		
+
 		server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
 		uri = "http://#{server_address}/population_stats.json/"
 		paramz = {district: session[:user]['district'], ta: session[:user]['ta'], stat: 'ta_population_tabulation'}
 		data = RestClient.post(uri,paramz)
-		
+
 		unless data.blank?
 			@stats = {}
 			data = JSON.parse(data)
@@ -228,15 +287,15 @@ class ReportController < ApplicationController
 	end
 	
 	def ta_population
-		
+
 		@report_title = "Chiwerengero cha M'boma"#'TA counts'
-		
+
 		if params[:run] == 'true'
 			server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
 			uri = "http://#{server_address}/population_stats.json/"
 			paramz = {district: session[:user]['district'], stat: 'ta_population'}
 			data = RestClient.post(uri,paramz)
-			
+
 			unless data.blank?
 				@stats = {}
 				data = JSON.parse(data)
@@ -254,21 +313,20 @@ class ReportController < ApplicationController
 		end
 		render :layout => false
 	end
-	
+
 	def village_population_per_ta
-	
+
 	end
-	
+
 	def village_age_groups
-		
+
 		@report_title = "Chiwerengero cha m'mudzi (pa dzaka)" #Village people count/break-down by Gender and Age groups'
-		
+
 		server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
 		uri = "http://#{server_address}/population_stats.json/"
 		paramz = {district: session[:user]['district'], ta: session[:user]['ta'],
 		          stat: 'current_district_ta_village', village: session[:user]['village']}
 		data = RestClient.post(uri,paramz)
-		
 		@stats = {}
 		unless data.blank?
 			(JSON.parse(data) || []).each do |person|
@@ -279,27 +337,25 @@ class ReportController < ApplicationController
 				@stats[age_group][gender] += 1
 			end
 		end
-		
+
 		render :layout => false
 	end
-	
+
 	def village_selection
 		if params[:extras] == 'tornado'
 			params[:report_path] = 'get_tornado_data/true'
 		end
-		
 		paramz = {ta_name: session[:user]['ta'], user: session[:user] }
 		server_address = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
 		uri = "http://#{server_address}/demographics/villages.json/"
 		data = RestClient.post(uri,paramz)
-		
 		unless data.blank?
 			@villages = JSON.parse(data)
 		else
 			@villages = {}
 		end
 	end
-	
+
 	def village_selection_per_ta
 		paramz = {district_name: session[:user]['district'], user: session[:user] }
 		server_address = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
@@ -307,11 +363,11 @@ class ReportController < ApplicationController
 		traditional_authorities = RestClient.post(uri,paramz)
 		@traditiona_authorities = JSON.parse(traditional_authorities)
 	end
-	
+
 	def village_selection_per_ta_data
 		server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
 		uri = "http://#{server_address}/population_stats.json/"
-		
+
 		@report_title = "Chiwelengero Cha M'mudzi: Pa T/A"
 		@ta_name = params[:ta_name]
 		@selected_villages = params[:village_names]
@@ -320,7 +376,6 @@ class ReportController < ApplicationController
 			@stats[village] = {} if @stats[village].blank?
 			paramz = {district: session[:user]['district'], ta: params[:ta_name], stat: 'current_district_ta_village', village: village}
 			data = RestClient.post(uri,paramz)
-			
 			unless data.blank?
 				(JSON.parse(data) || []).each do |person|
 					age_group = get_age_group_modified(person)
@@ -330,34 +385,30 @@ class ReportController < ApplicationController
 					@stats[village][age_group][gender] += 1
 				end
 			end
-		
+
 		end
-		
+
 		@village_name = @selected_villages.join(', ')
-		
-		
+
+
 		render :layout => false
 	end
-	
+
 	def tornado
 		@selected_villages = []
 		params[:ta]['villages'].each do |village|
 			@selected_villages << village.squish.capitalize
 		end
 		@report_title = "Chiwelengero cha Akazi ndi Amuna"
-		
 		if params[:run] == 'true'
 			server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
 			uri = "http://#{server_address}/population_stats.json/"
 			paramz = {district: session[:user]['district'], ta: session[:user]['ta'], stat: 'ta_population_tabulation'}
 			data = RestClient.post(uri,paramz)
-			
+
 			unless data.blank?
 				@stats = {}
 				data = JSON.parse(data)
-				File.open("tornado_aug_30.json","w") do |fil|
-					fil.write(RestClient.post(uri,paramz))
-				end
 				(data).each do |person|
 					village_name = person['addresses']['current_village']
 					next unless @selected_villages.include?(village_name.squish.capitalize)
@@ -373,10 +424,10 @@ class ReportController < ApplicationController
 			@report_generation_path = "/get_tornado_data/true"
 			@stats = {}
 		end
-		
+
 		render :layout => false
 	end
-	
+
 	def village_selector
 		ta_name = params[:ta_name]
 		paramz = {ta_name: params[:ta_name], user: session[:user] }
@@ -395,7 +446,7 @@ class ReportController < ApplicationController
 		villages = JSON.parse(data)
 		render :text => "<li>" + villages.sort.join("</li><li>") + "</li>" and return
 	end
-	
+
 	def get_age_group(person)
 		birthdate = person['birthdate'].to_date rescue 'Unknown'
 		return birthdate if birthdate == 'Unknown'
@@ -410,7 +461,7 @@ class ReportController < ApplicationController
 		end
 		raise "#{age} #{ (age >= 5 && age < 15) }"
 	end
-	
+
 	def get_age_group_modified(person)
 		birthdate = person['birthdate'].to_date rescue 'Unknown'
 		return birthdate if birthdate == 'Unknown'
@@ -429,35 +480,34 @@ class ReportController < ApplicationController
 		end
 		raise "#{age} #{ (age >= 5 && age < 15) }"
 	end
-	
+
 	def get_age(person, today = Date.today)
 		birthdate = person['birthdate'].to_date rescue nil
 		return 'Unknown' if birthdate.blank?
-		
+
 		# This code which better accounts for leap years
 		patient_age = (today.year - birthdate.year) + ((today.month - birthdate.month) + ((today.day - birthdate.day) < 0 ? -1 : 0) < 0 ? -1 : 0)
-		
+
 		# If the birthdate was estimated this year, we round up the age, that way if
 		# it is March and the patient says they are 25, they stay 25 (not become 24)
 		birth_date = birthdate
 		estimate = person['birthdate_estimated'] == true
-		
+
 		patient_age += (estimate && birth_date.month == 7 && birth_date.day == 1  &&
 				today.month < birth_date.month && person['created_at'].to_date.year == today.year) ? 1 : 0
-		
+
 		return patient_age.to_i
 	end
-	
+
 	def get_tornado_age_group(person)
 		categories = ['0-4', '5-9', '10-14', '15-19',
 		              '20-24', '25-29', '30-34', '35-39', '40-44',
 		              '45-49', '50-54', '55-59', '60-64', '65-69',
 		              '70-74', '75-79', '80-84', '85 + ']
-		
-		
+
 		return 'Unknown' if person['gender'].blank? || person['birthdate'].blank?
 		gender = person['gender']
-		age = get_age(person).to_i
+		age = get_age(person)
 		if age <= 4
 			cat = categories[0]
 		elsif age > 4 and age <= 9
@@ -495,13 +545,12 @@ class ReportController < ApplicationController
 		elsif age >=  85
 			cat = categories[17]
 		end
-		
-		
 		if gender == 'F' || gender == 'Female' || gender == 'Mkazi' #gender.match(/F/i)
 			return ['Female', cat]
 		elsif gender == 'M' || gender == 'Male' || gender == 'Mwamuna'
 			return ['Male', cat]
 		end
-	
+
 	end
+
 end

@@ -1,3 +1,11 @@
+<!-- Histogram inline scripts -->
+
+<%= javascript_include_tag 'highCharts/highcharts' %>
+<%= javascript_include_tag 'highCharts/modules/exporting' %>
+<%= javascript_include_tag 'highCharts/modules/export-data' %>
+
+<!-- End Histogram inline scripts -->
+
 <style>
 
     body {
@@ -172,18 +180,6 @@
                 end %>
                 <% loop += 1 %>
             <% end %>
-            <%
-              #hardcoded for Union April Data May report. To be removed
-              (@sydow.all || []).each do |sydow|
-                admin_count += 1
-              end
-              (@bht.all || []).each do |sydow|
-                admin_count += 1
-              end
-              (@max.all || []).each do |sydow|
-                admin_count += 1
-              end
-            %>
             <tr>
                 <td style="text-align: left;">
                     BHT Staff / Admin
@@ -210,7 +206,13 @@
                </tr>
         </tfoot>
     </table>
+
+    <!-- add Histogram -->
+    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    <!-- end Histogram -->
+
 </div>
+
 <%= render :partial => 'footer' %>
 
 <script>
@@ -240,7 +242,57 @@
 
 	}
 
-	createExportbutton();
+    createExportbutton();
+    
+    // script for Histogram comes in here
+
+    Highcharts.chart('container', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: 'Monthly People Statistics (New Registrations, Births, Deaths)'
+    },
+    subtitle: {
+        text: 'Server @ TA Mtema'
+    },
+    xAxis: {
+        categories: [],
+        crosshair: true
+    },
+    yAxis: {
+        min: 0,
+	tickInterval: 1,
+	allowDecimal: false,
+        title: {
+            text: 'New Registrations (people)',
+        }
+    },
+    tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y:1f} people</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+    },
+    plotOptions: {
+        column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+        }
+    },
+    series: [{
+        name: "New Registrations (Total: <%= @total_new_registrations %>)",
+        data: <%= @registrations %>
+    }, {
+        name: "Births (Total: <%= @total_births %>)",
+        data: <%= @births %>
+    }/**, {
+        name: 'Deaths',
+        data: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,2,3,4,5,6,7,8,9,10,31]
+    }*/]
+});
 
 </script>
 
