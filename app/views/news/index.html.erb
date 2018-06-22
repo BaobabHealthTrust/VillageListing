@@ -167,14 +167,16 @@
         <% (@news || []).each do |article| %>
             <!-- to be filtered in correctly
             article.category = 'local_news' || 'sports_news'
+            
             -->
+
             <% if i % 2 == 0 %>
-                <li class="<% article.title %>" id="<% article.id %>" onclick="loadModal('<%= article.title %>','<%=  %>', '<%= article.category %>')"
+                <li class="<% article.title %>" id="<% article.id %>" onclick='loadModal("<%= article.title %>", "body_" + "<%= article.id %>", "<%= article.category %>")'
                     style="padding: 20px; font-size: 24px; text-decoration: none; background-color: lightgray;
                             border-bottom: 1px dotted rgba(204,204,204,1)"
                 >
             <% else %>
-                <li class="<% article.title %>" id="<% article.id %>" onclick="loadModal('<%= article.title %>','<%=  %>', '<%= article.category %>')"
+                <li class="<% article.title %>" id="<% article.id %>" onclick='loadModal("<%= article.title %>", "body_" + "<%= article.id %>", "<%= article.category %>")'
                     style="padding: 20px; font-size: 24px; text-decoration: none; background-color: ghostwhite;
                             border-bottom: 1px dotted rgba(204,204,204,1)"
                 >
@@ -193,6 +195,9 @@
                     <%= article.title %>
                 </a>
             </li>
+            <div style="display: none" id="body_<%= article.id %>" >
+                <%= simple_format(article.body) %>
+            </div>
             <% i += 1 %>
         <% end %>
     </ul>
@@ -215,7 +220,9 @@
 </div>
 
 <script type="text/javascript">
-    function loadModal(title, content, category) {
+    function loadModal(title, body_id, category) {
+        content = document.getElementById(body_id).innerHTML;
+        console.log(category);
 		$('ul').on('click', 'li', function() {
 			var article_content = document.getElementById('article_content');
 			article_content.innerHTML = "<div id='modal_title'><h1 class=" + category + ">" + title + "</h1></div>" + "<div id='modal_content'>" + content + "</div>";
