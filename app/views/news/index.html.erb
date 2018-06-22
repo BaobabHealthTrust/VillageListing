@@ -193,9 +193,17 @@
       -->
 
       <% if i % 2 == 0 %>
-        <li class="<% article.title %>" id="<% article.id %>" onclick='loadModal("<%= article.title %>", "body_" + "<%= article.id %>", "<%= article.category %>")' style="padding: 20px; font-size: 24px; text-decoration: none; background-color: lightgray;border-bottom: 1px dotted rgba(204,204,204,1)">
+        <li class="<% article.title %>" id="<% article.id %>"
+            onclick='loadModal("<%= article.title %>", "body_" + "<%= article.id %>", "<%= article.category %>")'
+            style="padding: 20px; font-size: 24px; text-decoration: none; background-color: lightgray;
+                border-bottom: 1px dotted rgba(204,204,204,1)"
+        >
       <% else %>
-        <li class="<% article.title %>" id="<% article.id %>" onclick='loadModal("<%= article.title %>", "body_" + "<%= article.id %>", "<%= article.category %>")' style="padding: 20px; font-size: 24px; text-decoration: none; background-color: lightgray;border-bottom: 1px dotted rgba(204,204,204,1)">
+        <li class="<% article.title %>" id="<% article.id %>"
+            onclick='loadModal("<%= article.title %>", "body_" + "<%= article.id %>", "<%= article.category %>")'
+            style="padding: 20px; font-size: 24px; text-decoration: none; background-color: ghostwhite;
+                border-bottom: 1px dotted rgba(204,204,204,1)"
+        >
       <% end %>
       <a class="title" href="#showArticle" style="padding: 20px; font-size: 24px; border-bottom: 1px dotted
           rgba(204,204,204,1); text-decoration: none">
@@ -212,7 +220,7 @@
       </a>
       </li>
       <div style="display: none" id="body_<%= article.id %>">
-        <%= simple_format(article.body) %>
+        <%= simple_format(article.body.force_encoding(Encoding::UTF_8)) %>
       </div>
       <% i += 1 %>
     <% end %>
