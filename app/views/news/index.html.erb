@@ -194,13 +194,13 @@
 
       <% if i % 2 == 0 %>
         <li class="<% article.title %>" id="<% article.id %>"
-            onclick='loadModal("<%= article.title %>", "body_" + "<%= article.id.force_encoding(Encoding::UTF_8) %>", "<%= article.category %>")'
+            onclick='loadModal("<%= article.title %>", "body_" + "<%= article.id.to_i %>", "<%= article.category %>")'
             style="padding: 20px; font-size: 24px; text-decoration: none; background-color: lightgray;
                 border-bottom: 1px dotted rgba(204,204,204,1)"
         >
       <% else %>
         <li class="<% article.title %>" id="<% article.id %>"
-            onclick='loadModal("<%= article.title %>", "body_" + "<%= article.id.force_encoding(Encoding::UTF_8) %>", "<%= article.category %>")'
+            onclick='loadModal("<%= article.title %>", "body_" + "<%= article.id.to_i %>", "<%= article.category %>")'
             style="padding: 20px; font-size: 24px; text-decoration: none; background-color: ghostwhite;
                 border-bottom: 1px dotted rgba(204,204,204,1)"
         >
