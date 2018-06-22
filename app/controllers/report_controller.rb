@@ -1,5 +1,4 @@
 class ReportController < ApplicationController
-
 	def index
 		@role = session[:user]["role"]
 		render :layout => false
@@ -251,6 +250,7 @@ class ReportController < ApplicationController
 		data = RestClient.post(uri,paramz)
 		unless data.blank?
 			@people = JSON.parse(data)
+
 			File.open("#{Rails.root}/#{village}.json","w") do |f|
 				f.write(data)
 			end
@@ -329,7 +329,7 @@ class ReportController < ApplicationController
 		end
 		render :layout => false
 	end
-
+	
 	def ta_population
 
 		@report_title = "Chiwerengero cha M'boma"#'TA counts'
@@ -371,7 +371,6 @@ class ReportController < ApplicationController
 		paramz = {district: session[:user]['district'], ta: session[:user]['ta'],
 		          stat: 'current_district_ta_village', village: session[:user]['village']}
 		data = RestClient.post(uri,paramz)
-
 		@stats = {}
 		unless data.blank?
 			(JSON.parse(data) || []).each do |person|
@@ -390,12 +389,10 @@ class ReportController < ApplicationController
 		if params[:extras] == 'tornado'
 			params[:report_path] = 'get_tornado_data/true'
 		end
-
 		paramz = {ta_name: session[:user]['ta'], user: session[:user] }
 		server_address = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
 		uri = "http://#{server_address}/demographics/villages.json/"
 		data = RestClient.post(uri,paramz)
-
 		unless data.blank?
 			@villages = JSON.parse(data)
 		else
@@ -423,7 +420,6 @@ class ReportController < ApplicationController
 			@stats[village] = {} if @stats[village].blank?
 			paramz = {district: session[:user]['district'], ta: params[:ta_name], stat: 'current_district_ta_village', village: village}
 			data = RestClient.post(uri,paramz)
-
 			unless data.blank?
 				(JSON.parse(data) || []).each do |person|
 					age_group = get_age_group_modified(person)
@@ -448,7 +444,6 @@ class ReportController < ApplicationController
 			@selected_villages << village.squish.capitalize
 		end
 		@report_title = "Chiwelengero cha Akazi ndi Amuna"
-
 		if params[:run] == 'true'
 			server_address = YAML.load_file("#{Rails.root}/config/dde_connection.yml")[Rails.env]["dde_server"] rescue (raise raise "dde_server_address not set in dde_connection.yml")
 			uri = "http://#{server_address}/population_stats.json/"
@@ -486,7 +481,7 @@ class ReportController < ApplicationController
 		villages = JSON.parse(data)
 		@villages = villages.sort
 	end
-
+	
 	def render_villages
 		paramz = {ta_name: params[:ta_name], user: session[:user] }
 		server_address = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
@@ -554,7 +549,6 @@ class ReportController < ApplicationController
 		              '45-49', '50-54', '55-59', '60-64', '65-69',
 		              '70-74', '75-79', '80-84', '85 + ']
 
-
 		return 'Unknown' if person['gender'].blank? || person['birthdate'].blank?
 		gender = person['gender']
 		age = get_age(person)
@@ -595,8 +589,6 @@ class ReportController < ApplicationController
 		elsif age >=  85
 			cat = categories[17]
 		end
-
-
 		if gender == 'F' || gender == 'Female' || gender == 'Mkazi' #gender.match(/F/i)
 			return ['Female', cat]
 		elsif gender == 'M' || gender == 'Male' || gender == 'Mwamuna'
