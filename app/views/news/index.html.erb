@@ -246,7 +246,6 @@
 <script type="text/javascript">
     function loadModal(title, body_id, category) {
         content = document.getElementById(body_id).innerHTML;
-        console.log(category);
         $('ul').on('click', 'li', function () {
             var article_content = document.getElementById('article_content');
             article_content.innerHTML = "<div id='modal_title'><h1 class=" + category + ">" + title + "</h1></div>" + "<div id='modal_content'>" + content + "</div>";
