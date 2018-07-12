@@ -17,4 +17,10 @@ class NewsController < ApplicationController
 	def track_action
 	  ahoy.track "News visit", request.path_parameters
 	end
+=begin
+	def show
+		@events = Ahoy::Event.where_properties(title: params[:token])
+		@visits = Visit.joins(:ahoy_events).where(:ahoy_events=>{:properties => {title: params[:token]}})
+	end
+=end	
 end
