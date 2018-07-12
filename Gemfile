@@ -1,11 +1,15 @@
-source 'https://rubygems.org'
-
+source 'http://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.0'
 
 # gem mysql2 for news app reading
 gem 'mysql2', '~> 0.3.20'
+
+# for local analytics
+gem 'geocoder', '1.4.9'
+gem 'user_agent_parser', '2.4.1'
+gem 'ahoy_matey', '~> 2'
 
 # Use sqlite3 as the database for Active Record
 # gem 'sqlite3'

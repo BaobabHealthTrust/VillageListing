@@ -4,6 +4,9 @@ Rails.application.routes.draw do
 	post 'news/index' => 'home#index' # for redirecting from News(bad practice. to be redone)
 	
 	get 'main/index'
+
+	# do javascript tracking
+	get '/viewed_article' => 'news#viewed_article'
 	
 	##################### people ######################
 	get 'people/new'
@@ -18,8 +21,8 @@ Rails.application.routes.draw do
 	
 	##################### home ######################
 	get '/' => 'home#index'
-  get '/back_data_entry' => 'home#back_data_entry'
-  post '/back_data_entry' => 'home#back_data_entry'
+  	get '/back_data_entry' => 'home#back_data_entry'
+  	post '/back_data_entry' => 'home#back_data_entry'
 	##################### home end ######################
 	
 	##################### user ######################
