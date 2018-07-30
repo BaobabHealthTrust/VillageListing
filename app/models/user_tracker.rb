@@ -6,6 +6,7 @@ class UserTracker < CouchRest::Model::Base
 	
 	property :person_tracker, String
 	property :username, String
+	property :user_role, String
 	
 	timestamps!
 	

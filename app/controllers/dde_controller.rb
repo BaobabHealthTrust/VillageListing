@@ -62,7 +62,7 @@ class DdeController < ApplicationController
 		if !json['national_id'].nil?
 			if user_tracker.blank?
 				UserTracker.create(person_tracker: json['national_id'],
-				                   username: session[:user]['username'])
+				                   username: session[:user]['username'], user_role: session[:user]['role'])
 			else
 				# skip if tracker already available and not needed to update else update
 			end
