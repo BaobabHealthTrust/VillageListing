@@ -1,6 +1,6 @@
 class NewsController < ApplicationController
 	skip_before_filter :check_if_logged_in # we want news to be accessible even without being logged in
-	after_action :track_action
+	after_action :track_action # track every action after accessing it.
 	
 	def index
 		@news = News.all.order('created_at desc')
