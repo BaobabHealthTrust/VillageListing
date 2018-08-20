@@ -1,0 +1,238 @@
+
+<style>
+
+body {
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  -moz-user-select: none;     /* Firefox all */
+  -ms-user-select: none;      /* IE 10+ */
+  user-select: none;          /* Likely future */ 
+}
+
+img {
+  user-drag: none; 
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  pointer-events: none;
+}
+
+.main-page-container  {
+  display: table;
+  width: 100%;
+  padding: 0px 1px 0px 1px;
+}
+
+.main-page-container-rows  {
+  display: table-row;
+}
+
+.cells {
+  display: table-cell;
+}
+
+
+/* ...................................... */
+.divbtn {
+  height: 265px;
+  display: table;
+  margin-top: 10px;
+  cursor:pointer;
+}
+
+.icons {
+  width: 160px;
+  height: 160px;
+  margin-top: 10%;
+  text-align: middle;
+}
+
+.divbtn p {
+  font-weight: bold;
+}
+
+.btncells {
+  width: 25%;
+  text-align: center;
+}
+
+.small-icons {
+  width: 100px;
+  height: 100px;
+}
+
+.header .cells {
+  vertical-align: middle; 
+  padding-right: 5px;
+}
+
+#scan {
+  background-color: lightgrey;
+  border-style: solid;
+  border-width: 1px;
+  font-size: 80px;
+  margin-bottom: 6px;
+  width: 44%;
+}
+
+.header .icons {
+  width: 100px;
+  height: 100px;
+}
+
+/* ...................................... */
+
+.people {
+  padding-top: 10px;
+}
+
+.people th {
+  border-style: solid;
+  border-width: 1px;
+  text-align: right;
+  padding-right: 10px;
+}
+
+.people td {
+  border-style: solid;
+  border-width: 1px;
+  text-align: right;
+  padding-right: 10px;
+}
+
+.table-container {
+  height: 75%;
+  overflow: auto;
+}
+
+.percentage {
+  background-color: gold;
+}
+
+/* datatable ....................... */
+#search_results_info, #search_results_paginate, #search_results_length, #search_results_filter {
+  display: none;
+}
+
+#percentage_length, #percentage_filter, #percentage_info, #percentage_paginate {
+  display: none;
+}
+
+#percentage {
+  width: 50%;
+  height: 50px;
+  float: left;
+  padding-left: 5px;
+}
+
+.dataTables_wrapper {
+  min-height: 230px !important;
+}
+
+/* datatable ....................... */
+</style>
+
+<%= render :partial => 'header' %>
+
+<%=javascript_include_tag "DataTables/jquery" %>                          
+<%=javascript_include_tag "DataTables/prototype" %>                          
+<script>jQuery.noConflict();</script>
+<%=javascript_include_tag "DataTables/jquery.dataTables.min" %>
+
+<%= stylesheet_link_tag "DataTables/demo_table_jui" %>                                     
+<%= stylesheet_link_tag "DataTables/jquery.dataTables" %>                                     
+
+
+<div class="table-container">
+
+<table class="people" style="width: 99%; height: 90px;" id="search_results">
+  <thead>
+    <tr>
+      <th style="text-align: left;">Gulu La Dzaka</th>
+      <th>Akazi</th>
+      <th>Amuna</th>
+      <th>Onse pamodzi</th>
+    </tr>
+  </thead>
+  <tbody>
+  <%
+  total_females = 0 ; total_males = 0
+  (@stats || {}).each do |age_group, gender|%>
+  <tr>
+    <td style="text-align: left;"><%=age_group%></td>
+    <td><%=gender['F']%></td>
+    <td><%=gender['M']%></td>
+    <td><%=(gender['M'].to_i + gender['F'].to_i)%></td>
+  </tr>
+  <%
+  total_females +=  gender['F'].to_i ; total_males +=  gender['M'].to_i
+  end%>
+  
+  <%if @stats.length > 0%>
+  <tfoot>
+    <tr style="background-color: lightgrey;">
+      <td style="text-align: left;">Total</td>
+      <td><%=total_females%></td>
+      <td><%=total_males%></td>
+      <td><%=(total_females + total_males)%></td>
+    </tr>
+  </tfoot>
+  </tbody>
+  <%end%>
+</table>
+
+
+<!-- ............... precentage break down ................ -->
+
+<table id="percentage" class="people">
+  <thead>
+    <tr>
+      <th>Gulu La Dzaka</th>
+      <th>Akazi</th>
+      <th>Amuna</th>
+    </tr>
+  </thead>
+  
+  <tbody>
+  <%total_females_per = 0 ; total_males_per = 0
+  (@stats || []).each do |age_group, gender|%>
+    <tr>
+      <td style="text-align: left;"><%=age_group%></td>
+      <td><%=((gender['F'].to_f*100)/(total_females + total_males)).round(2)%>%</td>
+      <td><%=((gender['M'].to_f*100)/(total_females + total_males)).round(2)%>%</td>
+    </tr>
+  <%
+  total_females_per += ((gender['F'].to_f*100)/(total_females + total_males)).round(2)
+  total_males_per += ((gender['M'].to_f*100)/(total_females + total_males)).round(2)
+  end%> 
+  <%if @stats.length > 0%>
+  <tfoot>
+    <tr style="background-color: lightgrey;">
+      <td style="text-align: left;">Total</td>
+      <td><%=total_females_per.round(2)%>%</td>
+      <td><%=total_males_per.round(2)%>%</td>
+    </tr>
+  </tfoot>
+  </tbody>
+  <%end%>
+</table>
+  </tbody>
+
+</table>
+
+<!-- ............... precentage break down ................ -->
+
+</div>
+<%= render :partial => 'footer' %>
+
+<script>                                                                        
+  dataT();                   
+  
+  function dataT(){          
+    table = jQuery('#search_results').dataTable();                                                  
+    table2 = jQuery('#percentage').dataTable();                                                  
+  }
+
+</script>
+  

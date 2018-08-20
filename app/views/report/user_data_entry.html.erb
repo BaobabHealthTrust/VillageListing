@@ -1,0 +1,298 @@
+<!-- Histogram inline scripts -->
+
+<%= javascript_include_tag 'highCharts/highcharts' %>
+<%= javascript_include_tag 'highCharts/modules/exporting' %>
+<%= javascript_include_tag 'highCharts/modules/export-data' %>
+
+<!-- End Histogram inline scripts -->
+
+<style>
+
+    body {
+        -webkit-user-select: none;  /* Chrome all / Safari all */
+        -moz-user-select: none;     /* Firefox all */
+        -ms-user-select: none;      /* IE 10+ */
+        user-select: none;          /* Likely future */
+    }
+
+    img {
+        user-drag: none;
+        user-select: none;
+        -moz-user-select: none;
+        -webkit-user-drag: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        pointer-events: none;
+    }
+
+    .main-page-container  {
+        display: table;
+        width: 100%;
+        padding: 0px 1px 0px 1px;
+    }
+
+    .main-page-container-rows  {
+        display: table-row;
+    }
+
+    .cells {
+        display: table-cell;
+    }
+
+
+    /* ...................................... */
+    .divbtn {
+        height: 265px;
+        display: table;
+        margin-top: 10px;
+        cursor:pointer;
+    }
+
+    .icons {
+        width: 160px;
+        height: 160px;
+        margin-top: 10%;
+        text-align: middle;
+    }
+
+    .divbtn p {
+        font-weight: bold;
+    }
+
+    .btncells {
+        width: 25%;
+        text-align: center;
+    }
+
+    .small-icons {
+        width: 100px;
+        height: 100px;
+    }
+
+    .header .cells {
+        vertical-align: middle;
+        padding-right: 5px;
+    }
+
+    #scan {
+        background-color: lightgrey;
+        border-style: solid;
+        border-width: 1px;
+        font-size: 80px;
+        margin-bottom: 6px;
+        width: 44%;
+    }
+
+    .header .icons {
+        width: 100px;
+        height: 100px;
+    }
+
+    /* ...................................... */
+
+    .people {
+        padding-top: 10px;
+    }
+
+    .people th {
+        border-style: solid;
+        border-width: 1px;
+        text-align: right;
+        padding-right: 10px;
+    }
+
+    .people td {
+        border-style: solid;
+        border-width: 1px;
+        text-align: right;
+        padding-right: 10px;
+    }
+
+    .table-container {
+        height: 75%;
+        overflow: auto;
+    }
+
+    .percentage {
+        background-color: gold;
+    }
+
+    /* datatable ....................... */
+    #search_results_info, #search_results_paginate, #search_results_length, #search_results_filter {
+        display: none;
+    }
+
+    #percentage_length, #percentage_filter, #percentage_info, #percentage_paginate {
+        display: none;
+    }
+
+    #percentage {
+        width: 50%;
+        height: 50px;
+        float: left;
+        padding-left: 5px;
+    }
+
+    .dataTables_wrapper {
+        min-height: 230px !important;
+    }
+
+    /* datatable ....................... */
+</style>
+
+<%= render :partial => 'header' %>
+<%=javascript_include_tag "DataTables/jquery" %>
+<%=javascript_include_tag "DataTables/prototype" %>
+<script>jQuery.noConflict();</script>
+<%=javascript_include_tag "DataTables/jquery.dataTables.min" %>
+
+<%= stylesheet_link_tag "DataTables/demo_table_jui" %>
+<%= stylesheet_link_tag "DataTables/jquery.dataTables" %>
+
+<%=javascript_include_tag "toCSV/jQueryTable2CSV" %>
+
+<div class="table-container">
+    <table class="people" style="width: 99%; height: 90px;" id="search_results">
+        <caption>
+            <strong>
+                <%= @report_table_caption %>
+            </strong>
+        </caption>
+        <thead>
+            <tr>
+                <th style="text-align: left;">Responsible User</th>
+                <th>Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%  loop = 0
+                bht_staff_admin = []
+                community_user = []
+                admin_count = 0 # to record total count of record entered by admin/bht staff
+                community_count = 0 # to record total count of records entered by community users
+
+               (@user_tracker.all || []).each do |user_tracker| %>
+                    <% next if user_tracker.username == 'sample_username' %>
+                <% if user_tracker.username == 'admin'
+                    admin_count += 1
+                else
+                    community_count += 1
+                end %>
+                <% loop += 1 %>
+            <% end %>
+            <tr>
+                <td style="text-align: left;">
+                    BHT Staff / Admin
+                </td>
+                <td>
+                    <%= admin_count %>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">
+                    Community Users
+                </td>
+                <td>
+                    <%= community_count %>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+               <tr style="background-color: lightgrey;">
+                   <td style="text-align: left;">Total</td>
+                   <td>
+                       <%= loop %>
+                   </td>
+               </tr>
+        </tfoot>
+    </table>
+
+    <!-- add Histogram -->
+    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    <!-- end Histogram -->
+
+</div>
+
+<%= render :partial => 'footer' %>
+
+<script>
+	dataT();
+
+	function dataT(){
+		table = jQuery('#search_results').dataTable();
+	}
+
+	function tableToCSV() {
+		var csv =  jQuery('#search_results').table2CSV({delivery:'value'});
+		window.location.href = 'data:text/csv;charset=UTF-8,' + encodeURIComponent(csv);
+	}
+
+	function createExportbutton(){
+		buttonsDiv = document.getElementById("buttons");
+		button = document.createElement("button");
+		button.className = 'green';
+		button.style.margin = '5px 0px 0px';
+		button.style.minWidth = '190px';
+		button.style.float = 'right';
+		button.innerHTML = '<span>Tsitsani CSV</span>';
+		button.onclick = function(){
+			tableToCSV();
+		};
+		buttonsDiv.appendChild(button);
+
+	}
+
+    createExportbutton();
+    
+    // script for Histogram comes in here
+
+    Highcharts.chart('container', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: 'Monthly People Statistics (New Registrations, Births, Deaths)'
+    },
+    subtitle: {
+        text: 'Server @ TA Mtema'
+    },
+    xAxis: {
+        categories: [],
+        crosshair: true
+    },
+    yAxis: {
+        min: 0,
+        tickInterval: 1,
+        allowDecimal: false,
+        title: {
+            text: 'New Registrations (people)',
+        }
+    },
+    tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y:1f} people</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+    },
+    plotOptions: {
+        column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+        }
+    },
+    series: [{
+        name: "New Registrations (Total: <%= @total_new_registrations%>)",
+        data: <%= @registrations %>
+    }, {
+        name: "Births (Total: <%= @total_births %>)",
+        data: <%= @births %>
+    }/**, {
+        name: 'Deaths',
+        data: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,2,3,4,5,6,7,8,9,10,31]
+    }*/]
+});
+
+</script>
+

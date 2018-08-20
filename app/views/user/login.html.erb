@@ -10,7 +10,7 @@
 
       <script language="javascript">
         
-        var tt_cancel_destination = "/";
+        var tt_cancel_destination = "/portal";
         doListSuggestions = false; //speeds up keyboard response
 
         var setFocusTimeout = 1000;
@@ -43,12 +43,14 @@
            
         window.addEventListener("load", loadBarcodePage, false);
       </script>
+
+        <%= javascript_include_tag 'locale' %>
 	</head>
 <body>
 
 <%=form_tag '/login' do%>
-<input type="text" id="username" name="user[username]" helpText="Enter username" textCase="lower"/>
-<input type="password" id="password" name="user[password]" helpText ="Enter password" textCase="lower"/>
+<input type="text" id="username" name="user[username]" helpText="Lowetsani dzina logwiritsila ntchito" textCase="lower"/>
+<input type="password" id="password" name="user[password]" helpText ="Lowetsani mawu a chinsisi" textCase="lower"/>
 <%end%>
 
 </body>

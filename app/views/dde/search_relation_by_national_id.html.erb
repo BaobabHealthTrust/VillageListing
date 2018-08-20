@@ -1,0 +1,86 @@
+
+<script>
+  var tt_cancel_destination = "/people";
+  var checkForBarcodeTimeout = 1500;
+
+  function formatBarcodeSpace(){
+
+    __$('inputFrame' + tstCurrentPage).style.background = "white";
+    __$('inputFrame' + tstCurrentPage).style.marginTop = "6%";
+    __$('page' + tstCurrentPage).style.marginTop = "2.5%";
+    __$('inputFrame' + tstCurrentPage).style.border = "hidden";
+
+    var barcode = document.getElementById("touchscreenInput0");
+    var helptext = __$("helpText" + tstCurrentPage);
+
+    barcode.style.width = "539px"
+    barcode.style.fontSize = "50px"
+    barcode.style.marginLeft = "33%";
+    barcode.style.height = "80px";
+
+    helptext.style.marginLeft = "36.5%";
+    helptext.style.paddingTop = "50px";
+  }
+
+  function focusForBarcodeInput() {
+    var barcode = document.getElementById("touchscreenInput0");
+    if (barcode) {
+      barcode.focus();
+    }
+  }
+
+  function loadBarcodePage() {
+    focusForBarcodeInput();
+    moveNext();
+  }
+
+  function moveNext() {
+    usertext = document.getElementById("touchscreenInput0");
+    if (usertext && usertext.value.match(/.+\$$/i) != null) {
+      usertext.value = usertext.value.substring(0, usertext.value.length - 1);
+      gotoNextPage();
+    }
+  }
+
+  window.addEventListener("load", loadBarcodePage, false);
+
+  window.setInterval("moveNext();", 350);
+
+
+</script>
+<style type="text/css">
+  .national_id{
+    position: absolute;
+    left: 26%;
+    width: 5%;
+    top: 24%;
+    width: 100px;
+  }
+
+  #tt_page_nambala_ya_chiphaso .touchscreenTextInput {
+    position: absolute;
+    top: 80px;
+  }
+
+  #page0 .helpTextClass{
+    margin-left: 38.5% !Important;
+  }
+</style>
+
+<form action="/dde/process_scan_data_relation" method='post'>
+  <%= text_field_tag "national_id", '', {
+    :tt_onLoad => "formatBarcodeSpace();",
+    :id => 'barcode',
+    :class => 'touchscreenTextInput',
+    :field_type => 'alpha',
+    :tt_pageStyleClass => "Numeric NumbersOnly",
+    :helpText => "Nambala ya Chiphaso",
+    :style => 'position:absolute'
+  } %>
+
+</form
+<script type="text/javascript">
+<% if flash[:notice] %>
+    showMessage("<%= flash[:notice]%> ")
+<% end %>
+</script>

@@ -1,0 +1,212 @@
+
+<style>
+
+body {
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  -moz-user-select: none;     /* Firefox all */
+  -ms-user-select: none;      /* IE 10+ */
+  user-select: none;          /* Likely future */ 
+}
+
+img {
+  user-drag: none; 
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  pointer-events: none;
+}
+
+.main-page-container  {
+  display: table;
+  width: 100%;
+  padding: 0px 1px 0px 1px;
+}
+
+.main-page-container-rows  {
+  display: table-row;
+}
+
+.cells {
+  display: table-cell;
+}
+
+
+/* ...................................... */
+.divbtn {
+  height: 265px;
+  display: table;
+  margin-top: 10px;
+  cursor:pointer;
+}
+
+.icons {
+  width: 160px;
+  height: 160px;
+  margin-top: 10%;
+  text-align: middle;
+}
+
+.divbtn p {
+  font-weight: bold;
+}
+
+.btncells {
+  width: 25%;
+  text-align: center;
+}
+
+.small-icons {
+  width: 100px;
+  height: 100px;
+}
+
+.header .cells {
+  vertical-align: middle; 
+  padding-right: 5px;
+}
+
+#scan {
+  background-color: lightgrey;
+  border-style: solid;
+  border-width: 1px;
+  font-size: 80px;
+  margin-bottom: 6px;
+  width: 44%;
+}
+
+.header .icons {
+  width: 100px;
+  height: 100px;
+}
+
+/* ...................................... */
+
+.people {
+  padding-top: 10px;
+}
+
+.people th {
+  border-style: solid;
+  border-width: 1px;
+  text-align: right;
+  padding-right: 10px;
+}
+
+.people td {
+  border-style: solid;
+  border-width: 1px;
+  text-align: right;
+  padding-right: 10px;
+}
+
+.table-container {
+  height: 75%;
+  overflow: auto;
+}
+
+.percentage {
+  background-color: gold;
+}
+
+/* datatable ....................... */
+#search_results_info, #search_results_paginate, #search_results_length, #search_results_filter {
+  display: none;
+}
+
+#percentage_length, #percentage_filter, #percentage_info, #percentage_paginate {
+  display: none;
+}
+
+#percentage {
+  width: 50%;
+  height: 50px;
+  float: left;
+  padding-left: 5px;
+}
+
+.dataTables_wrapper {
+  min-height: 230px !important;
+}
+
+/* datatable ....................... */
+</style>
+
+<%= render :partial => 'header' %>
+
+<%=javascript_include_tag "DataTables/jquery" %>                          
+<%=javascript_include_tag "DataTables/prototype" %>                          
+<script>jQuery.noConflict();</script>
+<%=javascript_include_tag "DataTables/jquery.dataTables.min" %>
+
+<%= stylesheet_link_tag "DataTables/demo_table_jui" %>                                     
+<%= stylesheet_link_tag "DataTables/jquery.dataTables" %>
+
+<%=javascript_include_tag "toCSV/jQueryTable2CSV" %>
+
+<div class="table-container">
+
+<table class="people" style="width: 99%; height: 90px;" id="search_results">
+  <thead>
+    <tr>
+      <th style="text-align: left;">Zotsatila</th>
+      <th>Chiwerengelo</th>
+    </tr>
+  </thead>
+  <tbody>
+  <%
+  total = 0
+  (@stats || {}).each do |outcome, count|%>
+  <tr>
+    <td style="text-align: left;"><%=outcome.gsub('_',' ').titleize%></td>
+    <td><%=count%></td>
+  </tr>
+  <%
+  total +=  count
+  end%>
+  
+  <tfoot>
+    <tr style="background-color: lightgrey;">
+      <td style="text-align: left;">Zonse pamodzi</td>
+      <td><%=total < 1 ? '' : total%></td>
+    </tr>
+  </tfoot>
+  </tbody>
+</table>
+
+
+</div>
+<%= render :partial => 'footer' %>
+
+<script>                                                                        
+  dataT();                   
+  
+  function dataT(){          
+    table = jQuery('#search_results').dataTable();                                                  
+  }
+
+  function tableToCSV() {
+      var csv =  jQuery('#search_results').table2CSV({delivery:'value'});
+      window.location.href = 'data:text/csv;charset=UTF-8,' + encodeURIComponent(csv);
+  }
+
+  function createExportbutton(){
+      buttonsDiv = document.getElementById("buttons");
+      button = document.createElement("button");
+      button.className = 'green';
+      button.style.margin = '5px 0px 0px';
+      button.style.minWidth = '190px';
+      button.style.float = 'right';
+      button.innerHTML = '<span>Tsitsani CSV</span>';
+      button.onclick = function(){
+          tableToCSV();
+      }
+      buttonsDiv.appendChild(button);
+
+  }
+
+  createExportbutton();
+
+</script>
+  

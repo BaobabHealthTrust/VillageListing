@@ -1,0 +1,30 @@
+<script>
+	var tt_cancel_destination = "/report/index";
+</script>
+
+<style>
+    .inputFrameClass {
+        height: 85%;
+    }
+
+    .options {
+        height: 88%;
+    }
+
+</style>
+
+<%=form_tag @form_action_url do%>
+    <%= select_tag 'year',
+                   options_for_select(@years, []),
+                   :helpText => 'Select which year to report',
+                   :tt_onload => "$('keyboard').style.display = 'none'",
+                   :id => 'bloomberg_year',
+                   :multiple => false %>
+
+    <%= select_tag 'month_period',
+                   options_for_select(@months, []),
+                   :helpText => 'Select which month of the Year to report',
+                   :tt_onload => "$('helpText' + tstCurrentPage).innerHTML = 'Select which month of ' +
+                   $('bloomberg_year').value + ' to report'; $('keyboard').style.display = 'none'",
+                   :multiple => false %>
+<%end%>

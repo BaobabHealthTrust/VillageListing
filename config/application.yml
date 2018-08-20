@@ -1,0 +1,59 @@
+## YAML Template.
+---
+production:
+  user.management.url: http://localhost:3004
+  locale: en
+  village: Mtema
+  gvh: Mtema
+  ta: Mtema
+  district: lilongwe
+  app_gateway: false
+
+development:
+  user.management.url: http://localhost:5000
+  locale: en
+  village: Mtema
+  gvh: Mtema
+  ta: Mtema
+  district: lilongwe
+  news.app.reader.url: http://192.168.21.254:3000
+  app_gateway: false
+
+test: &TEST
+  user.management.url: http://localhost:3004
+  locale: ny
+  village: Mtema
+  gvh: Mtema
+  ta: Mtema
+  
+dde_mode: ta
+
+dde_ta:
+  username: admin
+  password: password
+  target_server: localhost:3002
+  site_code: MTA
+  batch_count: 50
+  threshold: 5
+  
+dde_gvh:
+  username: admin
+  password: password
+  target_server: localhost:3002
+  site_code: MTA
+  batch_count: 5
+  threshold: 5
+  gvh: Mtema
+  
+dde_vh:
+  username: admin
+  password: password
+  target_server: localhost:3002
+  site_code: MTA
+  batch_count: 3
+  threshold: 5
+  gvh: Mtema
+  vh: Mtema
+
+app_gateway_settings:
+  app_gateway_url: http://192.168.6.171:3000

@@ -9,3 +9,11 @@ Rails.application.config.assets.version = '1.0'
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
 # Rails.application.config.assets.precompile += %w( search.js )
+Rails.application.config.assets.precompile += %w( touch-fancy.css )
+Rails.application.config.assets.precompile += %w( DataTables/* )
+Rails.application.config.assets.precompile += %w( multi_column_controls.js )
+Rails.application.config.assets.precompile += %w( toCSV/* )
+Rails.application.config.assets.precompile += %w( highCharts/* )
+Rails.application.config.assets.precompile += %w( locale.js )
+Rails.application.config.assets.precompile += %w( bannerNews.js )
+Rails.application.config.assets.precompile += %w( jquery-3.2.1.min.js )

@@ -1,0 +1,15 @@
+
+<script type="text/javascript">
+  var tt_cancel_destination = "/people";
+</script>
+
+<%= form_tag "/dde/select_relation_search_type" do %>
+  <%= select_tag "search_relation_type", options_for_select([['Nambala Ya Chiphatso', 'national_id'], ['Dzina', 'name']]),
+    {:id => "relation",
+    :helptext => "Fufuzani Munthu kuzera"
+  } %>
+
+  <%= submit_tag "Create Relation" %>
+
+<% end %>
+

@@ -5,366 +5,367 @@
     }
 </style>
 
+<%= javascript_include_tag 'locale' %>
+
 <% @results = [] if @results.blank? %>
-
 <div class="table" style="width: 100%; height: 100%; border-spacing: 5px;">
-<div class="row">
-<div class="cell" style="width: 50%; border-radius: 1px; overflow: auto;
-        border: 1px solid #666; vertical-align: top; padding: 10px;">
-
-<div style="font-size: 32px; padding: 5px; background-color: #84cfa5;
-        text-align: center; border-radius: 0px; margin: auto; margin-bottom: 10px;">
-  Captured Data
-</div>
-
-<div id="captured" style="height: 40%; width: 100%; border: 1px solid #000; overflow: auto;">
-  <div class="table" style="width: 100%; border-spacing: 0px;">
     <div class="row">
-      <div class="cell bold label_cell">
-        First Name:
-      </div>
-      <div class="cell  input_cell ">
-        &nbsp;<%= @json["names"]["given_name"] rescue nil %>
-      </div>
-      <div class="cell">
-        &nbsp;
-      </div>
-      <!--/div>
+        <div class="cell" style="width: 50%; border-radius: 1px; overflow: auto;
+                border: 1px solid #666; vertical-align: top; padding: 10px;">
 
-      <div class="row"-->
-      <div class="cell bold label_cell">
-        Last Name:
-      </div>
-      <div class="cell  input_cell">
-        &nbsp;<%= @json["names"]["family_name"] rescue nil %>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="cell bold label_cell">
-        Gender:
-      </div>
-      <div class="cell  input_cell">
-        &nbsp;<%= @json["gender"] rescue nil %>
-      </div>
-      <div class="cell">
-        &nbsp;
-      </div>
-      <!--/div>
-
-      <div class="row"-->
-      <div class="cell bold label_cell">
-        Birthdate:
-      </div>
-      <div class="cell  input_cell">
-        &nbsp;<%= ((@json["birthdate_estimated"] rescue false) ? "~" : "") %><%= @json["birthdate"] rescue nil %>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="cell bold label_cell">
-        National ID:
-      </div>
-      <div class="cell  input_cell">
-        &nbsp;<%= @json["national_id"] rescue nil %>
-      </div>
-      <div class="cell">
-        &nbsp;
-      </div>
-      <!--/div>
-
-      <div class="row"-->
-      <div class="cell bold label_cell">
-        Other Identifiers:
-      </div>
-      <div class="cell  input_cell">
-        &nbsp;<%= @json["patient"]["identifiers"].collect { |id| "#{id.keys[0]}: #{id[id.keys[0]]}" }.join("\n") rescue nil %>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="cell bold label_cell">
-        Country of Residence:
-      </div>
-      <div class="cell  input_cell">
-        &nbsp;<%= @json["person_attributes"]["country_of_residence"] rescue nil %>
-      </div>
-      <div class="cell">
-        &nbsp;
-      </div>
-      <!--/div>
-
-      <div class="row"-->
-      <div class="cell bold label_cell">
-        Nationality:
-      </div>
-      <div class="cell  input_cell">
-        &nbsp;<%= @json["person_attributes"]["citizenship"] rescue nil %>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="cell bold label_cell no_bottom">
-        Current Address:
-      </div>
-      <div class="cell  input_cell no_bottom">
-        <%= @json["addresses"]["current_residence"] rescue nil %>
-        <br/>
-        <%= @json["addresses"]["current_village"] rescue nil %>
-        <br/>
-        <%= @json["addresses"]["current_ta"] rescue nil %>
-        <br/>
-        <%= @json["addresses"]["current_district"] rescue nil %>
-        &nbsp;
-      </div>
-      <div class="cell">
-        &nbsp;
-      </div>
-      <!--/div>
-
-      <div class="row"-->
-      <div class="cell bold label_cell no_bottom">
-        Home Address:
-      </div>
-      <div class="cell input_cell no_bottom">
-        <%= @json["addresses"]["home_village"] rescue nil %>
-        <br/>
-        <%= @json["addresses"]["home_ta"] rescue nil %>
-        <br/>
-        <%= @json["addresses"]["home_district"] rescue nil %>
-        &nbsp;
-      </div>
-    </div>
-
-  </div>
-
-</div>
-
-
-<div style="font-size: 32px; padding: 5px; background-color: #84cfa5;
-        text-align: center; border-radius: 0px; margin: auto; margin-bottom: 10px; margin-top: 10px;">
-  Matched Data
-</div>
-
-<div id="matched" style="height: 40%; width: 100%; border: 1px solid #000; overflow: auto;">
-  <div class="table" style="width: 100%; border-spacing: 0px;">
-    <div class="row">
-      <div class="cell bold label_cell">
-        First Name:
-      </div>
-      <div class="cell  input_cell ">
-        &nbsp;<%= @json["names"]["given_name"] rescue nil %>
-      </div>
-      <div class="cell" style="width: 30px;">
-        &nbsp;
-      </div>
-      <!--/div>
-
-      <div class="row"-->
-      <div class="cell bold label_cell">
-        Last Name:
-      </div>
-      <div class="cell  input_cell">
-        &nbsp;<%= @json["names"]["family_name"] rescue nil %>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="cell bold label_cell">
-        Gender:
-      </div>
-      <div class="cell  input_cell">
-        &nbsp;<%= @json["gender"] rescue nil %>
-      </div>
-      <div class="cell">
-        &nbsp;
-      </div>
-      <!--/div>
-
-      <div class="row"-->
-      <div class="cell bold label_cell">
-        Birthdate:
-      </div>
-      <div class="cell  input_cell">
-        &nbsp;<%= ((@json["birthdate_estimated"] rescue false) ? "~" : "") %><%= @json["birthdate"] rescue nil %>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="cell bold label_cell">
-        National ID:
-      </div>
-      <div class="cell  input_cell">
-        &nbsp;<%= @json["national_id"] rescue nil %>
-      </div>
-      <div class="cell">
-        &nbsp;
-      </div>
-      <!--/div>
-
-      <div class="row"-->
-      <div class="cell bold label_cell">
-        Other Identifiers:
-      </div>
-      <div class="cell  input_cell">
-        &nbsp;<%= (@json["patient"]["identifiers"].collect { |k, v| "#{k}: #{v}" } rescue []).join(",\n") rescue nil %>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="cell bold label_cell">
-        Country of Residence:
-      </div>
-      <div class="cell  input_cell">
-        &nbsp;<%= @json["person_attributes"]["country_of_residence"] rescue nil %>
-      </div>
-      <div class="cell">
-        &nbsp;
-      </div>
-      <!--/div>
-
-      <div class="row"-->
-      <div class="cell bold label_cell">
-        Nationality:
-      </div>
-      <div class="cell  input_cell">
-        &nbsp;<%= @json["person_attributes"]["citizenship"] rescue nil %>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="cell bold label_cell no_bottom">
-        Current Address:
-      </div>
-      <div class="cell  input_cell no_bottom">
-        <%= @json["addresses"]["current_residence"] rescue nil %>
-        <br/>
-        <%= @json["addresses"]["current_village"] rescue nil %>
-        <br/>
-        <%= @json["addresses"]["current_ta"] rescue nil %>
-        <br/>
-        <%= @json["addresses"]["current_district"] rescue nil %>
-        &nbsp;
-      </div>
-      <div class="cell">
-        &nbsp;
-      </div>
-      <!--/div>
-
-      <div class="row"-->
-      <div class="cell bold label_cell no_bottom">
-        Home Address:
-      </div>
-      <div class="cell input_cell no_bottom">
-        <%= @json["addresses"]["home_village"] rescue nil %>
-        <br/>
-        <%= @json["addresses"]["home_ta"] rescue nil %>
-        <br/>
-        <%= @json["addresses"]["home_district"] rescue nil %>
-        &nbsp;
-      </div>
-    </div>
-
-  </div>
-
-</div>
-
-</div>
-<div class="cell" style="width: 50%; border-radius: 1px; border: 1px solid #666; overflow: hidden;">
-
-  <% if !@results.nil? and @results.length == 0 %>
-
-      <div id="selections" style="width: 100%; border: none; padding: 10px; ">
-        <div style="width: 100%; height: 100%; font-size: 36px; text-align: center; padding-top: 60px;">
-          No matching existing people found!
-        </div>
-      </div>
-
-  <% else %>
-
-      <div style="display: table; width: 98%; border-spacing: 0px;">
-        <div style="display: table-row">
-          <div style="display: table-cell; height: 100%;">
-            <div id="selections" style="width: 98%; border: none; padding: 10px; ">
-
+            <div style="font-size: 32px; padding: 5px; background-color: #84cfa5;
+                    text-align: center; border-radius: 0px; margin: auto; margin-bottom: 10px;">
+                Zomwe Mwalowetsa
             </div>
-          </div>
-          <div style="display: table-cell; width: 70px; height: 98%; vertical-align: top; text-align: center;">
-            <div style="display: table; height: 100%; width: 100%;">
-              <div style="display: table-row">
-                <div style="display: table-cell; vertical-align: top;">
 
-                  <div class="arrow-up" id="btnLeft" style="float: right; margin-top: 80px;"></div>
+            <div id="captured" style="height: 40%; width: 100%; border: 1px solid #000; overflow: auto;">
+                <div class="table" style="width: 100%; border-spacing: 0px;">
+                    <div class="row">
+                        <div class="cell bold label_cell">
+                            Dzina Loyamba
+                        </div>
+                        <div class="cell  input_cell ">
+                            &nbsp;<%= @json["names"]["given_name"] rescue nil %>
+                        </div>
+                        <div class="cell">
+                            &nbsp;
+                        </div>
+                        <!--/div>
+
+                        <div class="row"-->
+                        <div class="cell bold label_cell">
+                            Dzina la Bambo:
+                        </div>
+                        <div class="cell  input_cell">
+                            &nbsp;<%= @json["names"]["family_name"] rescue nil %>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="cell bold label_cell">
+                            Mwamuna/Mkazi:
+                        </div>
+                        <div class="cell  input_cell">
+                            &nbsp;<%= (@json["gender"] == 'M' ? 'Mwamuna' : 'Mkazi') rescue nil %>
+                        </div>
+                        <div class="cell">
+                            &nbsp;
+                        </div>
+                        <!--/div>
+
+                        <div class="row"-->
+                        <div class="cell bold label_cell">
+                            Tsiku Lobadwa:
+                        </div>
+                        <div class="cell  input_cell">
+                            &nbsp;<%= ((@json["birthdate_estimated"] rescue false) ? "~" : "") %><%= @json["birthdate"] rescue nil %>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="cell bold label_cell">
+                            Nambala Yanu:
+                        </div>
+                        <div class="cell  input_cell">
+                            &nbsp;<%= @json["national_id"] rescue nil %>
+                        </div>
+                        <div class="cell">
+                            &nbsp;
+                        </div>
+                        <!--/div>
+
+                        <div class="row"-->
+                        <div class="cell bold label_cell">
+                            Nambala Zina:
+                        </div>
+                        <div class="cell  input_cell">
+                            &nbsp;<%= @json["patient"]["identifiers"].collect { |id| "#{id.keys[0]}: #{id[id.keys[0]]}" }.join("\n") rescue nil %>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="cell bold label_cell">
+                            Dziko Lomwe Mukukhala:
+                        </div>
+                        <div class="cell  input_cell">
+                            &nbsp;<%= @json["person_attributes"]["country_of_residence"] rescue nil %>
+                        </div>
+                        <div class="cell">
+                            &nbsp;
+                        </div>
+                        <!--/div>
+
+                        <div class="row"-->
+                        <div class="cell bold label_cell">
+                            Dziko Lanu:
+                        </div>
+                        <div class="cell  input_cell">
+                            &nbsp;<%= @json["person_attributes"]["citizenship"] rescue nil %>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="cell bold label_cell no_bottom">
+                            Kumene Mukukhala:
+                        </div>
+                        <div class="cell  input_cell no_bottom">
+                            <%= @json["addresses"]["current_residence"] rescue nil %>
+                            <br/>
+                            <%= @json["addresses"]["current_village"] rescue nil %>
+                            <br/>
+                            <%= @json["addresses"]["current_ta"] rescue nil %>
+                            <br/>
+                            <%= @json["addresses"]["current_district"] rescue nil %>
+                            &nbsp;
+                        </div>
+                        <div class="cell">
+                            &nbsp;
+                        </div>
+                        <!--/div>
+
+                        <div class="row"-->
+                        <div class="cell bold label_cell no_bottom">
+                            Kumudzi Kwanu:
+                        </div>
+                        <div class="cell input_cell no_bottom">
+                            <%= @json["addresses"]["home_village"] rescue nil %>
+                            <br/>
+                            <%= @json["addresses"]["home_ta"] rescue nil %>
+                            <br/>
+                            <%= @json["addresses"]["home_district"] rescue nil %>
+                            &nbsp;
+                        </div>
+                    </div>
 
                 </div>
-              </div>
-              <div style="display: table-row">
-                <div style="display: table-cell; vertical-align: bottom;">
 
-                  <div class="arrow-down" id="btnRight" style="float: right; margin-bottom: 10px;"></div>
+            </div>
+
+
+            <div style="font-size: 32px; padding: 5px; background-color: #84cfa5;
+                    text-align: center; border-radius: 0px; margin: auto; margin-bottom: 10px; margin-top: 10px;">
+                Zomwe Zafanana
+            </div>
+
+            <div id="matched" style="height: 40%; width: 100%; border: 1px solid #000; overflow: auto;">
+                <div class="table" style="width: 100%; border-spacing: 0px;">
+                    <div class="row">
+                        <div class="cell bold label_cell">
+                            Dzina Loyamba:
+                        </div>
+                        <div class="cell  input_cell ">
+                            &nbsp;<%= @json["names"]["given_name"] rescue nil %>
+                        </div>
+                        <div class="cell" style="width: 30px;">
+                            &nbsp;
+                        </div>
+                        <!--/div>
+
+                        <div class="row"-->
+                        <div class="cell bold label_cell">
+                            Dzina la Bambo:
+                        </div>
+                        <div class="cell  input_cell">
+                            &nbsp;<%= @json["names"]["family_name"] rescue nil %>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="cell bold label_cell">
+                            Mwamuna/Mkazi:
+                        </div>
+                        <div class="cell  input_cell">
+                            &nbsp;<%= (@json["gender"] == 'M' ? 'Mwamuna' : 'Mkazi') rescue nil %>
+                        </div>
+                        <div class="cell">
+                            &nbsp;
+                        </div>
+                        <!--/div>
+
+                        <div class="row"-->
+                        <div class="cell bold label_cell">
+                            Tsiku Lobadwa:
+                        </div>
+                        <div class="cell  input_cell">
+                            &nbsp;<%= ((@json["birthdate_estimated"] rescue false) ? "~" : "") %><%= @json["birthdate"] rescue nil %>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="cell bold label_cell">
+                            Nambala Yanu:
+                        </div>
+                        <div class="cell  input_cell">
+                            &nbsp;<%= @json["national_id"] rescue nil %>
+                        </div>
+                        <div class="cell">
+                            &nbsp;
+                        </div>
+                        <!--/div>
+
+                        <div class="row"-->
+                        <div class="cell bold label_cell">
+                            Nambala Zina:
+                        </div>
+                        <div class="cell  input_cell">
+                            &nbsp;<%= (@json["patient"]["identifiers"].collect { |k, v| "#{k}: #{v}" } rescue []).join(",\n") rescue nil %>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="cell bold label_cell">
+                            Dziko Lomwe Mukukhala:
+                        </div>
+                        <div class="cell  input_cell">
+                            &nbsp;<%= @json["person_attributes"]["country_of_residence"] rescue nil %>
+                        </div>
+                        <div class="cell">
+                            &nbsp;
+                        </div>
+                        <!--/div>
+
+                        <div class="row"-->
+                        <div class="cell bold label_cell">
+                            Dziko Lanu:
+                        </div>
+                        <div class="cell  input_cell">
+                            &nbsp;<%= @json["person_attributes"]["citizenship"] rescue nil %>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="cell bold label_cell no_bottom">
+                            Kumene Mukukhala:
+                        </div>
+                        <div class="cell  input_cell no_bottom">
+                            <%= @json["addresses"]["current_residence"] rescue nil %>
+                            <br/>
+                            <%= @json["addresses"]["current_village"] rescue nil %>
+                            <br/>
+                            <%= @json["addresses"]["current_ta"] rescue nil %>
+                            <br/>
+                            <%= @json["addresses"]["current_district"] rescue nil %>
+                            &nbsp;
+                        </div>
+                        <div class="cell">
+                            &nbsp;
+                        </div>
+                        <!--/div>
+
+                        <div class="row"-->
+                        <div class="cell bold label_cell no_bottom">
+                            Kumudzi Kwanu:
+                        </div>
+                        <div class="cell input_cell no_bottom">
+                            <%= @json["addresses"]["home_village"] rescue nil %>
+                            <br/>
+                            <%= @json["addresses"]["home_ta"] rescue nil %>
+                            <br/>
+                            <%= @json["addresses"]["home_district"] rescue nil %>
+                            &nbsp;
+                        </div>
+                    </div>
 
                 </div>
-              </div>
+
             </div>
-          </div>
+
         </div>
-      </div>
+        <div class="cell" style="width: 50%; border-radius: 1px; border: 1px solid #666; overflow: hidden;">
 
-  <% end %>
+            <% if !@results.nil? and @results.length == 0 %>
 
-</div>
-</div>
+                <div id="selections" style="width: 100%; border: none; padding: 10px; ">
+                    <div style="width: 100%; height: 100%; font-size: 36px; text-align: center; padding-top: 60px;">
+                        Mayina Ofanana Sanapezeke!
+                    </div>
+                </div>
+
+            <% else %>
+
+                <div style="display: table; width: 98%; border-spacing: 0px;">
+                    <div style="display: table-row">
+                        <div style="display: table-cell; height: 100%;">
+                            <div id="selections" style="width: 98%; border: none; padding: 10px; ">
+
+                            </div>
+                        </div>
+                        <div style="display: table-cell; width: 70px; height: 98%; vertical-align: top; text-align: center;">
+                            <div style="display: table; height: 100%; width: 100%;">
+                                <div style="display: table-row">
+                                    <div style="display: table-cell; vertical-align: top;">
+
+                                        <div class="arrow-up" id="btnLeft" style="float: right; margin-top: 80px;"></div>
+
+                                    </div>
+                                </div>
+                                <div style="display: table-row">
+                                    <div style="display: table-cell; vertical-align: bottom;">
+
+                                        <div class="arrow-down" id="btnRight" style="float: right; margin-bottom: 10px;"></div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            <% end %>
+
+        </div>
+    </div>
 </div>
 
 <div class="navbar  navbar-inverse navbar-fixed-bottom" style="position:absolute; bottom: 0px; width: 100%; min-height: 105px;
         color: #ccc; text-align: center; padding-top: 5px; background-color: #333; margin: 0px; margin-left: -5px;">
-  <button class='button_red' id='btncancel' style='float: left; margin-left: 20px;' onclick="showSpinner(); window.location = '/';">
-    Cancel
-  </button>
+    <button class='button_red' id='btncancel' style='float: left; margin-left: 20px;' onclick="showSpinner(); window.location = '/';">
+        Lekani
+    </button>
 
-  <% if @results.length > 0 %>
+    <% if @results.length > 0 %>
 
-      <button id="btnSelect" class='button_green' style='float: right; margin-right: 20px;'>
-        Select Person
-      </button>
+        <button id="btnSelect" class='button_green' style='float: right; margin-right: 20px;'>
+            Sakhani Muthu
+        </button>
 
-      <!--button id="btnUpdate" class='button_blue' style='float: right;' onclick="ajaxProcessRequest('update')">
-        Update Person
-      </button-->
+        <!--button id="btnUpdate" class='button_blue' style='float: right;' onclick="ajaxProcessRequest('update')">
+          Update Person
+        </button-->
 
-      <button id="btnAdd" class='button_blue' style='float: right;' onclick="showSpinner(); ajaxProcessRequest('create')">
-        New Person
-      </button>
+        <button id="btnAdd" class='button_blue' style='float: right;' onclick="showSpinner(); ajaxProcessRequest('create')">
+            Lembani Muthu Watsopano
+        </button>
 
-  <% elsif !params[:person].blank? %>
+    <% elsif !params[:person].blank? %>
 
-      <button id="btnAdd" class='button_blue' style='float: right; margin-right: 20px;' onclick="showSpinner(); ajaxProcessRequest('create')">
-        New Person
-      </button>
+        <button id="btnAdd" class='button_blue' style='float: right; margin-right: 20px;' onclick="showSpinner(); ajaxProcessRequest('create')">
+            Lembani Muthu Watsopano
+        </button>
 
-  <% end %>
+    <% end %>
 
-  <% if @results.length > 0 %>
+    <% if @results.length > 0 %>
 
-      <!--button id="btnRight" class='button_blue' style='float: right;'>
-        &rarr;
-      </button>
+        <!--button id="btnRight" class='button_blue' style='float: right;'>
+          &rarr;
+        </button>
 
-      <button id="btnLeft" class='button_blue' style='float: right;'>
-        &larr;
-      </button>
+        <button id="btnLeft" class='button_blue' style='float: right;'>
+          &larr;
+        </button>
 
-      <button id="btnFirst" class='button_blue' style='float: right;'
-              onclick="ajaxRequest(1);">
-        |&larr;
-      </button-->
+        <button id="btnFirst" class='button_blue' style='float: right;'
+                onclick="ajaxRequest(1);">
+          |&larr;
+        </button-->
 
-  <% end %>
+    <% end %>
 
 </div>
 
-<% form_tag("/dde/process_result", "method" => 'post', "enctype" => 'multipart/form-data',
-            "id" => 'form', "class" => "form-horizontal", "autocomplete" => "off", "role" => "form", "novalidate" => "novalidate") do %>
+<%= form_tag("/dde/process_result", "method" => 'post', "enctype" => 'multipart/form-data',
+             "id" => 'form', "class" => "form-horizontal", "autocomplete" => "off", "role" => "form", "novalidate" => "novalidate") do %>
 
     <textarea id="json" name="person"></textarea>
 
@@ -376,9 +377,32 @@
 
 <script type="text/javascript">
     <!--
-
-    var json = <%= (params[:person]).to_json rescue "{}" %>;
+    <%#  raise JSON.parse(params[:person]).inspect %>
+    //var json = "<%= (params[:person]).to_json rescue "{}" %>;"
     var people = [];
+    <% params[:person] = JSON.parse(params[:person]) %>
+
+    var json = "{national_id: '<%= params[:person][:national_id] %>', place_of_birth: '<%= params[:person][:place_of_birth] %>', application: '<%= params[:person][:application] %>', \n\
+site_code: '<%= params[:person][:site_code] %>', return_path: '<%= params[:person][:return_path] %>', \n\
+names: {family_name: '<%= params[:person][:names][:family_name] %>', given_name: '<%= params[:person][:names][:given_name] %>',\n\
+ middle_name: '<%= params[:person][:names][:middle_name] %>', maiden_name: '<%= params[:person][:names][:maiden_name] %>' },\n\
+ gender: '<%= params[:person][:gender] %>', encounter_date: '<%= params[:person][:encounter_date]%>', person_attributes: {country_of_residence: '<%=  params[:person][:person_attributes][:country_of_residence] %>',\n\
+ citizenship: '<%=  params[:person][:person_attributes][:citizenship] %>', occupation: '<%=  params[:person][:person_attributes][:occupation] %>',\n\
+ home_phone_number: '<%=  params[:person][:person_attributes][:home_phone_number] %>', \n\
+cell_phone_number: '<%=  params[:person][:person_attributes][:cell_phone_number] %>', \n\
+office_phone_number: '<%=  params[:person][:person_attributes][:office_phone_number] %>',\n\
+ race: '<%=  params[:person][:person_attributes][:race] %>'}, birthdate: '<%=  params[:person][:birthdate] %>', \n\
+patient: {identifiers: []}, birthdate_estimated: '<%=  params[:person][:birthdate_estimated] %>', \n\
+addresses: {current_residence: '<%=  params[:person][:addresses][:current_residence] %>', \n\
+current_village: '<%=  params[:person][:addresses][:current_village] %>', \n\
+current_ta: '<%=  params[:person][:addresses][:current_ta] %>', current_district: '<%=  params[:person][:addresses][:current_district] %>',\n\
+ home_village: '<%=  params[:person][:addresses][:home_village] %>', \n\
+home_ta: '<%=  params[:person][:addresses][:home_ta] %>', home_district: '<%=  params[:person][:addresses][:home_district] %>', \n\
+landmark: '<%=  params[:person][:addresses][:landmark] %>'}, print_barcode: '<%=  params[:person][:print_barcode] %>'}"
+
+
+    json = JSON.parse(JSON.stringify(eval("(" + json + ")")))
+
 
     function make_base_auth(user, password) {
         var tok = user + ':' + password;
@@ -626,16 +650,16 @@
                     {
                         field: "Current Address",
                         value: (obj.addresses.current_residence != null ? obj.addresses.current_residence : "") + "<br />" +
-                                (obj.addresses.current_village != null ? obj.addresses.current_village : "") + "<br />" +
-                                (obj.addresses.current_ta != null ? obj.addresses.current_ta : "") + "<br />" +
-                                (obj.addresses.current_district != null ? obj.addresses.current_district : ""),
+                        (obj.addresses.current_village != null ? obj.addresses.current_village : "") + "<br />" +
+                        (obj.addresses.current_ta != null ? obj.addresses.current_ta : "") + "<br />" +
+                        (obj.addresses.current_district != null ? obj.addresses.current_district : ""),
                         classes: "no_bottom"
                     },
                     {
                         field: "Home Address",
                         value: (obj.addresses.home_village != null ? obj.addresses.home_village : "") + "<br />" +
-                                (obj.addresses.home_ta != null ? obj.addresses.home_ta : "") + "<br />" +
-                                (obj.addresses.home_district != null ? obj.addresses.home_district : ""),
+                        (obj.addresses.home_ta != null ? obj.addresses.home_ta : "") + "<br />" +
+                        (obj.addresses.home_district != null ? obj.addresses.home_district : ""),
                         classes: "no_bottom"
                     }
                 ]
@@ -694,4 +718,4 @@
     ajaxRequest(1);
     //-->
 </script>
-      
+

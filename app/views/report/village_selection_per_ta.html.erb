@@ -1,0 +1,66 @@
+<script>
+  var tt_cancel_destination = "/report/index";
+  
+  function set_ajaxURL_for_suggestions(url, filter_value) {
+    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url + filter_value + "&search_str=");
+    listSuggestions(tstCurrentPage);
+  }
+  
+</script>
+
+<style>
+.inputFrameClass {
+  height: 85%;
+}
+
+.options {
+  height: 88%;
+}
+
+
+/* .......................................................... */
+
+
+.tt_controls_chaka_chobadwa_choyamba .inputFrameClass {
+  display: none;
+}
+
+.tt_controls_chaka_chobadwa_choyamba #Unknown, #backspace {
+  display: none;
+}
+
+
+.tt_controls_mwezi_wobadwa_woyamba .keyboard {
+  display: none !important;
+}
+
+#tt_page_mwezi_wobadwa_choyamba .options {
+  height: 515px;
+}
+
+#tt_page_mwezi_wobadwa_woyamba .options li {
+  font-size: 30px;
+}
+
+
+.tt_controls_mwezi_wobadwa_womaliza .keyboard {
+  display: none !important;
+}
+
+#tt_page_mwezi_wobadwa_womaliza .options {
+  height: 515px;
+}
+
+#tt_page_mwezi_wobadwa_womaliza .options li {
+  font-size: 30px;
+}
+
+
+</style>
+
+<%=form_tag "/report/village_selector" do %>
+  <%= select_tag 'ta_name', options_for_select(@traditiona_authorities.sort, []),
+      :id => "ta_name", 
+      :helpText => "Sakhani T/A" 
+  %> 
+<%end%>

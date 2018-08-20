@@ -1,0 +1,57 @@
+
+<%= stylesheet_link_tag "touch-fancy" %>
+<style>
+    #footer {
+        background-color: rgb(51, 51, 51);
+        bottom: 0;
+        left: 0;
+        color: #cadcea;
+        height: 80px;
+        overflow: hidden;
+        padding-right: 10px;
+        position: absolute;
+        width: 100%;
+    }
+
+    .blue {
+        float: right;
+    }
+
+</style>
+
+
+<div id="footer">
+
+    <div id="buttons" class="buttons" style="top: 0px;">
+        <% if params[:parameter].present? %>
+            <button style="margin: 5px 0px 0px; min-width: 190px; float: left;" class="blue" onclick="document.location='/monthly_select'">
+                <span>Back</span>
+            </button>
+        <% else %>
+            <button style="margin: 5px 0px 0px; min-width: 190px; float: left;" class="blue" onclick="document.location='/report/index'"><span>Bwelera</span></button>
+        <% end %>
+
+        <% if @report_title == 'Bloomberg Union Monthly' %>
+            <button style="margin: 5px 0px 0px; min-width: 190px; float: right;" class="green" onclick="tableToCSV();">
+                <span>Download CSV</span>
+            </button>
+        <% end %>
+        <%if @export_to_csv == true%>
+            <button style="margin: 5px 0px 0px; min-width: 190px; float: right;" class="green"
+                    onclick="tableToCSV();"><span>Tsitsani CSV</span></button>
+        <%end%>
+        <%unless @report_generation_path.blank?%>
+            <button style="margin: 5px 0px 0px; min-width: 190px; float: right;" class="green"
+                    onclick="tableToCSV();"><span>Tsitsani CSV</span></button>
+        <%end%>
+    </div>
+
+</div>
+
+
+
+<script>
+
+
+</script>
+

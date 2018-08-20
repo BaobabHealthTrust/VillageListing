@@ -9,11 +9,13 @@ config/couchdb.yml
 config/secrets.yml
 config/dde_connection.yml
 config/globals.yml
+.project
 .DS_Store
 *.swp
 *.swo
 *.txt
 *.pid.lock
+*.pid
 notes
 doc
 development.sql
@@ -27,3 +29,4 @@ Gemfile.lock
 .idea/*
 .ruby-version
 public/touchscreentoolkit/*
+.vscode/

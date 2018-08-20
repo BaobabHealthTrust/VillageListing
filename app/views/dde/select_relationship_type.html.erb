@@ -1,0 +1,15 @@
+<%= javascript_include_tag 'locale' %>
+<script type="text/javascript">
+  var tt_cancel_destination = "/people";
+</script>
+
+<%= form_tag "/dde/create_relation" do %>
+  <%= select_tag "relation", options_for_select(@relations),
+    {:id => "relation",
+    :helptext => "Sankhani Ubale"
+  } %>
+
+  <%= submit_tag "Create Relation" %>
+
+<% end %>
+
