@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.0'
+gem 'rails', '4.2.7.1'
 
 # gem mysql2 for news app reading
 gem 'mysql2', '~> 0.3.20'
