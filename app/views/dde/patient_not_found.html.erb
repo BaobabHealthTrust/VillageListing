@@ -171,7 +171,7 @@
   </style>
 
   <script type="text/javascript">
-    
+
 
     var showDurrentDistrict = '<%= @show_current_district %>';
     var freeTextHomeVillage = '';
@@ -187,45 +187,6 @@
 
   var json = "{national_id: '<%= @id %>', application: '<%= @settings["application_name"] %>', site_code: '<%= @settings["site_code"] %>', return_path: '<%= address %>', names: {family_name: '', given_name: '', middle_name: '', maiden_name: '' }, gender: '<%= params["gender"] %>', person_attributes: {country_of_residence: '', citizenship: '', occupation: '', home_phone_number: '', cell_phone_number: '', office_phone_number: '', race: ''}, birthdate: '', patient: {identifiers: []}, birthdate_estimated: '', addresses: {current_residence: '', current_village: '', current_ta: '', current_district: '', home_village: '', home_ta: '', home_district: '', landmark: ''}}"
 
-  /*var json = '<%= {
-    'national_id' => "#{@id}",
-    'application' => "#{@settings["application_name"]}",
-    'site_code' => "#{@settings["site_code"]}",
-    'return_path' => "http://#{request.host_with_port}/process_result",
-    'names' =>
-      {
-      'family_name' => nil,
-      'given_name' => nil,
-      'middle_name' => nil,
-      'maiden_name' => nil
-    },
-    'gender' => "#{params["gender"]}",
-    'person_attributes' => {
-      'country_of_residence' => nil,
-      'citizenship' => nil,
-      'occupation' => nil,
-      'home_phone_number' => nil,
-      'cell_phone_number' => nil,
-      'office_phone_number' => nil,
-      'race' => nil
-    },
-    'birthdate' => nil,
-    'patient' => {
-      'identifiers' => []
-    },
-    'birthdate_estimated' => nil,
-    'addresses' => {
-      'current_residence' => nil,
-      'current_village' => nil,
-      'current_ta' => nil,
-      'current_district' => nil,
-      'home_village' => nil,
-      'home_ta' => nil,
-      'home_district' => nil,
-      'landmark' => nil
-    }
-  }%>)';*/
-
   json = JSON.parse(JSON.stringify(eval("(" + json + ")")))
 
   function sendToDDE() {
@@ -233,7 +194,6 @@
     json.names.family_name = __$("last_name").value;
     json.names.middle_name = (__$("middle_name") ? __$("middle_name").value : null);
     json.names.maiden_name = (__$("maiden_name") ? __$("maiden_name").value : null);
-
 
     var dob = "1900-01-01";
     var dob_est = false;
@@ -262,27 +222,7 @@
     if (dob_day.match(/^$/)) {
       dob_day = null;
     }
-    /*
-        if (dob_year == null || String(dob_year).toLowerCase() == "unknown") {
-            var yr = (new Date()).getFullYear() - parseInt(__$("age_estimate").value);
 
-            dob = yr + "-07-05";
-            dob_est = true;
-        } else if ((dob_year != null && String(dob_year).toLowerCase() != "unknown") && (dob_month == null || String(dob_month).toLowerCase() == "unknown")) {
-            dob = dob_year + "-07-10";
-            dob_est = true;
-        } else if ((dob_year != null && String(dob_year).toLowerCase() != "unknown") &&
-                (dob_month != null && String(dob_month).toLowerCase() != "unknown") &&
-                (dob_day == null || String(dob_day).toLowerCase() == "unknown")) {
-            dob = dob_year + "-" + padZeros(dob_month, 2) + "-15";
-            dob_est = true;
-        } else {
-            dob = dob_year + "-" + padZeros(dob_month, 2) + "-" + padZeros(dob_day, 2);
-            dob_est = false;
-        }
-
-        json.birthdate = dob;
-     */
     dob_est = false;
 
     if (dob_month != null && String(dob_month).toLowerCase() == "unknown"){
@@ -348,7 +288,7 @@
     if (!(__$("all_district_villages").value.match(/OTHER/i)) && __$("all_district_villages").value != ''){
       json.addresses.home_village = __$("all_district_villages").value;
     }
-    
+
     json.addresses.home_ta = (
     __$("ancestral_traditional_authority") ?
       __$("ancestral_traditional_authority").value : null
@@ -544,7 +484,6 @@
     <%= text_field_tag "person[names][middle_name]", nil,
       {:id => "middle_name",
       :optional => true,
-      :tt_onLoad => 'if("#{params[:given_name]}".trim().length > 0){if(__$("backButton")){__$("backButton").style.display="none";}}',
       :helptext => "Dzina Lina"} if @show_middle_name %>
 
     <%= text_field_tag "person[names][family_name]", params[:family_name],
@@ -649,14 +588,14 @@
       :tt_onLoad => "$('nextButton').style.display = ''; processData(); set_ajaxURL_for_suggestions('/dde/village?filter_value=', __$('ancestral_traditional_authority').value);",
       :helptext => "Home Village"} if @show_region_of_origin %>
 
-    <% #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> %>
+    <% #------------------------------- %>
     <%= text_field_tag "person[addresses][neighborhood_cell]", nil,
       {:id => "free_text_home_village_known_ta",
       :condition => "__$('home_village').value.match(/OTHER/i);",
       :tt_onLoad => "processDataForUnknownVillage();",
       :optional => "true",
       :helptext => "Specify Home Village"} %>
-    <% #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> %>
+    <% #-------------------------------- %>
 
     <%= text_field_tag "person[country]", nil,
       {:id => "country",
@@ -697,8 +636,6 @@
       :tt_onLoad => "$('nextButton').style.display = 'none'; set_ajaxURL_for_suggestions('/dde/village?filter_value=', __$('current_area_of_residence').value);",
       :helptext => "Current Location Or Village"} if @show_current_village %>
 
-
-
     <%= text_field_tag "person[cell_phone_number]", nil,
       {:id => "cell_phone_number",
       :validationRule => "^0\\d{7}$|Unknown|Not Available|^0\\d{9}$|^N\\/A$",
@@ -725,12 +662,6 @@
       :tt_onLoad  => '$("nextButton").style.display = "block" ',
       :field_type => 'number',
       :helptext => "Home Phone Number"} if @show_home_phone_number %>
-
-    <%#= select_tag "person[occupation]", options_for_select(@occupations),
-    {:id => "occupation",
-    :tt_pageStyleClass => "tt_controls_occupation",
-    :helptext => "Occupation",
-    :tt_onLoad => "$('nextButton').style.display = 'block';upNextButton();"} if @show_occupation %>
 
     <%= text_field_tag "person[addresses][address1]", nil,
       {:id => "closest_landmark_or_plot_number",
