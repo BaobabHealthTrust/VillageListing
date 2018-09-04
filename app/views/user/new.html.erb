@@ -7,12 +7,14 @@
 <%= javascript_include_tag 'locale' %>
 
 <%= form_tag("/user/create", id: "create-form", method: 'post', enctype: 'multipart/form-data') do %>
- 
+
  <%= text_field_tag "user[username]", params[:username],
                      {:id => 'username', :field_type => 'alpha',
                       :helpText => 'Dzina logwiritsa ntchito',
                       :textCase => "lower",
                       :ajaxURL => '/user/username?search_string=',
+                      :validationRule => "^[a-zA-Z\\s\\r\\n]+$",
+                      :validationMessage => 'Pepani! \n Zilembo izi ndi zosaloledwa !@#$%^&*()-_+=~.',
                       :allowFreeText => true }%>
 
 
@@ -20,13 +22,17 @@
                      {:id => 'given_name', :field_type => 'alpha',
                       :helpText => 'Dzina Loyamba',
                       :ajaxURL => '/user/first_name?search_string=',
+                      :validationRule => "^[a-zA-Z\\s\\r\\n]+$",
+                      :validationMessage => 'Pepani! \n Zilembo izi ndi zosaloledwa !@#$%^&*()-_+=~.',
                       :allowFreeText => true }%>
-  
+
   <%= text_field_tag "user[last_name]", params[:lastname],
                      {:id => 'family_name',
                       :field_type => 'alpha',
                       :helpText => 'Dzina La Bambo',
                       :ajaxURL => '/user/last_name?search_string=',
+                      :validationRule => "^[a-zA-Z\\s\\r\\n]+$",
+                      :validationMessage => 'Pepani! \n Zilembo izi ndi zosaloledwa !@#$%^&*()-_+=~.',
                       :allowFreeText => true }%>
 
   <%= select_tag("user[gender]", options_for_select(['','Mwamuna','Mkazi'] ,params[:gender]),
@@ -47,7 +53,7 @@
                       :textCase => "lower",
                       :allowFreeText => true }%>
 
-<%= @roles = ['Administrator', 'Mfumu Yayikulu','Mfumu','Onthandizira'] %> 
+<%= @roles = ['Administrator', 'Mfumu Yayikulu','Mfumu','Othandizira'] %>
   <%= select_tag("user[role]", options_for_select(@roles ,params[:role]),
       :helpText =>"Ndinu ndani",
       :id => "role",
@@ -86,8 +92,8 @@
 
   <!-- ....................... User's location ........................... -->
 	<label for='summary'>Zotsatila mwachidule</label>
-	<%= text_field_tag :summary, nil, { :tt_onLoad => "summary();__$('keyboard').style.display = 'none';", 
-      :optional => "true", 
+	<%= text_field_tag :summary, nil, { :tt_onLoad => "summary();__$('keyboard').style.display = 'none';",
+      :optional => "true",
       :tt_pageStyleClass => "NoControls" } %>
 
 <%end%>
@@ -117,7 +123,7 @@ function summary() {
 
 	$('inputFrame'+tstCurrentPage).innerHTML = '<div id="summary">' + display + '</div>' ;
 	$("clearButton").style.display = "none";
-		
+
 
 }
 
