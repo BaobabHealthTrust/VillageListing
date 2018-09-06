@@ -195,7 +195,7 @@
     <%= text_field_tag "person[names][given_name]", params[:given_name],
       {:id => 'given_name',
       :field_type => 'alpha',
-      :helpText => 'First name',
+      :helpText => 'Dzina Loyamba',
       :ajaxURL => '/people/get_names?search_string=',
       :allowFreeText => true,
       :tt_onLoad => 'seen(tstCurrentPage);'} %>
@@ -206,7 +206,7 @@
     <%= text_field_tag "person[names][middle_name]", params[:given_name],
       {:id => 'middle_name',
       :field_type => 'alpha',
-      :helpText => 'Middle name',
+      :helpText => 'Dzina Lina',
       :ajaxURL => '/people/get_names?search_string=',
       :allowFreeText => true,
       :tt_onLoad => 'seen(tstCurrentPage);'} %>
@@ -215,7 +215,7 @@
     <%= text_field_tag "person[names][family_name]", params[:family_name],
       {:id => 'family_name',
       :field_type => 'alpha',
-      :helpText => 'Last name',
+      :helpText => 'Dzina La Bambo',
       :ajaxURL => '/people/get_names?search_string=',
       :allowFreeText => true,
       :tt_onLoad => 'seen(tstCurrentPage);'} %>
@@ -224,7 +224,7 @@
     <%= text_field_tag "person[names][family_name2]", params[:family_name2],
       {:id => 'family_name2',
       :field_type => 'alpha',
-      :helpText => 'Maiden name',
+      :helpText => 'Maiden Name',
       :ajaxURL => '/people/get_names?search_string=',
       :allowFreeText => true,
       :condition => '$("family_name2").value == "" || skipped[tstCurrentPage] == 1',
@@ -234,12 +234,12 @@
     Gender: <%= select_tag "gender", options_for_select([["", ""], ["Male", "M"], ["Female", "F"]], params[:gender]),
       {
       :id => 'gender',
-      :helpText => 'Gender',
+      :helpText => 'Mwamuna/Mkazi',
       :tt_onLoad => 'seen(tstCurrentPage);'} %>
 
   <% when 'birthdate' %>
     <%= text_field_tag "person[birth_year]", nil,
-      {:helpText => 'Year of Birth',
+      {:helpText => 'Chaka Chobadwa',
       :field_type => 'number',
       :absoluteMin => "1890",
       :min => "1940",
@@ -248,11 +248,11 @@
       :tt_onLoad => 'seen(tstCurrentPage);'} %>
 
     <%= select_tag "person[birth_month]", month_name_options,
-      {:helpText => 'Month of Birth',
+      {:helpText => 'Mwezi Wobadwa',
       :condition => '$("person_birth_year").value.toLowerCase() != "unknown"'} %>
 
     <%= text_field_tag "person[age_estimate]", nil,
-      {:helpText => 'Age',
+      {:helpText => 'Dzaka',
       :absoluteMin => 1,
       :absoluteMax => age_limit,
       :field_type => 'number',
@@ -261,7 +261,7 @@
 
     <%= text_field_tag "person[birth_day]", nil,
       :field_type => 'number',
-      :helpText => 'Birth Day',
+      :helpText => 'Tsiku Lobadwa',
       :absoluteMin => 1,
       :absoluteMax => 31,
       :condition => '($("person_birth_year").value != "Unknown") && ($("person_birth_month").value != "Unknown")',
@@ -287,7 +287,7 @@
   <% when 'state_province' %>
 
     <%= text_field_tag "person[attributes][country_of_residence]", nil,
-      {:id => "country",
+      {:id => "Dziko Lo Khala",
       :tt_requireNextClick => false,
       :ajaxURL => "",
       :tt_onLoad => "$('nextButton').style.display = 'none'; set_ajaxURL_for_suggestions('/dde/country?filter_value=', __$('country').value); ",
@@ -300,13 +300,13 @@
       :tt_requireNextClick => false,
       :condition => "__$('country') == null || __$('country').value == 'Malawi'",
       :tt_onLoad => "$('nextButton').style.display = 'none';",
-      :helptext => "Current Region"}%>
+      :helptext => "Chigawo Chokhala"}%>
 
 
     <%= text_field_tag "person[addresses][state_province]", params[:state_province], {
       :id => 'state_province',
       :field_type => 'alpha',
-      :helpText => 'Current District',
+      :helpText => 'Boma Lokhala',
       :tt_requireNextClick => false, :ajaxURL => '',
       :allowFreeText => false,
       :condition => "__$('country') == null || __$('country').value == 'Malawi'",
@@ -318,7 +318,7 @@
       <%= text_field_tag "person[addresses][township_division]", params[:township_division],
         {:id => "person_addresses_township_division",
         :condition => '$("state_province").value != "Other"',
-        :helpText => 'Traditional Authority (T/A) or area of residence',
+        :helpText => 'Mfumu Yayikulu Yakomwe Mukukhala',
         :tt_requireNextClick => false, :ajaxURL => '',
         :tt_pageStyleClass => "azButton",
         :condition => "__$('country') == null ||__$('country').value == 'Malawi'",
@@ -329,7 +329,7 @@
     <%= text_field_tag "person[addresses][city_village]", params[:city_village],
       {:condition => '$("person_addresses_township_division").value != "Other"',
       :field_type => 'alpha',
-      :helpText => 'Current Village',
+      :helpText => 'Mudzi Wokhala',
       :tt_requireNextClick => false,
       :tt_pageStyleClass => "azButton",
       :condition => "__$('country') == null || __$('country').value == 'Malawi'",
@@ -356,7 +356,7 @@
       :ajaxURL => "",
       :tt_requireNextClick => false,
       :tt_onLoad => "$('nextButton').style.display = 'none'; set_ajaxURL_for_suggestions('/dde/nationality?filter_value=', __$('nationality').value);",
-      :helptext => "Nationality"} if @show_nationality %>
+      :helptext => "Dziko Lakwanu"} if @show_nationality %>
 
     <%= select_tag "REGION OF ORIGIN", options_for_select([["Northern Region", "Northern+Region"],
         ["Central Region", "Central+Region"], ["Southern Region", "Southern+Region"], ["", ""]]),
@@ -364,11 +364,11 @@
       :tt_requireNextClick => false,
       :condition => "__$('nationality') == null || __$('nationality').value == 'Malawian'",
       :tt_onLoad => "$('nextButton').style.display = 'none';",
-      :helptext => "Region Of Origin"}%>
+      :helptext => "Chigawo Chakwanu"}%>
 
     <%= text_field_tag "person[addresses][address2]",
       params[:state_province], {:field_type => 'alpha',
-      :helpText => 'Home District',
+      :helpText => 'Boma Lakwanu',
       :id => "address2",
       :condition => "__$('nationality') == null ||__$('nationality').value == 'Malawian'",
       :tt_requireNextClick => false,
@@ -381,7 +381,7 @@
 
     <%= text_field_tag "person[addresses][county_district]", params[:county_district],
       {:field_type => 'alpha',
-      :helpText => "Tradional Authority (T/A)",
+      :helpText => "Mfumu Yayikulu Yakwanu",
       :ajaxURL => '',
       :allowFreeText => false,
       :condition => "__$('nationality') == null || __$('nationality').value == 'Malawian'",
@@ -392,7 +392,7 @@
     <%= text_field_tag "person[addresses][neighborhood_cell]", params[:neighborhood_cell],
       {
       :field_type => 'alpha',
-      :helpText => "Home Village",
+      :helpText => "Mudzi Wakwanu",
       :tt_requireNextClick => true,
       :tt_pageStyleClass => "azButton",
       :condition => "__$('nationality') == null || __$('nationality').value == 'Malawian'",
