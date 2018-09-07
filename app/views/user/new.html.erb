@@ -13,6 +13,7 @@
                       :helpText => 'Dzina logwiritsa ntchito',
                       :textCase => "lower",
                       :ajaxURL => '/user/username?search_string=',
+                      :tt_onUnLoad => "checkInputValueLength(__$('username').value);",
                       :validationRule => "^[a-zA-Z\\s\\r\\n]+$",
                       :validationMessage => 'Pepani! \n Zilembo izi ndi zosaloledwa !@#$%^&*()-_+=~.',
                       :allowFreeText => true }%>
@@ -44,12 +45,14 @@
                      {:id => 'password', :field_type => 'alpha',
                       :helpText => 'Mawu A Chinsisi',
                       :textCase => "lower",
+                      :tt_onUnLoad => "checkInputValueLength(__$('password').value);",
                       :allowFreeText => true }%>
 
   <%= password_field_tag "user[confirm password]", params[:confirm_password],
                      {:id => 'confirm_password', :field_type => 'alpha',
                       :helpText => 'Bwerazaninso Mawu A Chinsisi',
                       :textCase => "lower",
+                      :tt_onUnLoad => "checkInputValueLength(__$('confirm_password').value);",
                       :allowFreeText => true }%>
 
 <%= @roles = ['Administrator', 'Mfumu Yayikulu','Mfumu','Othandizira'] %>
@@ -136,6 +139,13 @@ function validatePasswords(password, confirm_password) {
   if(password != confirm_password) {
     __$('confirm_password').value = '';
     showMessage("Pepani! Onetsetsani kuti mawu a Chinsisi afanana.");
+    gotoPage(tstCurrentPage - 1);
+  }
+}
+
+function checkInputValueLength(input_value) {
+  if(input_value.length < 4) {
+    showMessage('Pepani! Onetsetsani kuti mawu asachepere anai.');
     gotoPage(tstCurrentPage - 1);
   }
 }
