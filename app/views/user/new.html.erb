@@ -17,7 +17,6 @@
                       :validationMessage => 'Pepani! \n Zilembo izi ndi zosaloledwa !@#$%^&*()-_+=~.',
                       :allowFreeText => true }%>
 
-
   <%= text_field_tag "user[first_name]", params[:firstname],
                      {:id => 'given_name', :field_type => 'alpha',
                       :helpText => 'Dzina Loyamba',
@@ -57,6 +56,7 @@
   <%= select_tag("user[role]", options_for_select(@roles ,params[:role]),
       :helpText =>"Ndinu ndani",
       :id => "role",
+      :tt_onLoad => "validatePasswords(__$('password').value, __$('confirm_password').value);",
       :allowFreeText => false)
   %>
 
@@ -130,6 +130,14 @@ function summary() {
  function set_ajaxURL_for_suggestions(url, filter_value) {
   $('touchscreenInput' + tstCurrentPage).setAttribute('ajaxURL', url + filter_value + "&search_string=");
   listSuggestions(tstCurrentPage);
+}
+
+function validatePasswords(password, confirm_password) {
+  if(password != confirm_password) {
+    __$('confirm_password').value = '';
+    showMessage("Pepani! Onetsetsani kuti mawu a Chinsisi afanana.");
+    gotoPage(tstCurrentPage - 1);
+  }
 }
 
 </script>
