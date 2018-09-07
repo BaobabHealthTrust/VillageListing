@@ -13,6 +13,7 @@
                       :helpText => 'Dzina logwiritsa ntchito',
                       :textCase => "lower",
                       :ajaxURL => '/user/username?search_string=',
+                      :tt_onLoad => "checkFlash();",
                       :tt_onUnLoad => "checkInputValueLength(__$('username').value);",
                       :validationRule => "^[a-zA-Z\\s\\r\\n]+$",
                       :validationMessage => 'Pepani! \n Zilembo izi ndi zosaloledwa !@#$%^&*()-_+=~.',
@@ -148,6 +149,12 @@ function checkInputValueLength(input_value) {
     showMessage('Pepani! Onetsetsani kuti mawu asachepere anai.');
     gotoPage(tstCurrentPage - 1);
   }
+}
+
+function checkFlash() {
+  <% if flash[:error] %>
+    showMessage("<%= flash[:error] %>")
+  <% end %>
 }
 
 </script>

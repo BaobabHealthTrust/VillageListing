@@ -15,7 +15,7 @@ class UserController < ApplicationController
   def portal
     settings = YAML.load_file("#{Rails.root}/config/application.yml") rescue {}
     @new_app_path = settings["#{Rails.env}"]["news.app.reader.url"]
-    
+
     if settings["#{Rails.env}"]['app_gateway'] == true
       return_url = settings['app_gateway_settings']['app_gateway_url']
       redirect_to return_url and return
@@ -65,8 +65,19 @@ class UserController < ApplicationController
     paramz = {user: session[:user], new_user: params[:user], location: params[:person]}
     server_address = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
     uri = "http://#{server_address}/remote_create_user.json/"
-    user = RestClient.post(uri,paramz)
+    #user = RestClient.post(uri,paramz)
+
+    user = RestClient.post(uri,paramz) { |response, request, result, &block|
+      case response.code
+      when 200
+        response
+      when 409
+        raise 'User with that username already exist.'
+      end
+    }
+
     if user.blank?
+      flash[:error] = 'Pepani! Wogwiritsa ntchito ameneyo alipo kale.'
       redirect_to '/user/new' and return
     else
       redirect_to '/user/list' and return
@@ -99,7 +110,7 @@ class UserController < ApplicationController
   private
 
   def search(field_name, params)
-    
+
     server_address = YAML.load_file("#{Rails.root}/config/globals.yml")[Rails.env]["user_mgmt_url"] rescue (raise "set your user Mgmt URL in globals.yml")
 
     case field_name
@@ -125,7 +136,7 @@ class UserController < ApplicationController
           render :text => "<li>" + data.map{|n| n } .join("</li><li>") + "</li>" and return
         end
     end
-    
+
     render :text => [].to_json
   end
 
