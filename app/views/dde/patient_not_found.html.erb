@@ -481,11 +481,6 @@
       {:id => "first_name",
       :helptext => "Dzina Loyamba"} %>
 
-    <%= text_field_tag "person[names][middle_name]", nil,
-      {:id => "middle_name",
-      :optional => true,
-      :helptext => "Dzina Lina"} if @show_middle_name %>
-
     <%= text_field_tag "person[names][family_name]", params[:family_name],
       {:id => "last_name",
       :helptext => "Dzina La Bambo"} %>
@@ -494,6 +489,12 @@
       {:id => "gender",
       :condition => "'#{params[:gender]}'.trim().length == 0",
       :helptext => "Mwamuna/Mkazi"} %>
+
+
+    <%= text_field_tag "person[names][middle_name]", nil,
+            {:id => "middle_name",
+            :optional => true,
+            :helptext => "Dzina Lina"} if @show_middle_name %>
 
     <%= text_field_tag "person[names][family_name2]", nil,
       {:id => "maiden_name",
