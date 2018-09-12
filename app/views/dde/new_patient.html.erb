@@ -329,6 +329,41 @@
         }
     }
 
+    var months = [
+    'Jan', 'Feb', 'Mar', 'Apr', 'May',
+    'Jun', 'Jul', 'Aug', 'Sep',
+    'Oct', 'Nov', 'Dec'
+    ];
+
+    function monthNumToName(monthnum) {
+        return months[monthnum - 1] || '';
+    }
+
+    function monthNameToNum(monthname) {
+        var month = months.indexOf(monthname);
+        return month ? month + 1 : 0;
+    }
+
+    function validateDate() {
+
+      var entered_year = __$('year_of_birth').value;
+      var entered_month = __$('month_of_birth').value;
+      var entered_day = __$('date_of_birth').value;
+
+      var current_date = new Date();
+      var current_year = current_date.getFullYear();
+      var current_month = current_date.getMonth()+1;
+      var current_day = current_date.getDate();
+
+      var entered_date = new Date(entered_year,entered_month - 1,entered_day);
+
+      if(current_date < entered_date) {
+        showMessage('Pepani! Onetsetsani kuti Chaka, Mwezi, ndi Tsiku za kubadwa ndi zolondola.');
+        gotoPage(tstCurrentPage - 1);
+      }
+
+    }
+
     function setDOB() {
         try {
             dob_year = document.getElementById('year_of_birth').value
@@ -484,6 +519,7 @@
                      {:id => "date_of_birth",
                       :helptext => "Tsiku Lakubadwa",
                       :tt_onLoad => "getDayOfMonthPicker($('year_of_birth').value, $('month_of_birth').value);$('nextButton').style.display = 'block';",
+                      :tt_onUnLoad => 'validateDate()',
                       :condition => '__$("year_of_birth").value != "Unknown" && __$("month_of_birth").value != "Unknown"'} %>
 
   <%= text_field_tag "person[age_estimate]", nil,
