@@ -130,7 +130,9 @@ class ReportController < ApplicationController
 		# for new registations
 		# for births
 		# for deaths 
-		        
+				
+		
+		
         results = {}
         results['births'] = {}
         results['deaths'] = {}

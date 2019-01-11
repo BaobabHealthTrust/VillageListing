@@ -193,8 +193,8 @@
 
     <div id="details" style="height: 100%;overflow:auto;display:block; width: 100%; background-color: white; border: 1px solid #000; vertical-align: top;">
 
-      <div style="height: 70px; width: 100%; background-color: #415772; text-align: center; vertical-align: middle; font-size: 42px; color: #9aa0a7; padding-top: 10px;">
-        Edit Demographics for <%= @patient_bean.name %>
+      <div style="height: 70px; width: 100%; background-color: #415772; text-align: center; vertical-align: middle; font-size: 42px; color: #9aa0a7; padding-top: 25px;">
+        Mbiri ya <%= @patient_bean.name.upcase %>
       </div>
 
       <div id="main" style="width: 98%; height: 80%; margin: auto; margin-top: 10px; border: 1px solid #415772; overflow-y: auto; text-align: center; padding-top: 8px;">
@@ -209,7 +209,7 @@
 
     <div id="footer" style="background-color: #333; height: 90px; margin-top: 10px; position: absolute; bottom: -1px; width: 100%;">
       <button class="button button_green" style="float: right; margin-right: 20px; height: 70px; width: 150px; border-radius: 8px; margin-top: 10px;" onclick="window.location = '/people'">
-        Finish
+        Malizani
       </button>
     </div>
 
@@ -236,19 +236,19 @@
 
         var links = [
           {
-            "label": "F<span class='therest'>IRST NAME</span>",
+            "label": "D<span class='therest'>ZINA LOYAMBA</span>",
             "field": "given_name",
             "value": "<%= @patient_bean.first_name rescue "&nbsp;" %>"
           },
           {
-            "label": "L<span class='therest'>AST NAME</span>",
+            "label": "D<span class='therest'>ZINA LA BAMBO</span>",
             "field": "family_name",
             "value": "<%= @patient_bean.last_name rescue "&nbsp;" %>"
           }
 <% if @show_middle_name %>
         ,
         {
-          "label": "M<span class='therest'>IDDLE NAME</span>",
+          "label": "D<span class='therest'>ZINA LINA</span>",
           "field": "middle_name",
           "value": "<%= @patient_bean.middle_name rescue "&nbsp;" %>"
         }
@@ -283,12 +283,12 @@ end
 
       ,
       {
-        "label": "D<span class='therest'>ATE OF BIRTH</span>",
+        "label": "T<span class='therest'>SIKU LAKUBADWA</span>",
         "field": "birthdate",
         "value": "<%= birth_date_string %>"
       },
       {
-        "label": "G<span class='therest'>ENDER</span>",
+        "label": "M<span class='therest'>WAMUNA/MKAZI</span>",
         "field": "gender",
         "value": "<%= ((@patient_bean.sex rescue "&nbsp;").to_s.length > 0 ? ((@patient_bean.sex rescue nil).to_s.downcase == "m" ? "Male" : "Female") : "") %>"
       }
@@ -296,7 +296,7 @@ end
 <% if @show_nationality  %>
         ,
         {
-          "label": "N<span class='therest'>ATIONALITY</span>",
+          "label": "D<span class='therest'>ZIKO LOCHOKERA</span>",
           "field": "address2",
           "value": "<%=  @patient_bean.nationality %>"
         }
@@ -305,17 +305,17 @@ end
 <% if @show_region_of_origin %>
         ,
         {
-          "label": "H<span class='therest'>OME DISTRICT</span>",
+          "label": "B<span class='therest'>OMA LAKWANU</span>",
           "field": "address2",
           "value": "<%= @patient_bean.home_district rescue "&nbsp;" %>"
         },
         {
-          "label": "H<span class='therest'>OME T/A</span>",
+          "label": "M<span class='therest'>FUMU YAYIKULU YAKWANU</span>",
           "field": "address2",
           "value": "<%= @patient_bean.home_ta rescue "&nbsp;" %>"
         },
         {
-          "label": "H<span class='therest'>OME VILLAGE</span>",
+          "label": "M<span class='therest'>UDZI WAKWANU</span>",
           "field": "address2",
           "value": "<%= @patient_bean.home_village rescue "&nbsp;" %>"
         }
@@ -324,7 +324,7 @@ end
 <% if @show_country_of_residence %>
         ,
         {
-          "label": "C<span class='therest'>OUNTRY OF RESIDENCE</span>",
+          "label": "D<span class='therest'>ZIKO LOKHALA</span>",
           "field": "state_province",
           "value": "<%= @patient_bean.state_province  %>"
         }
@@ -333,17 +333,17 @@ end
 
       ,
       {
-        "label": "C<span class='therest'>URRENT DISTRICT</span>",
+        "label": "B<span class='therest'>OMA LOKHALA</span>",
         "field": "state_province",
         "value": "<%= @patient_bean.current_district  rescue "&nbsp;" %>"
       },
       {
-        "label": "C<span class='therest'>URRENT AREA OR T/A</span>",
+        "label": "M<span class='therest'>FUMU YAYIKULU KOKHALA</span>",
         "field": "state_province",
         "value": "<%= @patient_bean.current_ta rescue "&nbsp;" %>"
       },
       {
-        "label": "C<span class='therest'>URRENT VILLAGE</span>",
+        "label": "M<span class='therest'>UDZI WOKHALA</span>",
         "field": "state_province",
         "value": "<%= @patient_bean.current_village rescue "&nbsp;" %>"
       }
@@ -453,9 +453,10 @@ end
         var btn = document.createElement("div");
         btn.className = "button button_blue";
         btn.setAttribute("tag", links[i]["field"]);
-        btn.innerHTML = "<img src='" + pencil + "' alt='Edit'/>";
+        btn.innerHTML = "<img src='" + pencil + "' alt='Edit' width='30px' />";
         btn.style.borderRadius = "8px";
         btn.style.verticalAlign = "middle";
+        btn.style.padding = "2px";
 
         btn.onclick = function () {
 
@@ -476,7 +477,3 @@ end
     </script>
   </body>
 </html>
-
-
-
-

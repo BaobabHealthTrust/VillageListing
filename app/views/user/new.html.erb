@@ -7,26 +7,33 @@
 <%= javascript_include_tag 'locale' %>
 
 <%= form_tag("/user/create", id: "create-form", method: 'post', enctype: 'multipart/form-data') do %>
- 
+
  <%= text_field_tag "user[username]", params[:username],
                      {:id => 'username', :field_type => 'alpha',
                       :helpText => 'Dzina logwiritsa ntchito',
                       :textCase => "lower",
                       :ajaxURL => '/user/username?search_string=',
+                      :tt_onLoad => "checkFlash();",
+                      :tt_onUnLoad => "checkInputValueLength(__$('username').value);",
+                      :validationRule => "^[a-zA-Z\\s\\r\\n]+$",
+                      :validationMessage => 'Pepani! \n Zilembo izi ndi zosaloledwa !@#$%^&*()-_+=~.',
                       :allowFreeText => true }%>
-
 
   <%= text_field_tag "user[first_name]", params[:firstname],
                      {:id => 'given_name', :field_type => 'alpha',
                       :helpText => 'Dzina Loyamba',
                       :ajaxURL => '/user/first_name?search_string=',
+                      :validationRule => "^[a-zA-Z\\s\\r\\n]+$",
+                      :validationMessage => 'Pepani! \n Zilembo izi ndi zosaloledwa !@#$%^&*()-_+=~.',
                       :allowFreeText => true }%>
-  
+
   <%= text_field_tag "user[last_name]", params[:lastname],
                      {:id => 'family_name',
                       :field_type => 'alpha',
                       :helpText => 'Dzina La Bambo',
                       :ajaxURL => '/user/last_name?search_string=',
+                      :validationRule => "^[a-zA-Z\\s\\r\\n]+$",
+                      :validationMessage => 'Pepani! \n Zilembo izi ndi zosaloledwa !@#$%^&*()-_+=~.',
                       :allowFreeText => true }%>
 
   <%= select_tag("user[gender]", options_for_select(['','Mwamuna','Mkazi'] ,params[:gender]),
@@ -39,18 +46,21 @@
                      {:id => 'password', :field_type => 'alpha',
                       :helpText => 'Mawu A Chinsisi',
                       :textCase => "lower",
+                      :tt_onUnLoad => "checkInputValueLength(__$('password').value);",
                       :allowFreeText => true }%>
 
   <%= password_field_tag "user[confirm password]", params[:confirm_password],
                      {:id => 'confirm_password', :field_type => 'alpha',
                       :helpText => 'Bwerazaninso Mawu A Chinsisi',
                       :textCase => "lower",
+                      :tt_onUnLoad => "checkInputValueLength(__$('confirm_password').value);",
                       :allowFreeText => true }%>
 
-<%= @roles = ['Administrator', 'Mfumu Yayikulu','Mfumu','Onthandizira'] %> 
+<%= @roles = ['Administrator', 'Mfumu Yayikulu','Mfumu','Othandizira'] %>
   <%= select_tag("user[role]", options_for_select(@roles ,params[:role]),
       :helpText =>"Ndinu ndani",
       :id => "role",
+      :tt_onLoad => "validatePasswords(__$('password').value, __$('confirm_password').value);",
       :allowFreeText => false)
   %>
 
@@ -86,8 +96,8 @@
 
   <!-- ....................... User's location ........................... -->
 	<label for='summary'>Zotsatila mwachidule</label>
-	<%= text_field_tag :summary, nil, { :tt_onLoad => "summary();__$('keyboard').style.display = 'none';", 
-      :optional => "true", 
+	<%= text_field_tag :summary, nil, { :tt_onLoad => "summary();__$('keyboard').style.display = 'none';",
+      :optional => "true",
       :tt_pageStyleClass => "NoControls" } %>
 
 <%end%>
@@ -117,13 +127,34 @@ function summary() {
 
 	$('inputFrame'+tstCurrentPage).innerHTML = '<div id="summary">' + display + '</div>' ;
 	$("clearButton").style.display = "none";
-		
+
 
 }
 
  function set_ajaxURL_for_suggestions(url, filter_value) {
   $('touchscreenInput' + tstCurrentPage).setAttribute('ajaxURL', url + filter_value + "&search_string=");
   listSuggestions(tstCurrentPage);
+}
+
+function validatePasswords(password, confirm_password) {
+  if(password != confirm_password) {
+    __$('confirm_password').value = '';
+    showMessage("Pepani! Onetsetsani kuti mawu a Chinsisi afanana.");
+    gotoPage(tstCurrentPage - 1);
+  }
+}
+
+function checkInputValueLength(input_value) {
+  if(input_value.length < 4) {
+    showMessage('Pepani! Onetsetsani kuti mawu asachepere anai.');
+    gotoPage(tstCurrentPage - 1);
+  }
+}
+
+function checkFlash() {
+  <% if flash[:error] %>
+    showMessage("<%= flash[:error] %>")
+  <% end %>
 }
 
 </script>

@@ -92,12 +92,18 @@
                     <th style="width:185px;">Boma Lomwe Mukukhala:</th>
                     <td style="text-align: left;"><%= @patient_bean.current_district %></td>
                     <th style="width:100px;">Zotsatila:</th>
-                    <td style="text-align: left;"><%= @patient_bean.outcome ||= 'Ali-Moyo'%></td>
+                    <td style="text-align: left;">
+                      <% if @patient_bean.outcome == 'Died' %>
+                          Adamwalira
+                      <% else %>
+                          <%= @patient_bean.outcome ||= 'Ali-Moyo'%>
+                      <% end %>
+                    </td>
                 </tr>
                 <tr>
                     <th style="width:185px;">T/A wakumene mukukhala:</th>
                     <td style="text-align: left;"><%= @patient_bean.current_ta %></td>
-                    <th style="width:100px;">Tsiku otsatila:</th>
+                    <th style="width:100px;">Tsiku la zotsatila:</th>
                     <td style="text-align: left;"><%= @patient_bean.outcome_date.to_date.strftime("%d/%b/%Y") rescue '' %></td>
                 </tr>
                 <tr>

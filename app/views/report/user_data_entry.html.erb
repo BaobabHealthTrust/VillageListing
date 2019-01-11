@@ -161,6 +161,9 @@
         <thead>
             <tr>
                 <th style="text-align: left;">Responsible User</th>
+                <th>Births</th>
+                <th>Deaths</th>
+                <th>Registrations</th>
                 <th>Count</th>
             </tr>
         </thead>
@@ -173,7 +176,7 @@
 
                (@user_tracker.all || []).each do |user_tracker| %>
                     <% next if user_tracker.username == 'sample_username' %>
-                <% if user_tracker.username == 'admin'
+                <% if user_tracker.username == 'admin' || user_tracker.user_role == 'admin'
                     admin_count += 1
                 else
                     community_count += 1
@@ -185,6 +188,13 @@
                     BHT Staff / Admin
                 </td>
                 <td>
+
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
                     <%= admin_count %>
                 </td>
             </tr>
@@ -193,17 +203,29 @@
                     Community Users
                 </td>
                 <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
                     <%= community_count %>
                 </td>
             </tr>
         </tbody>
         <tfoot>
-               <tr style="background-color: lightgrey;">
-                   <td style="text-align: left;">Total</td>
-                   <td>
-                       <%= loop %>
-                   </td>
-               </tr>
+            <tr style="background-color: lightgrey;">
+                <td style="text-align: left;">Total</td>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>                   
+                <td>
+                    <%= loop %>
+                </td>
+            </tr>
         </tfoot>
     </table>
 

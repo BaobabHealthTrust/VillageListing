@@ -62,7 +62,7 @@ class DdeController < ApplicationController
 		if !json['national_id'].nil?
 			if user_tracker.blank?
 				UserTracker.create(person_tracker: json['national_id'],
-				                   username: session[:user]['username'])
+				                   username: session[:user]['username'], user_role: session[:user]['role'])
 			else
 				# skip if tracker already available and not needed to update else update
 			end
@@ -1219,7 +1219,7 @@ A35,76,0,2,2,2,N,"#{patient_bean.national_id} #{patient_bean.birthdate}(#{patien
 
 			session[:dde_object] = json
 
-			redirect_to "/" and return
+			redirect_to "/people" and return
 
 		else
 			render :layout => "ts"
